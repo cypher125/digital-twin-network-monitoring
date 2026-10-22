@@ -11,7 +11,7 @@ from pathlib import Path
 
 import data_collection
 import digital_twin
-from data_collection.network_adapter import NetworkAdapter, TelemetryHttpAdapter
+from data_collection.network_adapter import ADAPTERS, NetworkAdapter, TelemetryHttpAdapter
 
 BACKEND = Path(__file__).resolve().parents[2]
 ALLOWED = {"describe", "poll", "events", "close"}
@@ -34,6 +34,15 @@ def test_telemetry_adapter_exposes_only_read_operations():
     public = {name for name, _ in inspect.getmembers(TelemetryHttpAdapter, inspect.isfunction)
               if not name.startswith("_")}
     assert public <= ALLOWED
+
+
+def test_every_registered_adapter_is_read_only_and_complete():
+    """NFR5 and G3: any adapter plugged into the registry offers exactly the read operations."""
+    assert "telemetry-http" in ADAPTERS
+    for key, factory in ADAPTERS.items():
+        public = {name for name, _ in inspect.getmembers(factory, inspect.isfunction) if not name.startswith("_")}
+        assert public <= ALLOWED, f"{key} has {sorted(public - ALLOWED)}"
+        assert {"describe", "poll", "events", "close"} <= public, f"{key} misses a read operation"
 
 
 HTTP_WRITES = [f"{client}.{verb}(" for client in ("httpx", "client", "self.client", "event_client", "requests")

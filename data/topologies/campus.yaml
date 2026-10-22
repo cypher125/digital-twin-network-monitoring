@@ -1,0 +1,200 @@
+# Illustrative campus network modelled on a Nigerian polytechnic (YCT-style).
+# This is NOT the real Yaba College of Technology network.
+#
+# Used by:
+#   - the network emulator (netemu), which plays the "real network";
+#   - the twin's topology import (manage.py import_topology), which loads
+#     devices and links into NetworkDevice / NetworkLink.
+
+name: Illustrative YCT-style campus network
+reference_bandwidth_mbps: 10000     # OSPF-style default cost = reference / capacity
+growth_per_week: 0.01               # traffic grows ~1 % a week during the semester
+
+# ----------------------------------------------------------------------------
+# Devices. position = [x, y] for the topology diagram (top = internet edge).
+# ----------------------------------------------------------------------------
+devices:
+  # Internet edge and core (ICT Centre data room)
+  - {name: ISP-A-GW,    type: wan_gateway, role: wan,        zone: CORE, ip: 10.0.0.1,  location: ICT Centre data room, position: [220, 40],  internet_egress: true}
+  - {name: ISP-B-GW,    type: wan_gateway, role: wan,        zone: CORE, ip: 10.0.0.2,  location: ICT Centre data room, position: [620, 40],  internet_egress: true}
+  - {name: EDGE-RTR-01, type: router,      role: edge,       zone: CORE, ip: 10.0.0.3,  location: ICT Centre data room, position: [420, 115]}
+  - {name: FW-01,       type: firewall,    role: edge,       zone: CORE, ip: 10.0.0.4,  location: ICT Centre data room, position: [420, 205]}
+  - {name: CORE-SW-01,  type: switch,      role: core,       zone: CORE, ip: 10.0.1.1,  location: ICT Centre data room, position: [270, 290]}
+  - {name: CORE-SW-02,  type: switch,      role: core,       zone: CORE, ip: 10.0.1.2,  location: ICT Centre data room, position: [570, 290]}
+  # Data centre
+  - {name: DC-SW-01,    type: switch,      role: datacentre, zone: DC,   ip: 10.0.2.1,  location: ICT Centre data room, position: [765, 215]}
+  - {name: SRV-PORTAL,  type: server,      role: server,     zone: DC,   ip: 10.0.2.10, location: ICT Centre data room, position: [885, 110]}
+  - {name: SRV-LMS,     type: server,      role: server,     zone: DC,   ip: 10.0.2.11, location: ICT Centre data room, position: [885, 152]}
+  - {name: SRV-LIB,     type: server,      role: server,     zone: DC,   ip: 10.0.2.12, location: ICT Centre data room, position: [885, 194]}
+  - {name: SRV-MAIL,    type: server,      role: server,     zone: DC,   ip: 10.0.2.13, location: ICT Centre data room, position: [885, 236]}
+  - {name: SRV-DNS,     type: server,      role: server,     zone: DC,   ip: 10.0.2.14, location: ICT Centre data room, position: [885, 278]}
+  - {name: SRV-CBT,     type: server,      role: server,     zone: DC,   ip: 10.0.2.15, location: ICT Centre data room, position: [885, 320]}
+  # Distribution layer: one per zone, dual-homed to both core switches
+  - {name: DIST-ICT,    type: switch, role: distribution, zone: ICT,    ip: 10.1.0.1, location: ICT Centre,             position: [45, 420]}
+  - {name: DIST-LIB,    type: switch, role: distribution, zone: LIB,    ip: 10.2.0.1, location: Library,                position: [135, 420]}
+  - {name: DIST-ADMIN,  type: switch, role: distribution, zone: ADMIN,  ip: 10.3.0.1, location: Administration block,   position: [245, 420]}
+  - {name: DIST-SOT,    type: switch, role: distribution, zone: SOT,    ip: 10.4.0.1, location: School of Technology,   position: [350, 420]}
+  - {name: DIST-SCI,    type: switch, role: distribution, zone: SCI,    ip: 10.5.0.1, location: School of Science,      position: [440, 420]}
+  - {name: DIST-ENG,    type: switch, role: distribution, zone: ENG,    ip: 10.6.0.1, location: School of Engineering,  position: [530, 420]}
+  - {name: DIST-HOSTEL, type: switch, role: distribution, zone: HOSTEL, ip: 10.7.0.1, location: Student hostels,        position: [660, 420]}
+  - {name: DIST-CBT,    type: switch, role: distribution, zone: CBT,    ip: 10.8.0.1, location: CBT centre,             position: [785, 420]}
+  # Access layer: wired access switches and Wi-Fi access points
+  - {name: ACC-ICT-01,    type: switch,       role: access, zone: ICT,    ip: 10.1.1.1, location: ICT Centre,            position: [45, 540]}
+  - {name: ACC-LIB-01,    type: switch,       role: access, zone: LIB,    ip: 10.2.1.1, location: Library,               position: [135, 600]}
+  - {name: AP-LIB-01,     type: access_point, role: access, zone: LIB,    ip: 10.2.2.1, location: Library reading room,  position: [190, 540]}
+  - {name: ACC-ADMIN-01,  type: switch,       role: access, zone: ADMIN,  ip: 10.3.1.1, location: Administration block,  position: [245, 600]}
+  - {name: ACC-SOT-01,    type: switch,       role: access, zone: SOT,    ip: 10.4.1.1, location: School of Technology,  position: [360, 600]}
+  - {name: AP-SOT-01,     type: access_point, role: access, zone: SOT,    ip: 10.4.2.1, location: School of Technology,  position: [300, 540]}
+  - {name: ACC-SCI-01,    type: switch,       role: access, zone: SCI,    ip: 10.5.1.1, location: School of Science,     position: [440, 540]}
+  - {name: ACC-ENG-01,    type: switch,       role: access, zone: ENG,    ip: 10.6.1.1, location: School of Engineering, position: [520, 600]}
+  - {name: ACC-HOSTEL-01, type: switch,       role: access, zone: HOSTEL, ip: 10.7.1.1, location: Student hostels,       position: [590, 540]}
+  - {name: AP-HOSTEL-01,  type: access_point, role: access, zone: HOSTEL, ip: 10.7.2.1, location: Hostel block A,        position: [660, 600]}
+  - {name: AP-HOSTEL-02,  type: access_point, role: access, zone: HOSTEL, ip: 10.7.2.2, location: Hostel block B,        position: [722, 540]}
+  - {name: ACC-CBT-01,    type: switch,       role: access, zone: CBT,    ip: 10.8.1.1, location: CBT centre hall 1,     position: [785, 600]}
+  - {name: ACC-CBT-02,    type: switch,       role: access, zone: CBT,    ip: 10.8.1.2, location: CBT centre hall 2,     position: [840, 540]}
+
+# ----------------------------------------------------------------------------
+# Links: [device A, device B, capacity in Mbps, optional routing cost]
+# The two ISP links have equal cost so internet traffic is shared between them.
+# ----------------------------------------------------------------------------
+links:
+  - [ISP-A-GW, EDGE-RTR-01, 300, 10]
+  - [ISP-B-GW, EDGE-RTR-01, 200, 10]
+  - [EDGE-RTR-01, FW-01, 1000]
+  - [FW-01, CORE-SW-01, 1000]
+  - [FW-01, CORE-SW-02, 1000]
+  - [CORE-SW-01, CORE-SW-02, 10000]
+  - [CORE-SW-01, DC-SW-01, 10000]
+  - [CORE-SW-02, DC-SW-01, 10000]
+  - [DC-SW-01, SRV-PORTAL, 1000]
+  - [DC-SW-01, SRV-LMS, 1000]
+  - [DC-SW-01, SRV-LIB, 1000]
+  - [DC-SW-01, SRV-MAIL, 1000]
+  - [DC-SW-01, SRV-DNS, 1000]
+  - [DC-SW-01, SRV-CBT, 1000]
+  - [DIST-ICT, CORE-SW-01, 1000]
+  - [DIST-ICT, CORE-SW-02, 1000]
+  - [DIST-LIB, CORE-SW-01, 1000]
+  - [DIST-LIB, CORE-SW-02, 1000]
+  - [DIST-ADMIN, CORE-SW-01, 1000]
+  - [DIST-ADMIN, CORE-SW-02, 1000]
+  - [DIST-SOT, CORE-SW-01, 1000]
+  - [DIST-SOT, CORE-SW-02, 1000]
+  - [DIST-SCI, CORE-SW-01, 1000]
+  - [DIST-SCI, CORE-SW-02, 1000]
+  - [DIST-ENG, CORE-SW-01, 1000]
+  - [DIST-ENG, CORE-SW-02, 1000]
+  - [DIST-HOSTEL, CORE-SW-01, 1000]
+  - [DIST-HOSTEL, CORE-SW-02, 1000]
+  - [DIST-CBT, CORE-SW-01, 1000]
+  - [DIST-CBT, CORE-SW-02, 1000]
+  - [DIST-ICT, ACC-ICT-01, 1000]
+  - [DIST-LIB, ACC-LIB-01, 1000]
+  - [DIST-LIB, AP-LIB-01, 1000]
+  - [DIST-ADMIN, ACC-ADMIN-01, 1000]
+  - [DIST-SOT, ACC-SOT-01, 1000]
+  - [DIST-SOT, AP-SOT-01, 1000]
+  - [DIST-SCI, ACC-SCI-01, 1000]
+  - [DIST-ENG, ACC-ENG-01, 1000]
+  - [DIST-HOSTEL, ACC-HOSTEL-01, 1000]
+  - [DIST-HOSTEL, AP-HOSTEL-01, 100]     # older Fast Ethernet uplinks in the hostels
+  - [DIST-HOSTEL, AP-HOSTEL-02, 100]
+  - [DIST-CBT, ACC-CBT-01, 1000]
+  - [DIST-CBT, ACC-CBT-02, 1000]
+
+# ----------------------------------------------------------------------------
+# Traffic model (emulator only). Demand for zone z, class c at time t =
+#   population(z) * activity(profile(z), t) * per_user_mbps(c) * multiplier(z, c)
+#   * growth(t) * scheduled events * random noise
+# split across the zone's access devices by share.
+# ----------------------------------------------------------------------------
+classes:
+  web:       {per_user_mbps: 0.100, dest: internet,   down_ratio: 0.85}
+  video:     {per_user_mbps: 0.080, dest: internet,   down_ratio: 0.95}
+  elearning: {per_user_mbps: 0.040, dest: SRV-LMS,    down_ratio: 0.80}
+  portal:    {per_user_mbps: 0.020, dest: SRV-PORTAL, down_ratio: 0.75}
+  email:     {per_user_mbps: 0.010, dest: SRV-MAIL,   down_ratio: 0.60}
+  library:   {per_user_mbps: 0.030, dest: SRV-LIB,    down_ratio: 0.85}
+  dns:       {per_user_mbps: 0.002, dest: SRV-DNS,    down_ratio: 0.50}
+  cbt:       {per_user_mbps: 0.000, dest: SRV-CBT,    down_ratio: 0.70}   # only during exam sessions
+
+zones:
+  ICT:    {name: ICT Centre,            population: 150, profile: academic, access: {ACC-ICT-01: 1.0},                                 multipliers: {elearning: 2.0}}
+  LIB:    {name: Library,               population: 250, profile: library,  access: {ACC-LIB-01: 0.4, AP-LIB-01: 0.6},                 multipliers: {library: 5.0, video: 0.4}}
+  ADMIN:  {name: Administration block,  population: 120, profile: office,   access: {ACC-ADMIN-01: 1.0},                               multipliers: {portal: 4.0, email: 4.0, video: 0.3}}
+  SOT:    {name: School of Technology,  population: 400, profile: academic, access: {ACC-SOT-01: 0.5, AP-SOT-01: 0.5},                 multipliers: {}}
+  SCI:    {name: School of Science,     population: 350, profile: academic, access: {ACC-SCI-01: 1.0},                                 multipliers: {}}
+  ENG:    {name: School of Engineering, population: 300, profile: academic, access: {ACC-ENG-01: 1.0},                                 multipliers: {}}
+  HOSTEL: {name: Student hostels,       population: 900, profile: hostel,   access: {ACC-HOSTEL-01: 0.5, AP-HOSTEL-01: 0.25, AP-HOSTEL-02: 0.25}, multipliers: {video: 1.6, web: 1.2, elearning: 0.5}}
+  CBT:    {name: CBT centre,            population: 300, profile: idle,     access: {ACC-CBT-01: 0.5, ACC-CBT-02: 0.5},                multipliers: {}}
+
+# Activity profiles: [hour, level 0-1] points, linearly interpolated.
+profiles:
+  academic:
+    weekday: [[0, 0.02], [6, 0.03], [7, 0.20], [8, 0.60], [9, 0.95], [12, 0.95], [13, 0.75], [14, 0.90], [16, 0.70], [17, 0.40], [18, 0.15], [20, 0.05], [24, 0.02]]
+    weekend: [[0, 0.02], [9, 0.05], [12, 0.10], [16, 0.08], [20, 0.03], [24, 0.02]]
+  library:
+    weekday: [[0, 0.01], [7, 0.05], [8, 0.40], [10, 0.95], [16, 0.95], [18, 0.70], [20, 0.50], [21, 0.10], [24, 0.01]]
+    weekend: [[0, 0.01], [9, 0.10], [11, 0.50], [15, 0.50], [17, 0.10], [24, 0.01]]
+  office:
+    weekday: [[0, 0.02], [7, 0.10], [8, 0.80], [12, 0.90], [13, 0.60], [14, 0.90], [16, 0.80], [17, 0.20], [18, 0.05], [24, 0.02]]
+    weekend: [[0, 0.02], [24, 0.02]]
+  hostel:
+    weekday: [[0, 0.60], [1, 0.40], [2, 0.15], [5, 0.12], [6, 0.30], [7, 0.50], [8, 0.35], [15, 0.35], [16, 0.50], [18, 0.70], [19, 0.95], [23, 1.00], [24, 0.60]]
+    weekend: [[0, 0.80], [2, 0.30], [6, 0.15], [9, 0.50], [12, 0.70], [17, 0.75], [19, 0.95], [23, 1.00], [24, 0.80]]
+  idle:
+    weekday: [[0, 0.02], [24, 0.02]]
+    weekend: [[0, 0.01], [24, 0.01]]
+
+# Traffic that is not generated by users (backups, software updates).
+system_flows:
+  - {name: offsite backup, source: SRV-LMS, dest: internet, class: bulk, mbps: 120, down_ratio: 0.05, hours: [1, 3]}
+
+# Scheduled events. Day numbers count from the emulator's start date (0 = first day).
+events:
+  - {name: CBT exam session, kind: exam, zone: CBT, class: cbt, per_user_mbps: 1.2, days: weekdays, windows: [[9, 11], [12, 14]], ramp_minutes: 10}
+  - {name: Course registration rush, kind: surge, zone: "*", class: portal, multiplier: 3.0, days: [2, 3], windows: [[9, 15]], ramp_minutes: 30}
+  # Day 11 falls in the held-out test days of a 14-day history (evaluation E2 sees an unseen event).
+  - {name: Software update day, kind: surge, zone: "*", class: web, multiplier: 1.6, days: [11], windows: [[10, 16]], ramp_minutes: 45}
+
+# Unplanned flash crowds (for example a live football match on the hostel Wi-Fi), so the
+# history contains congestion ramps to learn from. Evaluation E3 switches these off and
+# injects its own surges with a different seed and locations.
+random_surges:
+  enabled: true
+  per_day: 4
+  ramp_minutes: [10, 30]
+  hold_minutes: [15, 45]
+  seed: 11
+  # Each surge picks one of these by weight. Evening streaming in the hostels (a live
+  # match, a viral video) is the most common flash crowd on a residential campus.
+  templates:
+    - {zone: HOSTEL, class: video, hours: [18, 23.5], multiplier: [1.5, 2.4], weight: 4}
+    - {zone: HOSTEL, class: web,   hours: [19, 23.5], multiplier: [1.4, 2.0], weight: 1}
+    - {zone: SOT,    class: web,   hours: [9, 16],    multiplier: [1.6, 2.4], weight: 1}
+    - {zone: SCI,    class: video, hours: [10, 16],   multiplier: [1.8, 3.0], weight: 1}
+    - {zone: ENG,    class: web,   hours: [9, 16],    multiplier: [1.6, 2.4], weight: 1}
+    - {zone: LIB,    class: video, hours: [11, 18],   multiplier: [2.0, 3.0], weight: 1}
+
+# Random failures in the "real network".
+faults:
+  enabled: true
+  link_mtbf_hours: 1500
+  link_mttr_minutes: 20
+  device_mtbf_hours: 3000
+  device_mttr_minutes: 8
+
+# Data-quality problems in what the devices report (exercise the preprocessing module).
+data_quality:
+  missing_sample_prob: 0.002
+  spike_prob: 0.0005
+
+# Differences between the "real network" and the twin's model, so the twin is
+# not trivially perfect: uneven multipath hashing, protocol overhead, jitter.
+reality_gap:
+  ecmp_imbalance: 0.10
+  overhead_pct: 3.0
+  noise_sigma: 0.08
+  noise_phi: 0.90
+  flow_sampling: 100              # NetFlow-style 1:100 packet sampling
+  flow_export_delay_cycles: 1     # flow records arrive one cycle late

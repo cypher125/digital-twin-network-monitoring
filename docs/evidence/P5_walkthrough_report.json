@@ -1,0 +1,102 @@
+{
+  "when": "2026-10-19T04:12:04.647Z",
+  "url": "http://localhost:3000",
+  "surge": true,
+  "passed": 14,
+  "failed": 0,
+  "nfr1_seconds": [
+    1.174,
+    1.363,
+    0.633,
+    0.647,
+    1.326
+  ],
+  "nfr1_max_seconds": 1.363,
+  "steps": [
+    {
+      "name": "Sign-in refuses a wrong password",
+      "ok": true,
+      "seconds": 13.041,
+      "detail": null
+    },
+    {
+      "name": "Senior Administrator signs in",
+      "ok": true,
+      "seconds": 20.626,
+      "detail": null
+    },
+    {
+      "name": "UC1 overview shows the live map and summary",
+      "ok": true,
+      "seconds": 0.425,
+      "detail": "engine running, state version 48"
+    },
+    {
+      "name": "NFR1: the overview shows each new cycle within 5 s of it being stored",
+      "ok": true,
+      "seconds": 20.585,
+      "detail": "seconds: 1.17, 1.36, 0.63, 0.65, 1.33"
+    },
+    {
+      "name": "UC1 extension: open a link's detail from the links table",
+      "ok": true,
+      "seconds": 6.106,
+      "detail": "link 2"
+    },
+    {
+      "name": "UC1 extension: open a device's detail",
+      "ok": true,
+      "seconds": 4.02,
+      "detail": null
+    },
+    {
+      "name": "UC2: a surge in the network raises a predictive alert",
+      "ok": true,
+      "seconds": 21.075,
+      "detail": "video x11 (hostel AP at 26%): ISP-B-GW <-> EDGE-RTR-01: predicted, 30 min ahead, Low confidence, after 21 s"
+    },
+    {
+      "name": "UC2 alerts page shows alerts (or that none are expected) and the history",
+      "ok": true,
+      "seconds": 6.782,
+      "detail": "1 active alert(s)"
+    },
+    {
+      "name": "UC3: create and run a link-failure scenario with the guided form",
+      "ok": true,
+      "seconds": 20.37,
+      "detail": "Walkthrough link failure 04:11:15"
+    },
+    {
+      "name": "UC3 extension: compare the result with the network now",
+      "ok": true,
+      "seconds": 1.818,
+      "detail": null
+    },
+    {
+      "name": "UC4: trends, weekly pattern and capacity planning",
+      "ok": true,
+      "seconds": 8.218,
+      "detail": null
+    },
+    {
+      "name": "System page shows the engine, models and database",
+      "ok": true,
+      "seconds": 8.086,
+      "detail": "last cycle took 2674.9 ms in the engine"
+    },
+    {
+      "name": "Senior Administrator signs out",
+      "ok": true,
+      "seconds": 1.223,
+      "detail": null
+    },
+    {
+      "name": "Junior Administrator can look but not change anything",
+      "ok": true,
+      "seconds": 10.996,
+      "detail": null
+    }
+  ],
+  "problems": []
+}

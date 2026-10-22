@@ -1,0 +1,70 @@
+# Caddy: HTTPS front door for the Digital Twin (plan sections 8 and 12).
+#
+#   https://localhost  ->  the static dashboard (frontend/out)
+#                      ->  /api, /admin  -> Django (Waitress on 127.0.0.1:8000)
+#                      ->  /static       -> Django's collected static files (var/static)
+#
+# Started by deploy/start.ps1 from the project root, so the paths below are relative to it.
+# "tls internal" uses Caddy's own local certificate authority; run `caddy trust` once
+# (setup.ps1 does) so the browser accepts it.
+{
+	admin 127.0.0.1:2019
+	# no automatic HTTP->HTTPS redirect server on port 80 for other names
+	auto_https disable_redirects
+	# Never install the local root certificate on its own: on Windows that opens a dialog and
+	# holds Caddy until someone answers it. setup.ps1 runs `caddy trust` once instead.
+	skip_install_trust
+}
+
+http://localhost, http://127.0.0.1 {
+	redir https://{host}{uri} permanent
+}
+
+https://localhost, https://127.0.0.1 {
+	tls internal
+	encode zstd gzip
+
+	header {
+		# short max-age: on localhost a long one would also lock the development server out of plain HTTP
+		Strict-Transport-Security "max-age=300"
+		X-Content-Type-Options "nosniff"
+		X-Frame-Options "DENY"
+		Referrer-Policy "same-origin"
+		Permissions-Policy "camera=(), microphone=(), geolocation=()"
+		# Next.js pages carry small inline bootstrap scripts, hence 'unsafe-inline' for scripts
+		# (recorded in the as-built notes); nothing is loaded from other sites.
+		Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self'; object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'"
+		-Server
+	}
+
+	@django path /api/* /admin /admin/*
+	handle @django {
+		reverse_proxy 127.0.0.1:8000
+	}
+
+	handle_path /static/* {
+		root * var/static
+		file_server
+	}
+
+	handle {
+		root * frontend/out
+		# static export: /link is out/link.html
+		try_files {path} {path}.html {path}/index.html
+		file_server
+	}
+
+	handle_errors 404 {
+		rewrite * /404.html
+		root * frontend/out
+		file_server
+	}
+
+	log {
+		output file var/log/caddy-access.log {
+			roll_size 5MiB
+			roll_keep 3
+		}
+		format console
+	}
+}

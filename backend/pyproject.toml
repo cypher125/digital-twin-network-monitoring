@@ -1,0 +1,94 @@
+[project]
+name = "dtnmos-backend"
+version = "0.1.0"
+description = "Digital Twin-Based Network Monitoring and Optimization System: backend, digital twin engine and network emulator"
+requires-python = ">=3.13,<3.14"
+dependencies = [
+    "django>=5.2,<5.3",
+    "djangorestframework>=3.16",
+    "drf-spectacular>=0.28",
+    "django-filter>=25.1",
+    "psycopg[binary]>=3.2",
+    "networkx>=3.4",
+    "numpy>=2.2",
+    "pandas>=2.2",
+    "scikit-learn>=1.6",
+    "joblib>=1.4",
+    "pyyaml>=6.0",
+    "httpx>=0.27",
+    "waitress>=3.0",
+    "argon2-cffi>=23.1",
+    "python-dotenv>=1.0",
+    "django-axes>=7.0",
+    "drf-spectacular-sidecar>=2025.1",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3",
+    "pytest-django>=4.9",
+    "pytest-cov>=5.0",
+    "ruff>=0.7",
+    "import-linter>=2.1",
+]
+eval = [
+    "matplotlib>=3.9",
+]
+
+[tool.uv]
+package = false
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "config.settings.test"
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+addopts = "-ra"
+markers = ["slow: generates days of emulated history or trains models (deselect with -m 'not slow')"]
+
+# Architecture rules (plan principle 5 and section 7.1), checked with `lint-imports`.
+[tool.importlinter]
+root_packages = ["netemu", "data_collection", "digital_twin", "apps", "config", "evaluation"]
+include_external_packages = true
+
+[[tool.importlinter.contracts]]
+name = "The emulator (stand-in real network) does not import the twin"
+type = "forbidden"
+source_modules = ["netemu"]
+forbidden_modules = ["data_collection", "digital_twin", "apps", "config"]
+
+[[tool.importlinter.contracts]]
+name = "The twin does not import the emulator (it reads it only over the network)"
+type = "forbidden"
+source_modules = ["data_collection", "digital_twin", "apps", "config"]
+forbidden_modules = ["netemu"]
+
+[[tool.importlinter.contracts]]
+name = "The simulation engine has no path to the network adapters (no write path, G3)"
+type = "forbidden"
+source_modules = ["digital_twin.simulation_engine"]
+forbidden_modules = ["data_collection.network_adapter"]
+
+[[tool.importlinter.contracts]]
+name = "Only the test harness may control the emulator: the twin never uses the lab client (G3)"
+type = "forbidden"
+source_modules = ["data_collection", "digital_twin", "apps.twin", "apps.api", "apps.accounts", "config"]
+forbidden_modules = ["evaluation", "apps.lab"]
+
+[[tool.importlinter.contracts]]
+name = "The engine core is independent of the web framework (NFR5)"
+type = "forbidden"
+source_modules = [
+    "data_collection",
+    "digital_twin.network_model",
+    "digital_twin.prediction_engine",
+    "digital_twin.simulation_engine",
+]
+forbidden_modules = ["django", "rest_framework", "apps"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py313"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "DJ"]
+ignore = ["E501"]

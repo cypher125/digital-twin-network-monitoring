@@ -1,0 +1,36 @@
+{
+  "when": "2026-10-19T05:32:01",
+  "url": "https://localhost",
+  "results": [
+    {
+      "service": "engine",
+      "killed_pid": 12132,
+      "killed_at": "2026-10-19T05:30:18",
+      "restarted": true,
+      "seconds_to_new_cycle": 46.9,
+      "last_cycle_before": "2026-10-28T09:50:00+00:00",
+      "last_cycle_after": "2026-10-28T09:59:00+00:00",
+      "recovered": true
+    },
+    {
+      "service": "emulator",
+      "killed_pid": 22416,
+      "killed_at": "2026-10-19T05:31:11",
+      "restarted": true,
+      "seconds_to_new_cycle": 15.1,
+      "last_cycle_before": "2026-10-28T09:59:00+00:00",
+      "last_cycle_after": "2026-10-28T10:00:00+00:00",
+      "recovered": true
+    },
+    {
+      "service": "api",
+      "killed_pid": 4496,
+      "killed_at": "2026-10-19T05:31:31",
+      "restarted": true,
+      "seconds_to_new_cycle": 24.1,
+      "last_cycle_before": "2026-10-28T10:00:00+00:00",
+      "last_cycle_after": "2026-10-28T10:04:00+00:00",
+      "recovered": true
+    }
+  ]
+}

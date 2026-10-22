@@ -1,0 +1,30 @@
+{
+  "name": "frontend",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "node -e \"console.log('The dashboard is a static site, so next start cannot serve it. npm run build writes it to out/, and Caddy serves it (deploy/Caddyfile, which also routes /api and /admin to Django). Start the whole system with deploy/start.ps1; for development use npm run dev.')\"",
+    "lint": "eslint"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "5.104.1",
+    "cytoscape": "3.34.3",
+    "next": "16.4.2",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "recharts": "3.10.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/turbopack": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.4.2",
+    "playwright-core": "1.63.0",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}

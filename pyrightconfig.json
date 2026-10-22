@@ -1,0 +1,10 @@
+{
+  "include": ["backend"],
+  "exclude": ["backend/.venv", "**/node_modules", "**/migrations", "frontend"],
+  "venvPath": "backend",
+  "venv": ".venv",
+  "executionEnvironments": [{ "root": "backend" }],
+  "pythonVersion": "3.13",
+  "typeCheckingMode": "basic",
+  "reportAttributeAccessIssue": "none"
+}

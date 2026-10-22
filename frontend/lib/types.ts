@@ -20,6 +20,7 @@ export interface User {
 export interface Live {
   state_version: number;
   last_cycle: string | null;
+  received_at: string | null;
   network_time: string | null;
   mode: "live" | "stepped" | null;
   speed: number | null;

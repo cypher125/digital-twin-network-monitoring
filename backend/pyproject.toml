@@ -33,6 +33,7 @@ dev = [
 ]
 eval = [
     "matplotlib>=3.9",
+    "psutil>=7",
 ]
 
 [tool.uv]

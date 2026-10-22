@@ -1,0 +1,40 @@
+{
+  "experiment": "E7",
+  "title": "Resources and scalability (G4)",
+  "finished": "2026-10-22T10:03:46+00:00",
+  "seconds": 275.1,
+  "code_version": "31ee760+uncommitted",
+  "python": "3.13.1",
+  "machine": "Windows 11, Intel64 Family 6 Model 122 Stepping 8, GenuineIntel",
+  "config": {
+    "parts": [
+      "scale"
+    ],
+    "quick": true,
+    "url": "https://localhost"
+  },
+  "summary": {
+    "scale": {
+      "sizes": {
+        "34": {
+          "devices": 34,
+          "links": 43,
+          "label": "campus",
+          "ingest_cycle_ms_median": 8.6,
+          "simulation_ms_median": 52.3,
+          "forecast_all_links_ms_median": 266.6,
+          "map_first_frame_ms_median": 191.6
+        },
+        "42": {
+          "devices": 42,
+          "links": 53,
+          "label": "about 40",
+          "ingest_cycle_ms_median": 27.3,
+          "simulation_ms_median": 169.4,
+          "forecast_all_links_ms_median": 1125.5,
+          "map_first_frame_ms_median": 900.3
+        }
+      }
+    }
+  }
+}

@@ -28,6 +28,8 @@ class LiveView(APIView):
         return Response({
             "state_version": int(status.get("state_version") or 0),
             "last_cycle": status.get("last_cycle"),
+            # when the engine received that cycle's readings (server clock): NFR1 is timed from here (E5)
+            "received_at": status.get("last_received_at"),
             "network_time": source.get("time"),
             "mode": source.get("mode"),
             "speed": source.get("speed"),

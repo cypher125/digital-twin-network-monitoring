@@ -11,30 +11,65 @@ the poll interval itself.
 Target (plan section 9): every update on screen within 5 s of the data arriving (the maximum,
 not a percentile). Runs at real time (1x, one cycle a minute) and at demo speed (10x).
 
+A cycle the page did not show within 60 s is recorded as timed out and counts as a breach.
+A run made during the E6 soak test can leave out the fault windows (from fault to recovery,
+plus two minutes) with --exclude-faults; the samples left out are counted and reported.
+
     python -m evaluation.e5_report        (after one or more browser runs)
+    python -m evaluation.e5_report --exclude-faults evaluation/results/E6/faults.csv
 """
 from __future__ import annotations
 
+import argparse
+import csv
 import json
+from datetime import datetime, timedelta
 
 import numpy as np
 
 from .common import INK_2, SERIES, STATUS, Results, chart, legend
 
 LIMIT_S = 5.0
+MARGIN = timedelta(minutes=2)
 
 
-def summarise(values: list[float]) -> dict:
+def fault_windows(path) -> list[tuple[datetime, datetime, str]]:
+    windows = []
+    with open(path, encoding="utf-8", newline="") as handle:
+        for row in csv.DictReader(handle):
+            if row.get("skipped") == "True" or not row.get("at_utc"):
+                continue
+            start = datetime.fromisoformat(row["at_utc"])
+            recovered = float(row["recovered_after_s"]) if row.get("recovered_after_s") else 3600.0
+            windows.append((start, start + timedelta(seconds=recovered) + MARGIN, row["fault"]))
+    return windows
+
+
+def in_window(sample: dict, windows) -> str | None:
+    if not sample.get("received_at"):
+        return None
+    t = datetime.fromisoformat(sample["received_at"].replace("Z", "+00:00"))
+    return next((name for start, end, name in windows if start <= t <= end), None)
+
+
+def summarise(values: list[float], timed_out: int = 0) -> dict:
     data = np.array([v for v in values if v is not None], dtype=float)
     if data.size == 0:
-        return {"samples": 0}
-    return {"samples": int(data.size), "max_s": round(float(data.max()), 3), "p50_s": round(float(np.median(data)), 3),
+        return {"samples": 0, "timed_out": timed_out}
+    return {"samples": int(data.size) + timed_out, "timed_out": timed_out,
+            "max_s": None if timed_out else round(float(data.max()), 3),
+            "max_shown_s": round(float(data.max()), 3), "p50_s": round(float(np.median(data)), 3),
             "p95_s": round(float(np.percentile(data, 95)), 3), "mean_s": round(float(data.mean()), 3),
-            "share_within_5s": round(float((data <= LIMIT_S).mean()), 4)}
+            "share_within_5s": round(float((data <= LIMIT_S).sum() / (data.size + timed_out)), 4)}
 
 
 def main() -> None:
-    results = Results("E5", "Responsiveness (NFR1)")
+    parser = argparse.ArgumentParser(description="Summarise the E5 browser measurements.")
+    parser.add_argument("--exclude-faults", default=None, help="E6 faults.csv: leave out samples in fault windows")
+    args = parser.parse_args()
+    windows = fault_windows(args.exclude_faults) if args.exclude_faults else []
+    results = Results("E5", "Responsiveness (NFR1)",
+                      config={"exclude_fault_windows_from": args.exclude_faults, "fault_margin_s": MARGIN.seconds})
     runs = sorted(results.folder.glob("*.samples.json"))
     if not runs:
         raise SystemExit("no measurements yet: run frontend/scripts/e5_responsiveness.mjs first")
@@ -42,19 +77,31 @@ def main() -> None:
     for path in runs:
         run = json.loads(path.read_text(encoding="utf-8"))
         label = run["label"]
+        kept, left_out = [], {}
         for sample in run["samples"]:
+            fault = in_window(sample, windows)
+            if fault:
+                left_out[fault] = left_out.get(fault, 0) + 1
+                continue
+            kept.append(sample)
             rows.append({"run": label, "speed": run.get("speed"), **sample})
+        timed_out = sum(1 for s in kept if s.get("timed_out"))
         by_run[label] = {
             "speed": run.get("speed"), "url": run.get("url"), "measured": run.get("when"),
-            "received_to_screen": summarise([s["received_to_screen_s"] for s in run["samples"]]),
-            "received_to_api": summarise([s["received_to_api_s"] for s in run["samples"]]),
-            "api_to_screen": summarise([s["api_to_screen_s"] for s in run["samples"]]),
+            "received_to_screen": summarise([s.get("received_to_screen_s") for s in kept], timed_out),
+            "received_to_api": summarise([s.get("received_to_api_s") for s in kept]),
+            "api_to_screen": summarise([s.get("api_to_screen_s") for s in kept]),
+            "left_out_in_fault_windows": left_out,
         }
     results.write_csv("samples.csv", rows, ["run", "speed", "cycle", "received_at", "received_to_screen_s",
-                                            "received_to_api_s", "api_to_screen_s", "mode"])
-    worst = max((r["received_to_screen"].get("max_s", 0) for r in by_run.values()), default=None)
-    results.summary = {"runs": by_run, "worst_received_to_screen_s": worst,
-                       "target": "maximum within 5 s", "target_met": worst is not None and worst <= LIMIT_S}
+                                            "received_to_api_s", "api_to_screen_s", "timed_out", "mode"])
+    any_timeout = any(r["received_to_screen"].get("timed_out") for r in by_run.values())
+    worst = max((r["received_to_screen"].get("max_shown_s", 0) for r in by_run.values()), default=None)
+    met = worst is not None and worst <= LIMIT_S and not any_timeout
+    results.summary = {"runs": by_run, "worst_received_to_screen_s": worst, "any_timed_out": any_timeout,
+                       "target": "maximum within 5 s", "target_met": met,
+                       "target_nfr1": {"rule": "every new cycle on screen within 5 s of the data arriving (maximum)",
+                                       "met": met}}
 
     figure, axes = chart(7.0, 3.0)
     for index, (label, run) in enumerate(sorted(by_run.items())):

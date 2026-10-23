@@ -3,7 +3,12 @@
 // stack running, at real time and at demo speed; target: maximum within 5 s.
 //
 //   set DT_SENIOR=senior1:password
-//   node scripts/e5_responsiveness.mjs --url https://localhost --samples 30 --label speed10
+//   node scripts/e5_responsiveness.mjs --url https://localhost --samples 30 --label speed10 [--max-minutes 400]
+//
+// It keeps going through service restarts (for example during the E6 soak test): a failed request
+// counts as "no new data yet", and a cycle the page never shows within 60 s is recorded as timed
+// out (a breach, unless e5_report.py is told to leave out a fault window). Samples are saved
+// after each one, so an interrupted run keeps what it measured.
 //
 // For each new cycle it records: received_at (the engine got the readings, server clock),
 // when the API first reports the stored cycle, and when the overview page shows its time.
@@ -23,6 +28,7 @@ const option = (name, fallback) => {
 const BASE = option("--url", "https://localhost");
 const SAMPLES = Number(option("--samples", "30"));
 const LABEL = option("--label", "run");
+const MAX_MINUTES = Number(option("--max-minutes", "0"));
 const OUT = path.resolve("../backend/evaluation/results/E5");
 const [USER, PASSWORD] = (() => {
   const value = process.env.DT_SENIOR ?? "";
@@ -50,54 +56,78 @@ const context = await browser.newContext({ viewport: { width: 1366, height: 768 
 const page = await context.newPage();
 page.setDefaultTimeout(240_000);
 const live = async () => {
-  const response = await page.request.get(`${BASE}/api/v1/live`, { headers: { "X-Poll": "1" } });
-  return response.ok() ? response.json() : null;
+  try {
+    const response = await page.request.get(`${BASE}/api/v1/live`, { headers: { "X-Poll": "1" }, timeout: 10_000 });
+    return response.ok() ? await response.json() : null;
+  } catch {
+    return null; // Caddy or the API is restarting
+  }
 };
-
-const samples = [];
-let speed = null;
-try {
+const signIn = async () => {
   await page.goto(`${BASE}/login`);
   await page.fill("#username", USER);
   await page.fill("#password", PASSWORD);
   await Promise.all([page.waitForURL((url) => url.pathname === "/"), page.click('button[type="submit"]')]);
   await page.getByRole("heading", { name: "Network overview" }).waitFor();
+};
+const save = async () => {
+  await mkdir(OUT, { recursive: true });
+  await writeFile(
+    path.join(OUT, `${LABEL}.samples.json`),
+    JSON.stringify({ label: LABEL, url: BASE, speed, when: new Date().toISOString(), samples }, null, 2),
+  );
+};
+const began = Date.now();
+
+const samples = [];
+let speed = null;
+try {
+  await signIn();
   let last = (await live())?.last_cycle ?? null;
-  while (samples.length < SAMPLES) {
+  while (samples.length < SAMPLES && !(MAX_MINUTES && Date.now() - began > MAX_MINUTES * 60_000)) {
     const waitingFrom = Date.now();
     let now = null;
     for (;;) {
       now = await live();
       if (now && now.last_cycle && now.last_cycle !== last) break;
-      if (Date.now() - waitingFrom > 600_000) throw new Error("no new cycle within 10 minutes");
+      if (Date.now() - waitingFrom > 1_800_000) throw new Error("no new cycle within 30 minutes");
       await sleep(100);
     }
     const apiSeen = Date.now();
     speed = now.speed;
     const shown = wat.format(new Date(now.last_cycle));
-    await page.waitForFunction((text) => document.body.innerText.includes(text), shown, { timeout: 60_000, polling: 50 });
-    const onScreen = Date.now();
     const received = now.received_at ? Date.parse(now.received_at) : null;
-    const sample = {
-      cycle: now.last_cycle,
-      received_at: now.received_at,
-      received_to_screen_s: received ? (onScreen - received) / 1000 : null,
-      received_to_api_s: received ? (apiSeen - received) / 1000 : null,
-      api_to_screen_s: (onScreen - apiSeen) / 1000,
-      speed: now.speed,
-      mode: now.mode,
-    };
+    let sample;
+    try {
+      await page.waitForFunction((text) => document.body.innerText.includes(text), shown, { timeout: 60_000, polling: 50 });
+      const onScreen = Date.now();
+      sample = {
+        cycle: now.last_cycle,
+        received_at: now.received_at,
+        received_to_screen_s: received ? (onScreen - received) / 1000 : null,
+        received_to_api_s: received ? (apiSeen - received) / 1000 : null,
+        api_to_screen_s: (onScreen - apiSeen) / 1000,
+        speed: now.speed,
+        mode: now.mode,
+      };
+      console.log(`${samples.length + 1}/${SAMPLES} cycle ${sample.cycle}: ${sample.received_to_screen_s?.toFixed(2)} s from received to screen`);
+    } catch {
+      sample = { cycle: now.last_cycle, received_at: now.received_at, received_to_screen_s: null, timed_out: true,
+                 received_to_api_s: received ? (apiSeen - received) / 1000 : null, speed: now.speed, mode: now.mode };
+      console.log(`${samples.length + 1}/${SAMPLES} cycle ${sample.cycle}: not on screen within 60 s; reloading`);
+      try {
+        await page.goto(`${BASE}/`);
+        if (new URL(page.url()).pathname.startsWith("/login")) await signIn();
+      } catch {
+        // the system is still restarting; the next cycle tries again
+      }
+    }
     samples.push(sample);
-    console.log(`${samples.length}/${SAMPLES} cycle ${sample.cycle}: ${sample.received_to_screen_s?.toFixed(2)} s from received to screen`);
+    await save();
     last = now.last_cycle;
   }
 } finally {
   await browser.close();
+  await save();
 }
-
-await mkdir(OUT, { recursive: true });
-await writeFile(
-  path.join(OUT, `${LABEL}.samples.json`),
-  JSON.stringify({ label: LABEL, url: BASE, speed, when: new Date().toISOString(), samples }, null, 2),
-);
 console.log(`written ${samples.length} samples to ${path.join(OUT, `${LABEL}.samples.json`)}`);

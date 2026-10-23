@@ -11,12 +11,41 @@ The Windows build of pgserver ships without time-zone data, so PostgreSQL refuse
 start ("invalid value for parameter TimeZone: UTC"). install-timezones copies the IANA
 time-zone files from the tzdata package (this environment's, or the backend's) into it.
 """
+import os
 import shutil
+import socket
 import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-DATA = ROOT / "var" / "localpg" / "data"
+DATA = Path(os.environ.get("DT_LOCALPG_DATA", ROOT / "var" / "localpg" / "data"))
+PORT_FILE = DATA.parent / f"{DATA.name}.port"
+
+
+def _port_is_free(port: int) -> bool:
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as probe:
+        try:
+            probe.bind(("127.0.0.1", port))
+        except OSError:
+            return False
+    return True
+
+
+def _pin_port() -> None:
+    """pgserver picks a new random port at every start. Use the previous one again when it is free,
+    so that programs already running (the engine, the API) find a restarted database again."""
+    import pgserver.postgres_server as server_module
+
+    try:
+        port = int(PORT_FILE.read_text().strip())
+    except (OSError, ValueError):
+        return
+    original = server_module.find_suitable_port
+
+    def previous_port(address=None):
+        return port if _port_is_free(port) else original(address)
+
+    server_module.find_suitable_port = previous_port
 
 
 def install_timezones() -> None:
@@ -45,12 +74,17 @@ def main() -> None:
     import pgserver
 
     DATA.parent.mkdir(parents=True, exist_ok=True)
+    _pin_port()
     server = pgserver.get_server(DATA, cleanup_mode=None)  # keep running after this script exits
     if action == "stop":
         server.cleanup()
         print("stopped")
         return
-    print(server.get_uri())
+    uri = server.get_uri()
+    port = uri.rsplit(":", 1)[-1].split("/", 1)[0]
+    if port.isdigit():
+        PORT_FILE.write_text(port)
+    print(uri)
 
 
 if __name__ == "__main__":

@@ -401,7 +401,7 @@ The results are in `docs/evidence/P6_recovery.json`, written by `deploy/recovery
 - **Replacing a file fails while another program is reading it.** This hit the emulator's clock file during a history run, and the supervisor's own state file while `start.ps1` checked whether the system was ready. Both writers now retry briefly and otherwise skip one update, and the readers retry too; neither can stop the system any more.
 - **Caddy installs its local root certificate the first time it serves HTTPS.** On Windows that opens a dialog, and Caddy waits until someone answers it. The Caddyfile now says `skip_install_trust`, and `setup.ps1` runs `caddy trust` once, at a moment when the user expects the question.
 
-**Offline fallback** (Should, done). `start.ps1 -LocalDatabase` starts the local PostgreSQL (pgserver), runs everything on it, and stops it again. `deploy/localpg.py install-timezones` adds the time-zone data its Windows build lacks.
+**Offline fallback** (Should, done). `start.ps1 -LocalDatabase` starts the local PostgreSQL (pgserver), runs everything on it, and stops it again. `deploy/localpg.py install-timezones` adds the time-zone data its Windows build lacks. pgserver picks a new random port at every start, so a database restarted while the system runs would never be found again. `localpg.py` therefore reuses its previous port (found while preparing the E6 database-outage fault).
 
 **Not yet verified:** `setup.ps1` end to end on a fresh Windows account with a real Neon project. The script asks for the connection string and the first password, so it cannot run unattended. The students' first installation is that test.
 

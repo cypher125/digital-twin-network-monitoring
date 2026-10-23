@@ -32,7 +32,7 @@ import argparse
 import subprocess
 import sys
 import time
-from datetime import datetime
+from datetime import UTC, datetime
 
 import numpy as np
 
@@ -60,6 +60,23 @@ def database_is_local() -> bool:
     return "local" in label or "127.0.0.1" in label
 
 
+FAULT_FIELDS = ["fault", "at_s", "at_utc", "skipped", "recovered_after_s", "twin_shows_down_after_s",
+                "twin_shows_up_again_after_s", "outage_ended_s", "note", "error"]
+
+
+def across_restarts(counts: list[int]) -> int | None:
+    """Total of an engine counter over the run. The counter starts again from 0 whenever the
+    engine restarts, so each fall marks a new engine lifetime: add up each lifetime's last value."""
+    if not counts:
+        return None
+    total, previous = 0, counts[0]
+    for value in counts[1:]:
+        if value < previous:
+            total += previous
+        previous = value
+    return total + previous
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Soak test with injected faults (NFR2).")
     parser.add_argument("--hours", type=float, default=6.0)
@@ -81,6 +98,7 @@ def main() -> None:
     duration = hours * 3600
     began = time.monotonic()
     started_at = datetime.now().isoformat(timespec="seconds")
+    started_utc = datetime.now(UTC).isoformat(timespec="seconds")
 
     def elapsed() -> float:
         return time.monotonic() - began
@@ -101,59 +119,82 @@ def main() -> None:
     link_down_seen: float | None = None
     database_back_at: float | None = None
 
+    def checkpoint() -> None:
+        """Partial results, so a crash of this script hours into the run loses nothing."""
+        results.write_csv("timeline.csv", timeline, ["t_s", "utc", "api_ok", "fresh", "engine_state", "last_cycle",
+                                                     "error"])
+        results.write_csv("resources.csv", resources, ["t_s", "service", "pid", "rss_mb", "cpu_pct", "processes",
+                                                       "cycles_stored", "cycles_missed"])
+        results.write_csv("faults.csv", fault_rows, FAULT_FIELDS)
+
+    next_checkpoint = 600.0
     print(f"soak test for {hours:g} h against {args.url}; local database: {local_db}")
     while elapsed() < duration:
         now = elapsed()
-        if pending and now >= pending[0]["at"] * duration:
-            fault = pending.pop(0)
-            row = {"fault": fault["name"], "at_s": round(now, 1), "skipped": False}
-            if fault["name"].startswith("database"):
-                if local_db:
-                    subprocess.run([*LOCALPG, "stop"], capture_output=True, check=False)
-                    database_back_at = now + 90          # sampling carries on during the outage
+        try:
+            if pending and now >= pending[0]["at"] * duration:
+                fault = pending.pop(0)
+                row = {"fault": fault["name"], "at_s": round(now, 1), "at_utc": datetime.now(UTC).isoformat(timespec="seconds"),
+                       "skipped": False}
+                if fault["name"].startswith("database"):
+                    if local_db:
+                        subprocess.run([*LOCALPG, "stop"], capture_output=True, check=False)
+                        database_back_at = now + 90          # sampling carries on during the outage
+                    else:
+                        row["skipped"] = True
+                        row["note"] = "database is Neon: an outage cannot be injected from here"
                 else:
-                    row["skipped"] = True
-                    row["note"] = "database is Neon: an outage cannot be injected from here"
-            else:
-                try:
-                    fault["do"]()
-                except Exception as error:  # report, do not stop the soak test
-                    row["error"] = str(error)
-            print(f"{now / 60:6.1f} min  fault: {fault['name']}{' (skipped)' if row['skipped'] else ''}")
-            fault_rows.append(row)
-            active = None if row["skipped"] else row
-            link_down_seen = None
+                    try:
+                        fault["do"]()
+                    except Exception as error:  # report, do not stop the soak test
+                        row["error"] = str(error)
+                print(f"{now / 60:6.1f} min  fault: {fault['name']}{' (skipped)' if row['skipped'] else ''}")
+                fault_rows.append(row)
+                active = None if row["skipped"] else row
+                link_down_seen = None
 
-        if database_back_at is not None and now >= database_back_at:
-            subprocess.run([*LOCALPG, "start"], capture_output=True, check=False)
-            database_back_at = None
+            if database_back_at is not None and now >= database_back_at:
+                done = subprocess.run([*LOCALPG, "start"], capture_output=True, text=True, check=False)
+                if done.returncode != 0:
+                    database_back_at = now + 10              # try again shortly
+                else:
+                    database_back_at = None
+                    if active is not None:
+                        active["outage_ended_s"] = round(now, 1)
+                        # localpg.py restarts it on the same port, so the services find it again
+                        active["note"] = f"restarted at {(done.stdout.strip().splitlines() or [''])[-1].split('@')[-1]}"
+            live = dashboard.get("live")
+            fresh = bool(live) and live.get("engine_state") == "running" and not live.get("stale")
+            timeline.append({"t_s": round(now, 1), "utc": datetime.now(UTC).isoformat(timespec="seconds"),
+                             "api_ok": live is not None, "fresh": fresh,
+                             "engine_state": (live or {}).get("engine_state"), "last_cycle": (live or {}).get("last_cycle")})
             if active is not None:
-                active["outage_ended_s"] = round(now, 1)
-        live = dashboard.get("live")
-        fresh = bool(live) and live.get("engine_state") == "running" and not live.get("stale")
-        timeline.append({"t_s": round(now, 1), "api_ok": live is not None, "fresh": fresh,
-                         "engine_state": (live or {}).get("engine_state"), "last_cycle": (live or {}).get("last_cycle")})
-        if active is not None:
-            if active["fault"].startswith("ISP-B"):
-                status = link_status(dashboard)
-                if status == "down" and link_down_seen is None:
-                    link_down_seen = now
-                    active["twin_shows_down_after_s"] = round(now - active["at_s"], 1)
-                if link_down_seen is not None and status == "up" and fresh:
-                    active["twin_shows_up_again_after_s"] = round(now - active["at_s"], 1)
-                    active["recovered_after_s"] = active["twin_shows_up_again_after_s"]
+                if active["fault"].startswith("ISP-B"):
+                    status = link_status(dashboard)
+                    if status == "down" and link_down_seen is None:
+                        link_down_seen = now
+                        active["twin_shows_down_after_s"] = round(now - active["at_s"], 1)
+                    if link_down_seen is not None and status == "up" and fresh:
+                        active["twin_shows_up_again_after_s"] = round(now - active["at_s"], 1)
+                        active["recovered_after_s"] = active["twin_shows_up_again_after_s"]
+                        active = None
+                elif fresh and now - active["at_s"] > 5 and database_back_at is None:
+                    active["recovered_after_s"] = round(now - active["at_s"], 1)
                     active = None
-            elif fresh and now - active["at_s"] > 5 and database_back_at is None:
-                active["recovered_after_s"] = round(now - active["at_s"], 1)
-                active = None
-        if now >= next_resources:
-            usage = sampler.sample()
-            status = dashboard.get("system/status") or {}
-            engine = status.get("engine") or {}
-            for name, info in usage.items():
-                resources.append({"t_s": round(now, 1), "service": name, **info,
-                                  "cycles_stored": engine.get("cycles_stored"), "cycles_missed": engine.get("cycles_missed")})
-            next_resources = now + 60
+            if now >= next_resources:
+                usage = sampler.sample()
+                status = dashboard.get("system/status") or {}
+                engine = status.get("engine") or {}
+                for name, info in usage.items():
+                    resources.append({"t_s": round(now, 1), "service": name, **info,
+                                      "cycles_stored": engine.get("cycles_stored"), "cycles_missed": engine.get("cycles_missed")})
+                next_resources = now + 60
+        except Exception as error:  # never let one bad sample end a run of many hours
+            timeline.append({"t_s": round(now, 1), "utc": datetime.now(UTC).isoformat(timespec="seconds"),
+                             "api_ok": False, "fresh": False, "error": f"{type(error).__name__}: {error}"[:200]})
+        if now >= next_checkpoint:
+            checkpoint()
+            next_checkpoint = now + 600
         time.sleep(max(0.0, args.sample_seconds - (elapsed() - now)))
 
     # ---------------------------------------------------------------- summary
@@ -175,20 +216,19 @@ def main() -> None:
                             "rss_max_mb": round(float(y.max()), 1),
                             "growth_mb_per_hour": round(float(np.polyfit(x, y, 1)[0]), 2)}
     missed = [r["cycles_missed"] for r in resources if r["service"] == "engine" and r["cycles_missed"] is not None]
+    stored = [r["cycles_stored"] for r in resources if r["service"] == "engine" and r["cycles_stored"] is not None]
     recovered = [r for r in fault_rows if not r.get("skipped")]
-    results.write_csv("timeline.csv", timeline, ["t_s", "api_ok", "fresh", "engine_state", "last_cycle"])
-    results.write_csv("resources.csv", resources, ["t_s", "service", "pid", "rss_mb", "cpu_pct", "processes",
-                                                   "cycles_stored", "cycles_missed"])
-    results.write_csv("faults.csv", fault_rows, ["fault", "at_s", "skipped", "recovered_after_s", "twin_shows_down_after_s",
-                                                 "twin_shows_up_again_after_s", "outage_ended_s", "note", "error"])
+    checkpoint()
     all_recovered = all("recovered_after_s" in r for r in recovered)
     results.summary = {
-        "started": started_at, "hours": hours, "samples": len(timeline),
+        "started": started_at, "started_utc": started_utc, "hours": hours, "samples": len(timeline),
         "availability_pct": round(100 * float(fresh_flags.mean()), 2) if len(fresh_flags) else None,
         "availability_outside_faults_pct": round(100 * float(fresh_flags[~in_fault].mean()), 2) if (~in_fault).any() else None,
         "faults": fault_rows, "all_faults_recovered_without_manual_steps": all_recovered,
         "max_recovery_s": max((r.get("recovered_after_s", 0) for r in recovered), default=None),
-        "engine_cycles_missed_reported": missed[-1] if missed else None,
+        "engine_cycles_missed_reported": across_restarts(missed),
+        "engine_cycles_stored_reported": across_restarts(stored),
+        "distinct_cycles_seen_by_the_dashboard": len({r.get("last_cycle") for r in timeline if r.get("last_cycle")}),
         "memory": growth, "local_database": local_db,
         "target": "recovers with no manual steps", "target_met": all_recovered,
     }

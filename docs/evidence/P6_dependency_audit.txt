@@ -1,0 +1,39 @@
+Dependency audit, 2026-10-23T00:02Z, commit 9266780
+
+== Python: pip-audit on the locked production dependencies (uv export --no-dev) ==
+WARNING:pip_audit._cli:--no-deps is supported, but users are encouraged to fully hash their pinned dependencies
+WARNING:pip_audit._cli:Consider using a tool like `pip-compile`: https://pip-tools.readthedocs.io/en/latest/#using-hashes
+No known vulnerabilities found
+
+== npm audit --omit=dev (what the dashboard build ships) ==
+found 0 vulnerabilities
+
+== npm audit (including development tools) ==
+# npm audit report
+
+braces  *
+Severity: high
+braces vulnerable to stack-exhaustion denial of service through deeply nested patterns - https://github.com/advisories/GHSA-vfj7-8cjw-p6xm
+fix available via `npm audit fix --force`
+Will install eslint-config-next@14.2.35, which is a breaking change
+node_modules/braces
+  micromatch  >=0.2.0
+  Depends on vulnerable versions of braces
+  node_modules/micromatch
+    fast-glob  *
+    Depends on vulnerable versions of micromatch
+    node_modules/fast-glob
+      @next/eslint-plugin-next  >=14.3.0-canary.0
+      Depends on vulnerable versions of fast-glob
+      node_modules/@next/eslint-plugin-next
+        eslint-config-next  >=14.3.0-canary.0
+        Depends on vulnerable versions of @next/eslint-plugin-next
+        node_modules/eslint-config-next
+
+5 high severity vulnerabilities
+
+To address all issues (including breaking changes), run:
+
+Note: the five findings are one advisory (braces, GHSA-vfj7-8cjw-p6xm, every version affected, no fix released) reached only through eslint-config-next, the lint tool used during development. Linting is not part of the static build that Caddy serves, so it does not reach users.
+
+Before this run, pip-audit found one advisory: certifi 2026.10.18 (PYSEC-2026-4320). certifi was upgraded to 2026.10.19 in uv.lock and in the environment on 2026-10-23, and the audit above was then repeated.

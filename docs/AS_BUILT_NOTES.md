@@ -283,6 +283,16 @@ The model must be under 100 MB.
 4. The twin never uses the lab client. Only the test harness may control the emulator (G3).
 5. The engine core (data collection, network model, prediction, simulation) does not depend on Django.
 
+**Extension points.** There are two registries:
+- **Scenario types** (`simulation_engine/scenarios.py`). The dashboard builds its cards and forms from the registry, through `GET scenario-types`.
+- **Network adapters** (`network_adapter/__init__.py`). `run_twin --adapter <key> --source <address>` picks one.
+
+A worked example in [EXTENDING.md](EXTENDING.md) adds a "Link degradation" scenario type and a "snapshot-replay" adapter:
+- 7 files, 123 lines added and 1 changed;
+- no change to the engine, the API or the dashboard.
+
+The example was tested on a copy of the repository and kept out of the delivered system, which stays as Chapter 3 describes. Its diff is in `docs/evidence/NFR5_extension_example.diff`.
+
 ## 8a. REST API (Figure 3.2 Django REST Backend, Figure 3.4 process 6.0)
 
 All under `/api/v1/`, JSON. The live documentation is at `/api/v1/docs` (Swagger UI, login required).

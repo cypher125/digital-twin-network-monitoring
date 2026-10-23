@@ -963,3 +963,15 @@ Three independent critics reviewed v1.1: fidelity to the write-up, feasibility o
 | After an emulator restart its numbering started again, so the adapter would wait for numbers that never came | The emulator resumes its cycle numbers; the adapter notices a restart and reads the new records |
 | Caddy's automatic trust install opens a Windows dialog and holds Caddy until it is answered | `skip_install_trust`; `setup.ps1` runs `caddy trust` once |
 | A CPU-heavy recommendation thread still slows the cycle (Python runs one thread at a time) | Recommendations are worked out only between cycles |
+
+**Found while preparing the evaluation (P7, v1.5):**
+
+| Finding | Change |
+|---|---|
+| The traceability matrix promised a schema conformance test for Tables 3.2 and 3.3, but there was none | `tests/integration/test_schema.py` reads the live PostgreSQL catalogue: the six tables, every principal field, the primary keys, the Table 3.3 foreign keys, PROTECT on delete. It found that Django's foreign keys are checked at commit (deferred), so the test checks them immediately |
+| Adapters were said to plug in "through registries", but `run_twin` built the HTTP adapter directly | An adapter registry with `run_twin --adapter`; a test checks that every registered adapter is read-only and complete (NFR5, G3) |
+| NFR5 asks for a documented extension walkthrough | `docs/EXTENDING.md`: a scenario type and an adapter added on a copy of the repository and tested — 7 files, 123 lines, no change to the engine, API or dashboard |
+| §6.3 promised a data dictionary | `docs/DATA_DICTIONARY.md`, taken from the models |
+| §8 promised dependency audits | `docs/evidence/P6_dependency_audit.txt`. The audit found one Python advisory (certifi), fixed by upgrading to 2026.10.19. The npm findings are in a development-only lint tool |
+| Chapter 4 needs the as-built figures | `docs/diagrams/`: architecture, DFD, ERD and use cases, in the style of Chapter 3, with additions dashed |
+| E8 had no tooling | `evaluation/e8_functional_matrix.py` (requirement → tests, walkthrough steps, experiments; pass/fail) and `evaluation/e8_sus.py` with `docs/evaluation/E8_USABILITY_KIT.md` |

@@ -267,8 +267,12 @@ def experiment_status(name: str) -> tuple[str, str]:
     if data.get("config", {}).get("quick") or summary.get("quick"):
         return "pending", "only a quick run so far"
     verdict = summary.get("verdict")
+    targets = {k: v for k, v in summary.items() if k.startswith("target") and isinstance(v, dict) and "met" in v}
     if isinstance(verdict, dict):
         passed, criterion = verdict.get("passed"), verdict.get("criterion", "")
+    elif targets:   # {"target_x": {"rule": ..., "met": bool}, ...}
+        passed = all(bool(v["met"]) for v in targets.values())
+        criterion = "; ".join(f"{v.get('rule', k)}: {'met' if v['met'] else 'not met'}" for k, v in targets.items())
     else:
         passed, criterion = verdict if isinstance(verdict, bool) else summary.get("passed"), ""
     if passed is None:

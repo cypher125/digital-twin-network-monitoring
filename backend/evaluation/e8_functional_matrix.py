@@ -270,6 +270,8 @@ def experiment_status(name: str) -> tuple[str, str]:
     targets = {k: v for k, v in summary.items() if k.startswith("target") and isinstance(v, dict) and "met" in v}
     if isinstance(verdict, dict):
         passed, criterion = verdict.get("passed"), verdict.get("criterion", "")
+    elif isinstance(summary.get("target_met"), bool):   # {"target": "...", "target_met": bool}
+        passed, criterion = summary["target_met"], str(summary.get("target", ""))
     elif targets:   # {"target_x": {"rule": ..., "met": bool}, ...}
         passed = all(bool(v["met"]) for v in targets.values())
         criterion = "; ".join(f"{v.get('rule', k)}: {'met' if v['met'] else 'not met'}" for k, v in targets.items())

@@ -1,0 +1,717 @@
+{
+  "experiment": "E1",
+  "title": "Replication fidelity (G1)",
+  "finished": "2026-10-25T10:55:28+00:00",
+  "seconds": 143.6,
+  "code_version": "c27c0aa+uncommitted",
+  "python": "3.13.1",
+  "machine": "Windows 11, Intel64 Family 6 Model 122 Stepping 8, GenuineIntel",
+  "machine_load": {
+    "at_start": {
+      "cpu_pct": 100.0,
+      "memory_used_pct": 93.6,
+      "busy_other_programs": [
+        {
+          "name": "backgroundTaskHost.exe",
+          "cpu_pct_of_machine": 15.6,
+          "command": "C:\\WINDOWS\\system32\\backgroundTaskHost.exe -ServerName:App.AppXpybpk6fj2fe0gb0jan49e6dncngk3pa1.mca"
+        },
+        {
+          "name": "backgroundTaskHost.exe",
+          "cpu_pct_of_machine": 9.8,
+          "command": "C:\\WINDOWS\\system32\\backgroundTaskHost.exe -ServerName:App.AppXe9cvj1thv1hmcw0cs98xm3r97tyzy2xs.mca"
+        },
+        {
+          "name": "Void.exe",
+          "cpu_pct_of_machine": 8.9,
+          "command": "C:\\Program Files\\Void\\Void.exe --type=renderer --user-data-dir=C:\\Users\\cirex\\AppData\\Roaming\\Void -"
+        },
+        {
+          "name": "Void.exe",
+          "cpu_pct_of_machine": 8.2,
+          "command": "C:\\Program Files\\Void\\Void.exe --type=renderer --user-data-dir=C:\\Users\\cirex\\AppData\\Roaming\\Void -"
+        },
+        {
+          "name": "System",
+          "cpu_pct_of_machine": 6.0,
+          "command": ""
+        }
+      ]
+    },
+    "at_finish": {
+      "cpu_pct": 93.4,
+      "memory_used_pct": 90.0,
+      "busy_other_programs": [
+        {
+          "name": "Void.exe",
+          "cpu_pct_of_machine": 40.6,
+          "command": "C:\\Program Files\\Void\\Void.exe --type=renderer --user-data-dir=C:\\Users\\cirex\\AppData\\Roaming\\Void -"
+        },
+        {
+          "name": "System Idle Process",
+          "cpu_pct_of_machine": 15.7,
+          "command": ""
+        },
+        {
+          "name": "MemCompression",
+          "cpu_pct_of_machine": 6.3,
+          "command": ""
+        },
+        {
+          "name": "System",
+          "cpu_pct_of_machine": 6.0,
+          "command": ""
+        }
+      ]
+    }
+  },
+  "config": {
+    "quick": false,
+    "start": "2026-11-02T00:00:00+01:00",
+    "hours_per_preset": 24.0,
+    "cycles_per_preset": 1440,
+    "cycle_seconds": 60,
+    "step_seconds": 10,
+    "poll_offset_seconds": 10.0,
+    "presets": [
+      "off",
+      "default",
+      "high"
+    ],
+    "seed": 2026,
+    "fault_seed": 2125,
+    "injected_fault_every_minutes": 120.0,
+    "injected_link_fault_minutes": [
+      3.0,
+      20.0
+    ],
+    "injected_device_fault_minutes": [
+      2.0,
+      10.0
+    ],
+    "random_faults": {
+      "enabled": true,
+      "link_mtbf_hours": 1500,
+      "link_mttr_minutes": 20,
+      "device_mtbf_hours": 3000,
+      "device_mttr_minutes": 8
+    },
+    "data_quality": {
+      "missing_sample_prob": 0.002,
+      "spike_prob": 0.0005
+    },
+    "reality_gap": {
+      "off": {
+        "ecmp_imbalance": 0.0,
+        "overhead_pct": 0.0,
+        "noise_sigma": 0.08,
+        "noise_phi": 0.9,
+        "flow_sampling": 1,
+        "flow_export_delay_cycles": 0
+      },
+      "default": {
+        "ecmp_imbalance": 0.1,
+        "overhead_pct": 3.0,
+        "noise_sigma": 0.08,
+        "noise_phi": 0.9,
+        "flow_sampling": 100,
+        "flow_export_delay_cycles": 1
+      },
+      "high": {
+        "ecmp_imbalance": 0.25,
+        "overhead_pct": 5.0,
+        "noise_sigma": 0.08,
+        "noise_phi": 0.9,
+        "flow_sampling": 1000,
+        "flow_export_delay_cycles": 2
+      }
+    },
+    "random_surges_per_day": 4,
+    "demand_model_every_cycles": 5,
+    "warmup_polls_excluded": 1,
+    "topology": "data\\topologies\\campus.yaml",
+    "devices": 34,
+    "links": 43,
+    "target": "MAE < 1 percentage point at the default preset; every status change within one cycle"
+  },
+  "summary": {
+    "target_error": {
+      "rule": "mean absolute utilisation error < 1 percentage point at the default reality-gap preset",
+      "preset": "default",
+      "mae_pts": 0.0001,
+      "met": true,
+      "p95_under_1pt": true,
+      "max_under_1pt": true
+    },
+    "target_status": {
+      "rule": "every ground-truth status change shown by the twin within one cycle (60 s) and kept",
+      "preset": "default",
+      "changes": 60,
+      "met": true,
+      "met_per_preset": {
+        "off": true,
+        "default": true,
+        "high": true
+      }
+    },
+    "presets": {
+      "off": {
+        "cycles_scored": 1439,
+        "link_cycles": 61877,
+        "coverage_pct": 100.0,
+        "utilisation_error_pts": {
+          "n": 61877,
+          "mae": 0.0001,
+          "p50": 0.0,
+          "p95": 0.0,
+          "p99": 0.0,
+          "max": 0.811,
+          "share_under_1pt": 1.0
+        },
+        "utilisation_error_clean_pts": {
+          "n": 61206,
+          "mae": 0.0,
+          "p50": 0.0,
+          "p95": 0.0,
+          "p99": 0.0,
+          "max": 0.0001,
+          "share_under_1pt": 1.0
+        },
+        "utilisation_error_dq_affected_pts": {
+          "n": 624,
+          "mae": 0.01,
+          "p50": 0.0,
+          "p95": 0.0355,
+          "p99": 0.1915,
+          "max": 0.811,
+          "share_under_1pt": 1.0
+        },
+        "utilisation_error_status_change_cycles_pts": {
+          "n": 48,
+          "mae": 0.0006,
+          "p50": 0.0,
+          "p95": 0.0,
+          "p99": 0.0145,
+          "max": 0.0274,
+          "share_under_1pt": 1.0
+        },
+        "displayed_state_error_pts": {
+          "n": 61877,
+          "mae": 0.0001,
+          "p50": 0.0,
+          "p95": 0.0,
+          "p99": 0.0,
+          "max": 0.811,
+          "share_under_1pt": 1.0
+        },
+        "demand_model_error_pts": {
+          "n": 12341,
+          "mae": 0.0058,
+          "p50": 0.0,
+          "p95": 0.0,
+          "p99": 0.0506,
+          "max": 8.5162,
+          "share_under_1pt": 0.9989
+        },
+        "status": {
+          "link_cycle_agreement_pct": 100.0,
+          "device_cycle_agreement_pct": 100.0,
+          "link_step_agreement_pct": 99.9855,
+          "device_step_agreement_pct": 99.9959,
+          "changes": 60,
+          "within_one_cycle": 60,
+          "within_one_cycle_pct": 100.0,
+          "missed": 0,
+          "reverted": 11,
+          "overwritten_by_poll": 11,
+          "delay_median_s": 0.0,
+          "delay_p95_s": 60.0,
+          "delay_max_s": 60.0,
+          "delay_max_cycles": 1.0,
+          "links": {
+            "changes": 48,
+            "missed": 0,
+            "reverted": 9,
+            "overwritten_by_poll": 9,
+            "within_one_cycle": 48,
+            "delay_median_s": 0.0,
+            "delay_max_s": 60.0
+          },
+          "devices": {
+            "changes": 12,
+            "missed": 0,
+            "reverted": 2,
+            "overwritten_by_poll": 2,
+            "within_one_cycle": 12,
+            "delay_median_s": 0.0,
+            "delay_max_s": 60.0
+          },
+          "injected": {
+            "changes": 58,
+            "missed": 0,
+            "reverted": 11,
+            "overwritten_by_poll": 11,
+            "within_one_cycle": 58,
+            "delay_median_s": 0.0,
+            "delay_max_s": 60.0
+          },
+          "random": {
+            "changes": 2,
+            "missed": 0,
+            "reverted": 0,
+            "overwritten_by_poll": 0,
+            "within_one_cycle": 2,
+            "delay_median_s": 0.0,
+            "delay_max_s": 0.0
+          }
+        },
+        "tiers": {
+          "access": {
+            "links": 13,
+            "coverage_pct": 100.0,
+            "mae_pts": 0.0002,
+            "p95_pts": 0.0,
+            "max_pts": 0.811,
+            "model_mae_pts": 0.0073
+          },
+          "core": {
+            "links": 6,
+            "coverage_pct": 100.0,
+            "mae_pts": 0.0001,
+            "p95_pts": 0.0,
+            "max_pts": 0.1817,
+            "model_mae_pts": 0.0021
+          },
+          "distribution": {
+            "links": 16,
+            "coverage_pct": 100.0,
+            "mae_pts": 0.0,
+            "p95_pts": 0.0,
+            "max_pts": 0.0769,
+            "model_mae_pts": 0.0054
+          },
+          "server": {
+            "links": 6,
+            "coverage_pct": 100.0,
+            "mae_pts": 0.0,
+            "p95_pts": 0.0,
+            "max_pts": 0.034,
+            "model_mae_pts": 0.0086
+          },
+          "wan": {
+            "links": 2,
+            "coverage_pct": 100.0,
+            "mae_pts": 0.0004,
+            "p95_pts": 0.0,
+            "max_pts": 0.422,
+            "model_mae_pts": 0.0032
+          }
+        },
+        "data_quality_reported": {
+          "interfaces_expected": 123641,
+          "interfaces_received": 123373,
+          "interfaces_missing": 268,
+          "spikes_rejected": 45,
+          "counter_resets": 6,
+          "utilisation_clipped": 0,
+          "links_without_rate": 0,
+          "unknown_elements": 0,
+          "cpu_rejected": 0,
+          "flows_rejected": 0,
+          "capacity_changes": 0
+        },
+        "data_quality_injected": {
+          "scheduled": 12,
+          "applied": 12,
+          "skipped_already_down": 0,
+          "served_missing": 268,
+          "served_spikes": 45,
+          "reboots": 6
+        },
+        "processing_ms": {
+          "p50": 7.1731,
+          "p95": 10.9797,
+          "max": 129.204,
+          "mean": 8.1619
+        },
+        "wall_seconds": 48.1
+      },
+      "default": {
+        "cycles_scored": 1439,
+        "link_cycles": 61877,
+        "coverage_pct": 100.0,
+        "utilisation_error_pts": {
+          "n": 61877,
+          "mae": 0.0001,
+          "p50": 0.0,
+          "p95": 0.0,
+          "p99": 0.0,
+          "max": 0.6143,
+          "share_under_1pt": 1.0
+        },
+        "utilisation_error_clean_pts": {
+          "n": 61216,
+          "mae": 0.0,
+          "p50": 0.0,
+          "p95": 0.0,
+          "p99": 0.0,
+          "max": 0.0001,
+          "share_under_1pt": 1.0
+        },
+        "utilisation_error_dq_affected_pts": {
+          "n": 613,
+          "mae": 0.0117,
+          "p50": 0.0,
+          "p95": 0.0488,
+          "p99": 0.3162,
+          "max": 0.6143,
+          "share_under_1pt": 1.0
+        },
+        "utilisation_error_status_change_cycles_pts": {
+          "n": 48,
+          "mae": 0.0,
+          "p50": 0.0,
+          "p95": 0.0,
+          "p99": 0.0,
+          "max": 0.0,
+          "share_under_1pt": 1.0
+        },
+        "displayed_state_error_pts": {
+          "n": 61877,
+          "mae": 0.0001,
+          "p50": 0.0,
+          "p95": 0.0,
+          "p99": 0.0,
+          "max": 0.6143,
+          "share_under_1pt": 1.0
+        },
+        "demand_model_error_pts": {
+          "n": 12341,
+          "mae": 0.1014,
+          "p50": 0.0174,
+          "p95": 0.5394,
+          "p99": 1.4238,
+          "max": 10.9022,
+          "share_under_1pt": 0.9773
+        },
+        "status": {
+          "link_cycle_agreement_pct": 100.0,
+          "device_cycle_agreement_pct": 100.0,
+          "link_step_agreement_pct": 99.9855,
+          "device_step_agreement_pct": 99.9959,
+          "changes": 60,
+          "within_one_cycle": 60,
+          "within_one_cycle_pct": 100.0,
+          "missed": 0,
+          "reverted": 11,
+          "overwritten_by_poll": 11,
+          "delay_median_s": 0.0,
+          "delay_p95_s": 60.0,
+          "delay_max_s": 60.0,
+          "delay_max_cycles": 1.0,
+          "links": {
+            "changes": 48,
+            "missed": 0,
+            "reverted": 9,
+            "overwritten_by_poll": 9,
+            "within_one_cycle": 48,
+            "delay_median_s": 0.0,
+            "delay_max_s": 60.0
+          },
+          "devices": {
+            "changes": 12,
+            "missed": 0,
+            "reverted": 2,
+            "overwritten_by_poll": 2,
+            "within_one_cycle": 12,
+            "delay_median_s": 0.0,
+            "delay_max_s": 60.0
+          },
+          "injected": {
+            "changes": 58,
+            "missed": 0,
+            "reverted": 11,
+            "overwritten_by_poll": 11,
+            "within_one_cycle": 58,
+            "delay_median_s": 0.0,
+            "delay_max_s": 60.0
+          },
+          "random": {
+            "changes": 2,
+            "missed": 0,
+            "reverted": 0,
+            "overwritten_by_poll": 0,
+            "within_one_cycle": 2,
+            "delay_median_s": 0.0,
+            "delay_max_s": 0.0
+          }
+        },
+        "tiers": {
+          "access": {
+            "links": 13,
+            "coverage_pct": 100.0,
+            "mae_pts": 0.0002,
+            "p95_pts": 0.0,
+            "max_pts": 0.6016,
+            "model_mae_pts": 0.1438
+          },
+          "core": {
+            "links": 6,
+            "coverage_pct": 100.0,
+            "mae_pts": 0.0001,
+            "p95_pts": 0.0,
+            "max_pts": 0.12,
+            "model_mae_pts": 0.0398
+          },
+          "distribution": {
+            "links": 16,
+            "coverage_pct": 100.0,
+            "mae_pts": 0.0001,
+            "p95_pts": 0.0,
+            "max_pts": 0.1041,
+            "model_mae_pts": 0.0452
+          },
+          "server": {
+            "links": 6,
+            "coverage_pct": 100.0,
+            "mae_pts": 0.0,
+            "p95_pts": 0.0,
+            "max_pts": 0.0847,
+            "model_mae_pts": 0.064
+          },
+          "wan": {
+            "links": 2,
+            "coverage_pct": 100.0,
+            "mae_pts": 0.001,
+            "p95_pts": 0.0,
+            "max_pts": 0.6143,
+            "model_mae_pts": 0.572
+          }
+        },
+        "data_quality_reported": {
+          "interfaces_expected": 123641,
+          "interfaces_received": 123402,
+          "interfaces_missing": 239,
+          "spikes_rejected": 67,
+          "counter_resets": 6,
+          "utilisation_clipped": 0,
+          "links_without_rate": 0,
+          "unknown_elements": 0,
+          "cpu_rejected": 0,
+          "flows_rejected": 0,
+          "capacity_changes": 0
+        },
+        "data_quality_injected": {
+          "scheduled": 12,
+          "applied": 12,
+          "skipped_already_down": 0,
+          "served_missing": 239,
+          "served_spikes": 67,
+          "reboots": 6
+        },
+        "processing_ms": {
+          "p50": 6.76,
+          "p95": 10.8194,
+          "max": 176.0064,
+          "mean": 7.915
+        },
+        "wall_seconds": 44.2,
+        "busy_link": {
+          "link": "ISP-B-GW <-> EDGE-RTR-01",
+          "tier": "wan",
+          "capacity_mbps": 200.0,
+          "error": {
+            "n": 1439,
+            "mae": 0.0006,
+            "p50": 0.0,
+            "p95": 0.0,
+            "p99": 0.0,
+            "max": 0.4172,
+            "share_under_1pt": 1.0
+          }
+        }
+      },
+      "high": {
+        "cycles_scored": 1439,
+        "link_cycles": 61877,
+        "coverage_pct": 99.9984,
+        "utilisation_error_pts": {
+          "n": 61876,
+          "mae": 0.0001,
+          "p50": 0.0,
+          "p95": 0.0,
+          "p99": 0.0,
+          "max": 0.7226,
+          "share_under_1pt": 1.0
+        },
+        "utilisation_error_clean_pts": {
+          "n": 61154,
+          "mae": 0.0,
+          "p50": 0.0,
+          "p95": 0.0,
+          "p99": 0.0,
+          "max": 0.0001,
+          "share_under_1pt": 1.0
+        },
+        "utilisation_error_dq_affected_pts": {
+          "n": 674,
+          "mae": 0.0092,
+          "p50": 0.0,
+          "p95": 0.0358,
+          "p99": 0.2093,
+          "max": 0.7226,
+          "share_under_1pt": 1.0
+        },
+        "utilisation_error_status_change_cycles_pts": {
+          "n": 48,
+          "mae": 0.0,
+          "p50": 0.0,
+          "p95": 0.0,
+          "p99": 0.0,
+          "max": 0.0,
+          "share_under_1pt": 1.0
+        },
+        "displayed_state_error_pts": {
+          "n": 61877,
+          "mae": 0.0001,
+          "p50": 0.0,
+          "p95": 0.0,
+          "p99": 0.0,
+          "max": 0.7226,
+          "share_under_1pt": 1.0
+        },
+        "demand_model_error_pts": {
+          "n": 12341,
+          "mae": 0.2415,
+          "p50": 0.0479,
+          "p95": 1.2166,
+          "p99": 3.334,
+          "max": 81.0488,
+          "share_under_1pt": 0.9425
+        },
+        "status": {
+          "link_cycle_agreement_pct": 100.0,
+          "device_cycle_agreement_pct": 100.0,
+          "link_step_agreement_pct": 99.9855,
+          "device_step_agreement_pct": 99.9959,
+          "changes": 60,
+          "within_one_cycle": 60,
+          "within_one_cycle_pct": 100.0,
+          "missed": 0,
+          "reverted": 11,
+          "overwritten_by_poll": 11,
+          "delay_median_s": 0.0,
+          "delay_p95_s": 60.0,
+          "delay_max_s": 60.0,
+          "delay_max_cycles": 1.0,
+          "links": {
+            "changes": 48,
+            "missed": 0,
+            "reverted": 9,
+            "overwritten_by_poll": 9,
+            "within_one_cycle": 48,
+            "delay_median_s": 0.0,
+            "delay_max_s": 60.0
+          },
+          "devices": {
+            "changes": 12,
+            "missed": 0,
+            "reverted": 2,
+            "overwritten_by_poll": 2,
+            "within_one_cycle": 12,
+            "delay_median_s": 0.0,
+            "delay_max_s": 60.0
+          },
+          "injected": {
+            "changes": 58,
+            "missed": 0,
+            "reverted": 11,
+            "overwritten_by_poll": 11,
+            "within_one_cycle": 58,
+            "delay_median_s": 0.0,
+            "delay_max_s": 60.0
+          },
+          "random": {
+            "changes": 2,
+            "missed": 0,
+            "reverted": 0,
+            "overwritten_by_poll": 0,
+            "within_one_cycle": 2,
+            "delay_median_s": 0.0,
+            "delay_max_s": 0.0
+          }
+        },
+        "tiers": {
+          "access": {
+            "links": 13,
+            "coverage_pct": 100.0,
+            "mae_pts": 0.0002,
+            "p95_pts": 0.0,
+            "max_pts": 0.7226,
+            "model_mae_pts": 0.366
+          },
+          "core": {
+            "links": 6,
+            "coverage_pct": 100.0,
+            "mae_pts": 0.0001,
+            "p95_pts": 0.0,
+            "max_pts": 0.117,
+            "model_mae_pts": 0.0818
+          },
+          "distribution": {
+            "links": 16,
+            "coverage_pct": 99.9957,
+            "mae_pts": 0.0001,
+            "p95_pts": 0.0,
+            "max_pts": 0.641,
+            "model_mae_pts": 0.0989
+          },
+          "server": {
+            "links": 6,
+            "coverage_pct": 100.0,
+            "mae_pts": 0.0001,
+            "p95_pts": 0.0,
+            "max_pts": 0.2293,
+            "model_mae_pts": 0.1503
+          },
+          "wan": {
+            "links": 2,
+            "coverage_pct": 100.0,
+            "mae_pts": 0.0002,
+            "p95_pts": 0.0,
+            "max_pts": 0.1864,
+            "model_mae_pts": 1.3245
+          }
+        },
+        "data_quality_reported": {
+          "interfaces_expected": 123641,
+          "interfaces_received": 123371,
+          "interfaces_missing": 270,
+          "spikes_rejected": 69,
+          "counter_resets": 6,
+          "utilisation_clipped": 0,
+          "links_without_rate": 1,
+          "unknown_elements": 0,
+          "cpu_rejected": 0,
+          "flows_rejected": 0,
+          "capacity_changes": 0
+        },
+        "data_quality_injected": {
+          "scheduled": 12,
+          "applied": 12,
+          "skipped_already_down": 0,
+          "served_missing": 270,
+          "served_spikes": 69,
+          "reboots": 6
+        },
+        "processing_ms": {
+          "p50": 6.5481,
+          "p95": 9.9111,
+          "max": 302.5612,
+          "mean": 7.5962
+        },
+        "wall_seconds": 40.6
+      }
+    }
+  }
+}

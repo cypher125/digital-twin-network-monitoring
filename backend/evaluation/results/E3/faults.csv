@@ -1,0 +1,3 @@
+seq,time,type,element,detail
+21,2026-11-04T18:53:10+01:00,link_down,DIST-ENG|CORE-SW-01,
+23,2026-11-04T22:44:40+01:00,link_down,DC-SW-01|SRV-MAIL,

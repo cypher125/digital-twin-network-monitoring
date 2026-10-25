@@ -1,0 +1,9 @@
+method,ramp_class,detected,surges_with_onset,detection_rate_pct
+rf,slow,6,6,100.0
+rf,medium,6,6,100.0
+rf,fast,6,6,100.0
+rf,all,18,18,100.0
+trend,slow,6,6,100.0
+trend,medium,6,6,100.0
+trend,fast,6,6,100.0
+trend,all,18,18,100.0

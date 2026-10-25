@@ -1,0 +1,9 @@
+basis,action,kind,recommended,not_testable,not_scorable,scorable,success,still_congested,new_bottleneck,success_rate,target_relieved,target_relieved_rate
+forecast,routing_change,immediate,13,0,1,12,0,9,3,0.0,3,0.25
+forecast,reroute_traffic,immediate,10,0,1,9,1,1,7,0.111111,8,0.888889
+forecast,qos_policy,immediate,24,0,6,18,12,6,0,0.666667,12,0.666667
+forecast,capacity_change,planning,24,0,6,18,18,0,0,1.0,18,1.0
+current,routing_change,immediate,4,0,0,4,0,4,0,0.0,0,0.0
+current,reroute_traffic,immediate,7,0,0,7,1,1,5,0.142857,6,0.857143
+current,qos_policy,immediate,19,0,0,19,10,9,0,0.526316,10,0.526316
+current,capacity_change,planning,19,0,0,19,19,0,0,1.0,19,1.0

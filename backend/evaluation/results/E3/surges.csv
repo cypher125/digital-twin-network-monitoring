@@ -1,0 +1,19 @@
+surge,day_time_wat,ramp_class,zone,traffic_class,multiplier,injected,run_peak_pct,run_peak_link,onset_links,primary_onset_wat,primary_link,minutes_surge_start_to_onset,most_lead_possible_min,fault_in_surge_window,rf_detected,rf_lead_min,rf_predicted_error_first_min,trend_detected,trend_lead_min
+S01,Mon 02 Nov 08:00,slow,SOT,video,4.0,True,97.512,ISP-B-GW - EDGE-RTR-01,ISP-B-GW - EDGE-RTR-01,Mon 02 Nov 08:45,ISP-B-GW - EDGE-RTR-01,45.0,44.0,False,True,28.0,2.0,True,34.0
+S02,Mon 02 Nov 11:00,medium,ICT,web,8.0,True,99.9715,ISP-B-GW - EDGE-RTR-01,ISP-B-GW - EDGE-RTR-01,Mon 02 Nov 11:09,ISP-B-GW - EDGE-RTR-01,9.0,8.0,False,True,6.0,24.0,True,6.0
+S03,Mon 02 Nov 14:00,fast,SCI,web,4.0,True,96.7684,ISP-B-GW - EDGE-RTR-01,ISP-B-GW - EDGE-RTR-01,Mon 02 Nov 14:04,ISP-B-GW - EDGE-RTR-01,4.0,3.0,False,True,3.0,27.0,True,3.0
+S04,Mon 02 Nov 17:00,slow,LIB,web,12.0,True,100.0,ISP-B-GW - EDGE-RTR-01,ISP-B-GW - EDGE-RTR-01,Mon 02 Nov 17:20,ISP-B-GW - EDGE-RTR-01,20.0,19.0,False,True,15.0,15.0,True,12.0
+S05,Mon 02 Nov 20:00,medium,HOSTEL,elearning,8.0,True,96.7566,DIST-HOSTEL - AP-HOSTEL-02,DIST-HOSTEL - AP-HOSTEL-02; DIST-HOSTEL - AP-HOSTEL-01,Mon 02 Nov 20:14,DIST-HOSTEL - AP-HOSTEL-02,14.0,13.0,False,True,11.0,-1.0,True,10.0
+S06,Mon 02 Nov 23:00,fast,HOSTEL,portal,12.0,True,100.0,DIST-HOSTEL - AP-HOSTEL-01,DIST-HOSTEL - AP-HOSTEL-01; DIST-HOSTEL - AP-HOSTEL-02,Mon 02 Nov 23:04,DIST-HOSTEL - AP-HOSTEL-02,4.0,3.0,False,True,2.0,8.0,True,1.0
+S07,Tue 03 Nov 08:00,medium,SCI,web,6.0,True,100.0,ISP-B-GW - EDGE-RTR-01,ISP-B-GW - EDGE-RTR-01,Tue 03 Nov 08:20,ISP-B-GW - EDGE-RTR-01,20.0,19.0,False,True,11.0,19.0,True,12.0
+S08,Tue 03 Nov 11:00,fast,ENG,video,4.0,True,95.8214,ISP-B-GW - EDGE-RTR-01,ISP-B-GW - EDGE-RTR-01,Tue 03 Nov 11:05,ISP-B-GW - EDGE-RTR-01,5.0,4.0,False,True,3.0,27.0,True,2.0
+S09,Tue 03 Nov 14:00,slow,ICT,video,12.0,True,100.0,ISP-B-GW - EDGE-RTR-01,ISP-B-GW - EDGE-RTR-01,Tue 03 Nov 14:20,ISP-B-GW - EDGE-RTR-01,20.0,19.0,False,True,15.0,15.0,True,13.0
+S10,Tue 03 Nov 17:00,medium,SOT,video,16.0,True,95.7604,ISP-B-GW - EDGE-RTR-01,ISP-B-GW - EDGE-RTR-01,Tue 03 Nov 17:13,ISP-B-GW - EDGE-RTR-01,13.0,12.0,False,True,10.0,20.0,True,7.0
+S11,Tue 03 Nov 20:00,fast,HOSTEL,portal,12.0,True,100.0,DIST-HOSTEL - AP-HOSTEL-01,DIST-HOSTEL - AP-HOSTEL-01; DIST-HOSTEL - AP-HOSTEL-02,Tue 03 Nov 20:04,DIST-HOSTEL - AP-HOSTEL-01,4.0,3.0,False,True,3.0,7.0,True,1.0
+S12,Tue 03 Nov 23:00,slow,HOSTEL,elearning,16.0,True,100.0,DIST-HOSTEL - AP-HOSTEL-02,DIST-HOSTEL - AP-HOSTEL-01; DIST-HOSTEL - AP-HOSTEL-02,Tue 03 Nov 23:18,DIST-HOSTEL - AP-HOSTEL-01,18.0,17.0,False,True,6.0,24.0,True,14.0
+S13,Wed 04 Nov 08:00,fast,ENG,video,8.0,True,95.3263,ISP-B-GW - EDGE-RTR-01,ISP-B-GW - EDGE-RTR-01,Wed 04 Nov 08:23,ISP-B-GW - EDGE-RTR-01,23.0,22.0,False,True,20.0,10.0,True,19.0
+S14,Wed 04 Nov 11:00,slow,ADMIN,web,8.0,True,95.0715,ISP-B-GW - EDGE-RTR-01,ISP-B-GW - EDGE-RTR-01,Wed 04 Nov 11:22,ISP-B-GW - EDGE-RTR-01,22.0,21.0,False,True,18.0,12.0,True,16.0
+S15,Wed 04 Nov 14:00,medium,SOT,video,6.0,True,100.0,ISP-B-GW - EDGE-RTR-01,ISP-B-GW - EDGE-RTR-01,Wed 04 Nov 14:08,ISP-B-GW - EDGE-RTR-01,8.0,7.0,False,True,5.0,25.0,True,5.0
+S16,Wed 04 Nov 17:00,fast,SCI,web,16.0,True,100.0,ISP-B-GW - EDGE-RTR-01,ISP-B-GW - EDGE-RTR-01,Wed 04 Nov 17:04,ISP-B-GW - EDGE-RTR-01,4.0,3.0,False,True,2.0,3.0,True,1.0
+S17,Wed 04 Nov 20:00,slow,HOSTEL,elearning,8.0,True,97.335,DIST-HOSTEL - AP-HOSTEL-02,DIST-HOSTEL - AP-HOSTEL-02,Wed 04 Nov 20:30,DIST-HOSTEL - AP-HOSTEL-02,30.0,29.0,False,True,19.0,11.0,True,25.0
+S18,Wed 04 Nov 23:00,medium,HOSTEL,portal,12.0,True,98.9068,DIST-HOSTEL - AP-HOSTEL-01,DIST-HOSTEL - AP-HOSTEL-01; DIST-HOSTEL - AP-HOSTEL-02,Wed 04 Nov 23:14,DIST-HOSTEL - AP-HOSTEL-01,14.0,13.0,False,True,12.0,3.0,True,11.0

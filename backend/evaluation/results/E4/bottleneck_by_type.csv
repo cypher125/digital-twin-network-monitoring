@@ -1,0 +1,9 @@
+scenario_type,preset,true_positives,false_positives,false_negatives,precision_pct,recall_pct
+traffic_increase,default,5,1,0,83.333333,100.0
+link_failure,default,3,0,0,100.0,100.0
+device_failure,default,1,0,0,100.0,100.0
+routing_change,default,4,0,0,100.0,100.0
+reroute_traffic,default,0,0,0,,
+capacity_change,default,5,2,0,71.428571,100.0
+access_control_rule,default,0,0,0,,
+qos_policy,default,0,0,0,,

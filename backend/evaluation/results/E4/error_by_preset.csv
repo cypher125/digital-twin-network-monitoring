@@ -1,0 +1,4 @@
+preset,instances_scored,busy_samples,busy_mae_pts,busy_p95_pts,busy_max_pts,all_links_mae_pts,all_links_p95_pts,busy_effect_mae_pts,busy_no_change_mae_pts,precision,recall
+off,96,1048,0.56472,2.16662,13.5644,0.172824,0.88715,0.227672,3.578688,0.888889,1.0
+default,96,1049,0.681147,2.41376,13.0017,0.224762,1.1446,0.292598,3.665299,0.857143,1.0
+high,96,1071,0.989981,4.4703,12.6846,0.338906,1.6292,0.410114,3.692506,0.95,0.95

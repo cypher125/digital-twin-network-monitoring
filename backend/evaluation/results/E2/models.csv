@@ -1,0 +1,3 @@
+model,classifier_bytes,created_at,file_bytes,gb_refit_bytes,gb_refit_samples,gb_refit_seconds,gradient_boosting_bytes,random_forest_bytes,test_samples,train_samples,train_seconds_classifier,train_seconds_evaluation,train_seconds_features,train_seconds_gradient_boosting,train_seconds_permutation,train_seconds_random_forest,version,warning_threshold
+full,1049510,2026-10-19T01:41:48.522980+00:00,2584187,3863353,190053,93.2,3863545,4692247,114845,190053,216.3,16.9,2.32,62.86,29.61,260.24,rf-full-20261019T014146984670Z,0.2
+short,1192632,2026-10-19T01:53:26.037500+00:00,3119533,3767224,199643,54.5,3767224,5733781,123314,200000,349.1,16.69,6.67,67.97,19.84,236.3,rf-short-20261019T015325555480Z,0.25

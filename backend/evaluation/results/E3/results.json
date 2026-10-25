@@ -1,0 +1,528 @@
+{
+  "experiment": "E3",
+  "title": "Early warning (G2, UC2)",
+  "finished": "2026-10-25T21:04:47+00:00",
+  "seconds": 2085.6,
+  "code_version": "8651550+uncommitted",
+  "python": "3.13.1",
+  "machine": "Windows 11, Intel64 Family 6 Model 122 Stepping 8, GenuineIntel",
+  "machine_load": {
+    "at_start": {
+      "cpu_pct": 37.7,
+      "memory_used_pct": 94.6,
+      "busy_other_programs": [
+        {
+          "name": "System Idle Process",
+          "cpu_pct_of_machine": 43.0,
+          "command": ""
+        },
+        {
+          "name": "MemCompression",
+          "cpu_pct_of_machine": 10.8,
+          "command": ""
+        }
+      ]
+    },
+    "at_finish": {
+      "cpu_pct": 15.2,
+      "memory_used_pct": 90.1,
+      "busy_other_programs": [
+        {
+          "name": "System Idle Process",
+          "cpu_pct_of_machine": 57.8,
+          "command": ""
+        }
+      ]
+    }
+  },
+  "config": {
+    "quick": false,
+    "seed": 2026,
+    "warmup_flash_crowd_seed": 2026,
+    "training_flash_crowd_seed": 11,
+    "topology": "data/topologies/campus.yaml",
+    "topology_sha256": "a70d07bca35b5d87d06abf7cda8ef317dba4a5497a0863fc5a747182efc38e23",
+    "reality_gap": "default",
+    "world_start": "2026-10-26T00:00:00+01:00",
+    "warmup_days": 7,
+    "experiment_start": "2026-11-02T00:00:00+01:00",
+    "experiment_end": "2026-11-05T06:00:00+01:00",
+    "experiment_hours": 78,
+    "experiment_cycles": 4680,
+    "cycle_seconds": 60,
+    "ramp_classes_min": {
+      "slow": 30,
+      "medium": 15,
+      "fast": 5
+    },
+    "hold_min": 30,
+    "slots_wat": [
+      8,
+      11,
+      14,
+      17,
+      20,
+      23
+    ],
+    "ladder": [
+      1.5,
+      2.0,
+      3.0,
+      4.0,
+      6.0,
+      8.0,
+      12.0,
+      16.0,
+      24.0
+    ],
+    "probe_peak_pct": 95.0,
+    "onset_pct": 90.0,
+    "rearm_below_pct": 85.0,
+    "rearm_cycles": 5,
+    "detect_window_min": [
+      1,
+      35
+    ],
+    "false_alarm_window_min": 35,
+    "attribution_margin_min": 10,
+    "confidence_bins": [
+      0.0,
+      0.4,
+      0.6,
+      0.8,
+      1.0
+    ],
+    "critical_pct": 90.0,
+    "clear_below_pct": 85.0,
+    "clear_cycles": 5,
+    "warning_probability_setting": 0.5,
+    "history_days": 7,
+    "buffer_cycles": 10140,
+    "random_faults": true,
+    "surges_dropped_past_end": [],
+    "code_version": "8651550+uncommitted",
+    "code_sha256": {
+      "e3_early_warning.py": "d12f4e97008d40b364f456e1d5798e75cc124bd235c6ab330e6bfc31c63321d7",
+      "twin.py": "9782682562916b42dbaf00469c54d138bab44ade7fae2138137357e955f6ecce",
+      "common.py": "534ab8f6d0e7a2e1b29ae4df988eef714704eb478265a724fd0e57a58c88c901"
+    },
+    "protocol": "docs/evaluation/E3_PROTOCOL.md",
+    "protocol_sha256": "3bcc5537a4bfcc93cb199ba6516b7b05dd6e242666eb2240484cbe0b4fd73584",
+    "deviation_from_plan": null,
+    "flash_crowds_cancelled_at_start": [
+      {
+        "zone": "HOSTEL",
+        "cls": "video",
+        "multiplier": 2.185,
+        "start": "2026-11-02T20:48+01:00"
+      },
+      {
+        "zone": "HOSTEL",
+        "cls": "web",
+        "multiplier": 1.766,
+        "start": "2026-11-02T21:31+01:00"
+      },
+      {
+        "zone": "SOT",
+        "cls": "web",
+        "multiplier": 2.069,
+        "start": "2026-11-02T15:31+01:00"
+      },
+      {
+        "zone": "HOSTEL",
+        "cls": "video",
+        "multiplier": 1.709,
+        "start": "2026-11-02T21:37+01:00"
+      }
+    ],
+    "models": [
+      {
+        "kind": "full",
+        "version": "rf-full-20261019T014146984670Z",
+        "model_sha256": "f9523d33b1132faa85cf7167de4d624ab9444005303c23bd7cb9d742530f99e2",
+        "warning_threshold": 0.2,
+        "window": {
+          "train_start": "2026-10-15T01:33:00+00:00",
+          "train_end": "2026-10-24T07:30:00+00:00",
+          "test_start": "2026-10-24T08:03:00+00:00",
+          "test_end": "2026-10-28T01:03:00+00:00"
+        },
+        "features": "with same-time-yesterday"
+      },
+      {
+        "kind": "short",
+        "version": "rf-short-20261019T015325555480Z",
+        "model_sha256": "0087f048910a045d2887788e868b76a664e8f44e15dbcb668a82cc17b4fb4f0b",
+        "warning_threshold": 0.25,
+        "window": {
+          "train_start": "2026-10-14T02:33:00+00:00",
+          "train_end": "2026-10-24T00:57:00+00:00",
+          "test_start": "2026-10-24T01:28:00+00:00",
+          "test_end": "2026-10-28T01:02:00+00:00"
+        },
+        "features": "short history"
+      }
+    ],
+    "leftover_flash_crowds": [
+      {
+        "zone": "HOSTEL",
+        "cls": "video",
+        "multiplier": 1.797,
+        "start": "2026-11-01T23:08+01:00",
+        "end": "2026-11-02T00:49+01:00"
+      }
+    ],
+    "warmup_cycles": 10080,
+    "warmup_congested_cycles": 349,
+    "registration_sha256": "8ed6c050758bf413b0525914f1a9c1bcf01c5617b15082cf92fedba4647a6c96",
+    "registered_at": "2026-10-25T20:34:53+00:00"
+  },
+  "summary": {
+    "target": "median lead time >= 10 min (Random Forest, detected primary onsets, all classes)",
+    "median_lead_min": 10.5,
+    "target_met": true,
+    "run_valid": true,
+    "deviation_from_plan": null,
+    "median_lead_without_flagged_min": 10.5,
+    "detected_with_episode_started_over_35_min_before": 0,
+    "detected_with_warning_before_surge_start": 0,
+    "most_lead_possible_median_min": 13.0,
+    "detection_rate": 1.0,
+    "detected": 18,
+    "surges_with_onset": 18,
+    "surges_injected": 18,
+    "surges_not_congesting": 0,
+    "median_lead_misses_as_0_min": 10.5,
+    "by_class": {
+      "slow": {
+        "surge_start_to_onset_median_min": 21.0,
+        "most_lead_possible_median_min": 20.0,
+        "rf": {
+          "detected": 6,
+          "surges_with_onset": 6,
+          "detection_rate": 1.0,
+          "lead_median_min": 16.5,
+          "lead_p10_min": 10.5,
+          "lead_median_without_flagged_min": 16.5,
+          "false_alarms": 4,
+          "false_alarms_per_episode": 0.333,
+          "late_alarms": 0,
+          "detected_with_episode_started_over_35_min_before": 0,
+          "detected_with_warning_before_surge_start": 0,
+          "predicted_time_error_first_median_min": 13.5
+        },
+        "trend": {
+          "detected": 6,
+          "surges_with_onset": 6,
+          "detection_rate": 1.0,
+          "lead_median_min": 15.0,
+          "lead_p10_min": 12.5,
+          "lead_median_without_flagged_min": 15.0,
+          "false_alarms": 3,
+          "false_alarms_per_episode": 0.3,
+          "late_alarms": 0,
+          "detected_with_episode_started_over_35_min_before": 0,
+          "detected_with_warning_before_surge_start": 0,
+          "predicted_time_error_first_median_min": 15.0
+        }
+      },
+      "medium": {
+        "surge_start_to_onset_median_min": 13.5,
+        "most_lead_possible_median_min": 12.5,
+        "rf": {
+          "detected": 6,
+          "surges_with_onset": 6,
+          "detection_rate": 1.0,
+          "lead_median_min": 10.5,
+          "lead_p10_min": 5.5,
+          "lead_median_without_flagged_min": 10.5,
+          "false_alarms": 1,
+          "false_alarms_per_episode": 0.125,
+          "late_alarms": 0,
+          "detected_with_episode_started_over_35_min_before": 0,
+          "detected_with_warning_before_surge_start": 0,
+          "predicted_time_error_first_median_min": 19.5
+        },
+        "trend": {
+          "detected": 6,
+          "surges_with_onset": 6,
+          "detection_rate": 1.0,
+          "lead_median_min": 8.5,
+          "lead_p10_min": 5.5,
+          "lead_median_without_flagged_min": 8.5,
+          "false_alarms": 4,
+          "false_alarms_per_episode": 0.333,
+          "late_alarms": 0,
+          "detected_with_episode_started_over_35_min_before": 0,
+          "detected_with_warning_before_surge_start": 0,
+          "predicted_time_error_first_median_min": 21.5
+        }
+      },
+      "fast": {
+        "surge_start_to_onset_median_min": 4.0,
+        "most_lead_possible_median_min": 3.0,
+        "rf": {
+          "detected": 6,
+          "surges_with_onset": 6,
+          "detection_rate": 1.0,
+          "lead_median_min": 3.0,
+          "lead_p10_min": 2.0,
+          "lead_median_without_flagged_min": 3.0,
+          "false_alarms": 4,
+          "false_alarms_per_episode": 0.333,
+          "late_alarms": 0,
+          "detected_with_episode_started_over_35_min_before": 0,
+          "detected_with_warning_before_surge_start": 0,
+          "predicted_time_error_first_median_min": 9.0
+        },
+        "trend": {
+          "detected": 6,
+          "surges_with_onset": 6,
+          "detection_rate": 1.0,
+          "lead_median_min": 1.5,
+          "lead_p10_min": 1.0,
+          "lead_median_without_flagged_min": 1.5,
+          "false_alarms": 5,
+          "false_alarms_per_episode": 0.385,
+          "late_alarms": 0,
+          "detected_with_episode_started_over_35_min_before": 0,
+          "detected_with_warning_before_surge_start": 0,
+          "predicted_time_error_first_median_min": 10.0
+        }
+      }
+    },
+    "surge_start_to_onset_median_min": 14.0,
+    "false_alarms": {
+      "rf": {
+        "definition": "plan: an episode with no onset on its link within 35 min (late alarms included)",
+        "count": 31,
+        "per_day": 9.538,
+        "per_episode": 0.517,
+        "episodes_scored": 60,
+        "late_alarms": 0,
+        "excluding_late": 31,
+        "outside_surges": 22,
+        "by_day": {
+          "Mon 02 Nov": 8,
+          "Tue 03 Nov": 9,
+          "Wed 04 Nov": 14
+        }
+      },
+      "trend": {
+        "definition": "plan: an episode with no onset on its link within 35 min (late alarms included)",
+        "count": 16,
+        "per_day": 4.923,
+        "per_episode": 0.4,
+        "episodes_scored": 40,
+        "late_alarms": 0,
+        "excluding_late": 16,
+        "outside_surges": 4,
+        "by_day": {
+          "Mon 02 Nov": 5,
+          "Tue 03 Nov": 4,
+          "Wed 04 Nov": 7
+        }
+      }
+    },
+    "injected_onsets_with_fault_in_window": 0,
+    "predicted_time_error_first_median_min": 13.5,
+    "predicted_time_abs_error_first_median_min": 13.5,
+    "trend_alarm": {
+      "detected": 18,
+      "detection_rate": 1.0,
+      "lead_median_min": 10.5,
+      "lead_p10_min": 1.0,
+      "false_alarms": 16,
+      "false_alarms_per_day": 4.923
+    },
+    "calibration_all_horizons": [
+      {
+        "bin": "0.0-0.4",
+        "warnings": 1011,
+        "mean_confidence": 0.289420079583584,
+        "share_followed_by_onset": 0.3600395647873393,
+        "share_reaching_90": 0.40059347181008903
+      },
+      {
+        "bin": "0.4-0.6",
+        "warnings": 398,
+        "mean_confidence": 0.48198241332368036,
+        "share_followed_by_onset": 0.5753768844221105,
+        "share_reaching_90": 0.678391959798995
+      },
+      {
+        "bin": "0.6-0.8",
+        "warnings": 56,
+        "mean_confidence": 0.6540124991110393,
+        "share_followed_by_onset": 0.44642857142857145,
+        "share_reaching_90": 0.5357142857142857
+      },
+      {
+        "bin": "0.8-1.0",
+        "warnings": 0,
+        "mean_confidence": null,
+        "share_followed_by_onset": null,
+        "share_reaching_90": null
+      }
+    ],
+    "calibration_by_class": {
+      "slow": [
+        {
+          "bin": "0.0-0.4",
+          "warnings": 392,
+          "mean_confidence": 0.2957602043313031,
+          "share_followed_by_onset": 0.45918367346938777,
+          "share_reaching_90": 0.49744897959183676
+        },
+        {
+          "bin": "0.4-0.6",
+          "warnings": 180,
+          "mean_confidence": 0.47634889052973856,
+          "share_followed_by_onset": 0.5,
+          "share_reaching_90": 0.6222222222222222
+        },
+        {
+          "bin": "0.6-0.8",
+          "warnings": 15,
+          "mean_confidence": 0.6372400045394897,
+          "share_followed_by_onset": 0.26666666666666666,
+          "share_reaching_90": 0.4666666666666667
+        },
+        {
+          "bin": "0.8-1.0",
+          "warnings": 0,
+          "mean_confidence": null,
+          "share_followed_by_onset": null,
+          "share_reaching_90": null
+        }
+      ],
+      "medium": [
+        {
+          "bin": "0.0-0.4",
+          "warnings": 273,
+          "mean_confidence": 0.2988520156551193,
+          "share_followed_by_onset": 0.4542124542124542,
+          "share_reaching_90": 0.5164835164835165
+        },
+        {
+          "bin": "0.4-0.6",
+          "warnings": 151,
+          "mean_confidence": 0.48666755036013015,
+          "share_followed_by_onset": 0.5960264900662252,
+          "share_reaching_90": 0.695364238410596
+        },
+        {
+          "bin": "0.6-0.8",
+          "warnings": 37,
+          "mean_confidence": 0.6578702668885927,
+          "share_followed_by_onset": 0.4594594594594595,
+          "share_reaching_90": 0.5135135135135135
+        },
+        {
+          "bin": "0.8-1.0",
+          "warnings": 0,
+          "mean_confidence": null,
+          "share_followed_by_onset": null,
+          "share_reaching_90": null
+        }
+      ],
+      "fast": [
+        {
+          "bin": "0.0-0.4",
+          "warnings": 125,
+          "mean_confidence": 0.2890320003032684,
+          "share_followed_by_onset": 0.432,
+          "share_reaching_90": 0.504
+        },
+        {
+          "bin": "0.4-0.6",
+          "warnings": 63,
+          "mean_confidence": 0.4876063508646829,
+          "share_followed_by_onset": 0.7301587301587301,
+          "share_reaching_90": 0.7936507936507936
+        },
+        {
+          "bin": "0.6-0.8",
+          "warnings": 4,
+          "mean_confidence": 0.6812250018119812,
+          "share_followed_by_onset": 1.0,
+          "share_reaching_90": 1.0
+        },
+        {
+          "bin": "0.8-1.0",
+          "warnings": 0,
+          "mean_confidence": null,
+          "share_followed_by_onset": null,
+          "share_reaching_90": null
+        }
+      ],
+      "outside": [
+        {
+          "bin": "0.0-0.4",
+          "warnings": 221,
+          "mean_confidence": 0.2667425341600746,
+          "share_followed_by_onset": 0.027149321266968326,
+          "share_reaching_90": 0.027149321266968326
+        },
+        {
+          "bin": "0.4-0.6",
+          "warnings": 4,
+          "mean_confidence": 0.47004999965429306,
+          "share_followed_by_onset": 0.75,
+          "share_reaching_90": 0.75
+        },
+        {
+          "bin": "0.6-0.8",
+          "warnings": 0,
+          "mean_confidence": null,
+          "share_followed_by_onset": null,
+          "share_reaching_90": null
+        },
+        {
+          "bin": "0.8-1.0",
+          "warnings": 0,
+          "mean_confidence": null,
+          "share_followed_by_onset": null,
+          "share_reaching_90": null
+        }
+      ]
+    },
+    "calibration_warnings": 1465,
+    "calibration_excluded_critical_now": 1102,
+    "all_injected_onsets": {
+      "count": 23,
+      "rf_detected": 23,
+      "trend_detected": 23
+    },
+    "natural_onsets": {
+      "count": 0,
+      "rf_detected": 0,
+      "trend_detected": 0,
+      "rf_leads_min": []
+    },
+    "faults_during_experiment": 2,
+    "example_event": {
+      "surge": "S02",
+      "link": "ISP-B-GW - EDGE-RTR-01",
+      "onset": "Mon 02 Nov 11:09",
+      "rf_detected": true,
+      "rf_lead_min": 6.0,
+      "first_warning_cycle": "Mon 02 Nov 11:03"
+    },
+    "determinism_max_difference_pts": 0.0,
+    "determinism_passed": true,
+    "protocol_sha256": "3bcc5537a4bfcc93cb199ba6516b7b05dd6e242666eb2240484cbe0b4fd73584",
+    "protocol_unchanged": true,
+    "registration_sha256": "8ed6c050758bf413b0525914f1a9c1bcf01c5617b15082cf92fedba4647a6c96",
+    "registration_unchanged": true,
+    "registered_at": "2026-10-25T20:34:53+00:00",
+    "first_prediction_at": "2026-10-25T20:34:55+00:00",
+    "active_models_unchanged": true,
+    "models_served_cycles": {
+      "rf-full-20261019T014146984670Z": 4680
+    },
+    "missing_polls": 0,
+    "forecast_ms_median": 302.324,
+    "warmup_congested_cycles": 349
+  }
+}

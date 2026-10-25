@@ -1,0 +1,9 @@
+scenario_type,preset,busy_samples,busy_mae_pts,busy_p95_pts,busy_max_pts,all_links_mae_pts,all_links_p95_pts,busy_no_change_mae_pts,busy_effect_mae_pts
+traffic_increase,default,148,0.62475,2.1276,6.0701,0.225085,1.175275,4.666521,0.19784
+link_failure,default,134,0.5591,2.07254,4.3361,0.198391,1.000305,2.763567,0.134225
+device_failure,default,121,0.585861,1.9791,4.3361,0.183789,0.8717,3.085126,0.174509
+routing_change,default,130,0.569458,1.888445,4.3361,0.190786,0.999525,3.307967,0.17689
+reroute_traffic,default,137,0.577347,1.95812,4.3361,0.20089,0.999525,1.921516,0.109876
+capacity_change,default,135,0.582821,1.8552,4.9822,0.200083,1.13545,4.249769,0.105085
+access_control_rule,default,114,0.525725,1.64976,4.2983,0.164951,0.85815,6.154091,0.252279
+qos_policy,default,130,1.41932,6.91025,13.0017,0.428341,2.212275,3.400511,1.211989

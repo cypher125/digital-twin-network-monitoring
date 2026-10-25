@@ -1,0 +1,9 @@
+method,ramp_class,surges_scheduled,surges_injected,surges_not_congesting,surges_with_onset,detected,detection_rate,lead_median_min,lead_p10_min,lead_min_min,lead_max_min,lead_median_misses_as_0_min,surge_start_to_onset_median_min,most_lead_possible_median_min,lead_median_without_flagged_min,detected_with_episode_started_over_35_min_before,detected_with_warning_before_surge_start,all_injected_onsets,all_injected_onsets_detected,predicted_time_error_first_median_min,predicted_time_abs_error_first_median_min,predicted_time_error_last_median_min,episodes,false_alarms,false_alarms_per_episode,false_alarms_per_day,false_alarms_excluding_late,late_alarms,true_alarms,false_alarms_outside_surges,injected_onsets_with_fault_in_window
+rf,slow,6,6,0,6,6,1.0,16.5,10.5,6.0,28.0,16.5,21.0,20.0,16.5,0,0,7,7,13.5,13.5,4.0,12,4,0.3333,,4,0,8,,0
+rf,medium,6,6,0,6,6,1.0,10.5,5.5,5.0,12.0,10.5,13.5,12.5,10.5,0,0,8,8,19.5,19.5,4.0,8,1,0.125,,1,0,7,,0
+rf,fast,6,6,0,6,6,1.0,3.0,2.0,2.0,20.0,3.0,4.0,3.0,3.0,0,0,8,8,9.0,9.0,4.0,12,4,0.3333,,4,0,8,,0
+rf,all,18,18,0,18,18,1.0,10.5,2.7,2.0,28.0,10.5,14.0,13.0,10.5,0,0,23,23,13.5,13.5,4.0,60,31,0.5167,9.5385,31,0,29,22,0
+trend,slow,6,6,0,6,6,1.0,15.0,12.5,12.0,34.0,15.0,21.0,20.0,15.0,0,0,7,7,15.0,15.0,4.0,10,3,0.3,,3,0,7,,0
+trend,medium,6,6,0,6,6,1.0,8.5,5.5,5.0,12.0,8.5,13.5,12.5,8.5,0,0,8,8,21.5,21.5,4.0,12,4,0.3333,,4,0,8,,0
+trend,fast,6,6,0,6,6,1.0,1.5,1.0,1.0,19.0,1.5,4.0,3.0,1.5,0,0,8,8,10.0,10.0,4.0,13,5,0.3846,,5,0,8,,0
+trend,all,18,18,0,18,18,1.0,10.5,1.0,1.0,34.0,10.5,14.0,13.0,10.5,0,0,23,23,16.5,16.5,4.0,40,16,0.4,4.9231,16,0,24,4,0

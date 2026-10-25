@@ -1,0 +1,713 @@
+{
+  "experiment": "E4",
+  "title": "Safe, accurate change testing and recommendations (G3, UC3)",
+  "finished": "2026-10-25T20:29:34+00:00",
+  "seconds": 32671.6,
+  "code_version": "8651550+uncommitted",
+  "python": "3.13.1",
+  "machine": "Windows 11, Intel64 Family 6 Model 122 Stepping 8, GenuineIntel",
+  "machine_load": {
+    "at_start": {
+      "cpu_pct": 93.6,
+      "memory_used_pct": 91.4,
+      "busy_other_programs": [
+        {
+          "name": "MsMpEng.exe",
+          "cpu_pct_of_machine": 14.8,
+          "command": ""
+        },
+        {
+          "name": "claude.exe",
+          "cpu_pct_of_machine": 11.4,
+          "command": "c:\\Users\\cirex\\.void-editor\\extensions\\anthropic.claude-code-2.1.309-win32-x64\\resources\\native-bina"
+        },
+        {
+          "name": "System",
+          "cpu_pct_of_machine": 5.5,
+          "command": ""
+        }
+      ]
+    },
+    "at_finish": {
+      "cpu_pct": 74.2,
+      "memory_used_pct": 95.2,
+      "busy_other_programs": [
+        {
+          "name": "taskhostw.exe",
+          "cpu_pct_of_machine": 27.4,
+          "command": ""
+        },
+        {
+          "name": "System Idle Process",
+          "cpu_pct_of_machine": 15.1,
+          "command": ""
+        },
+        {
+          "name": "MemCompression",
+          "cpu_pct_of_machine": 7.6,
+          "command": ""
+        }
+      ]
+    }
+  },
+  "config": {
+    "quick": false,
+    "presets": [
+      "off",
+      "default",
+      "high"
+    ],
+    "moments": [
+      "2026-11-02T10:00:00+01:00",
+      "2026-11-02T21:30:00+01:00",
+      "2026-11-03T08:30:00+01:00",
+      "2026-11-03T13:00:00+01:00",
+      "2026-11-04T15:30:00+01:00",
+      "2026-11-04T19:30:00+01:00",
+      "2026-11-05T11:00:00+01:00",
+      "2026-11-05T23:00:00+01:00",
+      "2026-11-06T02:00:00+01:00",
+      "2026-11-06T16:30:00+01:00",
+      "2026-11-07T12:00:00+01:00",
+      "2026-11-08T20:30:00+01:00"
+    ],
+    "scenario_types": [
+      "traffic_increase",
+      "link_failure",
+      "device_failure",
+      "routing_change",
+      "reroute_traffic",
+      "capacity_change",
+      "access_control_rule",
+      "qos_policy"
+    ],
+    "not_testable_types": {
+      "add_link": "the lab interface cannot install a new link in the emulated network"
+    },
+    "instances_per_type_per_preset": 12,
+    "warmup_cycles": 15,
+    "settle_cycles": 3,
+    "cycle_seconds": 60,
+    "busy_pct": 5.0,
+    "critical_pct": 90.0,
+    "seed_part_a": "2426 + moment index",
+    "flash_crowd_seed_part_a": "4400 + moment index",
+    "random_faults": false,
+    "data_quality_faults": "campus.yaml (on)",
+    "topology": "data/topologies/campus.yaml",
+    "topology_sha256": "a70d07bca35b5d87d06abf7cda8ef317dba4a5497a0863fc5a747182efc38e23",
+    "recommendations": true,
+    "cases": [
+      {
+        "case": "R01",
+        "time": "2026-11-03T08:00:00+01:00",
+        "zone": "SCI",
+        "cls": "video"
+      },
+      {
+        "case": "R02",
+        "time": "2026-11-03T09:20:00+01:00",
+        "zone": "SOT",
+        "cls": "web"
+      },
+      {
+        "case": "R03",
+        "time": "2026-11-03T10:40:00+01:00",
+        "zone": "ENG",
+        "cls": "video"
+      },
+      {
+        "case": "R04",
+        "time": "2026-11-03T12:00:00+01:00",
+        "zone": "LIB",
+        "cls": "video"
+      },
+      {
+        "case": "R05",
+        "time": "2026-11-03T13:20:00+01:00",
+        "zone": "ICT",
+        "cls": "web"
+      },
+      {
+        "case": "R06",
+        "time": "2026-11-03T14:40:00+01:00",
+        "zone": "SCI",
+        "cls": "web"
+      },
+      {
+        "case": "R07",
+        "time": "2026-11-03T16:00:00+01:00",
+        "zone": "SOT",
+        "cls": "video"
+      },
+      {
+        "case": "R08",
+        "time": "2026-11-03T17:20:00+01:00",
+        "zone": "HOSTEL",
+        "cls": "video"
+      },
+      {
+        "case": "R09",
+        "time": "2026-11-03T18:40:00+01:00",
+        "zone": "HOSTEL",
+        "cls": "web"
+      },
+      {
+        "case": "R10",
+        "time": "2026-11-03T20:00:00+01:00",
+        "zone": "HOSTEL",
+        "cls": "video"
+      },
+      {
+        "case": "R11",
+        "time": "2026-11-03T21:20:00+01:00",
+        "zone": "HOSTEL",
+        "cls": "elearning"
+      },
+      {
+        "case": "R12",
+        "time": "2026-11-03T22:40:00+01:00",
+        "zone": "HOSTEL",
+        "cls": "web"
+      }
+    ],
+    "seed_part_b": 2526,
+    "flash_crowd_seed_part_b": 4500,
+    "ramp_min": 15,
+    "hold_min": 30,
+    "ladder": [
+      1.5,
+      2.0,
+      3.0,
+      4.0,
+      6.0,
+      8.0,
+      12.0
+    ],
+    "probe_peak_pct": 95.0,
+    "window_cycles": 35,
+    "max_triggers_per_basis_and_case": 3,
+    "success_rule": "success: the no-action branch has the target link at 90 % or more in some cycle of the window and the action branch never does, and the action adds no other link at 90 % or more; target_relieved counts the target link only (success + new_bottleneck)",
+    "code_version": "8651550+uncommitted",
+    "deviation_from_plan": {
+      "counter_only_demand_estimate": "not run: the twin as built has no counter-only (gravity) estimate; it belongs to the SNMP adapter, a Should item that was not built (D11)",
+      "add_link": "not tested: a Could scenario type with no lab equivalent in the emulator"
+    },
+    "part_b": {
+      "models": {
+        "full": "rf-full-20261019T014146984670Z",
+        "short": "rf-short-20261019T015325555480Z"
+      },
+      "world_start": "2026-11-02T00:00:00+01:00",
+      "flash_crowds_off_from": "2026-11-03T07:50:00+01:00",
+      "forecasting_minutes_before_each_case": 10,
+      "critical_pct": 90.0,
+      "warning_probability_setting": 0.5,
+      "clear_below_pct": 85.0,
+      "clear_cycles": 5,
+      "flash_crowds_switched_off": {
+        "switched_off_at": "2026-11-03T07:51+01:00",
+        "removed_not_started": [
+          {
+            "zone": "HOSTEL",
+            "cls": "web",
+            "multiplier": 1.752,
+            "start": "2026-11-03T19:15+01:00",
+            "end": "2026-11-03T20:27+01:00"
+          },
+          {
+            "zone": "LIB",
+            "cls": "video",
+            "multiplier": 2.692,
+            "start": "2026-11-03T13:02+01:00",
+            "end": "2026-11-03T14:13+01:00"
+          },
+          {
+            "zone": "LIB",
+            "cls": "video",
+            "multiplier": 2.022,
+            "start": "2026-11-03T14:35+01:00",
+            "end": "2026-11-03T15:53+01:00"
+          },
+          {
+            "zone": "ENG",
+            "cls": "web",
+            "multiplier": 1.892,
+            "start": "2026-11-03T15:02+01:00",
+            "end": "2026-11-03T16:24+01:00"
+          }
+        ],
+        "in_progress": []
+      },
+      "model_cycles_served_main_world": {
+        "rf-full-20261019T014146984670Z": 120
+      }
+    }
+  },
+  "summary": {
+    "target": "configuration always unchanged (plan section 11)",
+    "target_met": true,
+    "unchanged_checks": {
+      "network_configuration": {
+        "checked": 367,
+        "all_unchanged": true,
+        "changed": 0
+      },
+      "twin_model_configuration": {
+        "checked": 331,
+        "all_unchanged": true,
+        "changed": 0
+      },
+      "twin_model_state": {
+        "checked": 331,
+        "all_unchanged": true,
+        "changed": 0
+      }
+    },
+    "lab_calls": {
+      "calls": 477,
+      "from_twin_code": 0,
+      "during_twin_simulation": 0,
+      "by_method": {
+        "add_surge": 69,
+        "apply_change": 408
+      },
+      "callers": [
+        "evaluation.e4_sim_vs_reality"
+      ]
+    },
+    "import_contracts": {
+      "ran": true,
+      "passed": true,
+      "result": "Contracts: 5 kept, 0 broken."
+    },
+    "accuracy_by_preset": {
+      "off": {
+        "scored": 96,
+        "busy_samples": 1048,
+        "busy_mae": 0.565,
+        "busy_p95": 2.167,
+        "busy_max": 13.564,
+        "mae": 0.173,
+        "p95": 0.887,
+        "max": 13.564,
+        "busy_no_change_mae": 3.579,
+        "busy_effect_mae": 0.228,
+        "status_mismatches": 0,
+        "tp": 16,
+        "fp": 2,
+        "fn": 0,
+        "precision": 0.889,
+        "recall": 1.0
+      },
+      "default": {
+        "scored": 96,
+        "busy_samples": 1049,
+        "busy_mae": 0.681,
+        "busy_p95": 2.414,
+        "busy_max": 13.002,
+        "mae": 0.225,
+        "p95": 1.145,
+        "max": 13.002,
+        "busy_no_change_mae": 3.665,
+        "busy_effect_mae": 0.293,
+        "status_mismatches": 0,
+        "tp": 18,
+        "fp": 3,
+        "fn": 0,
+        "precision": 0.857,
+        "recall": 1.0
+      },
+      "high": {
+        "scored": 96,
+        "busy_samples": 1071,
+        "busy_mae": 0.99,
+        "busy_p95": 4.47,
+        "busy_max": 12.685,
+        "mae": 0.339,
+        "p95": 1.629,
+        "max": 12.685,
+        "busy_no_change_mae": 3.693,
+        "busy_effect_mae": 0.41,
+        "status_mismatches": 0,
+        "tp": 19,
+        "fp": 1,
+        "fn": 1,
+        "precision": 0.95,
+        "recall": 0.95
+      }
+    },
+    "accuracy_by_type_default": {
+      "traffic_increase": {
+        "scored": 12,
+        "busy_samples": 148,
+        "busy_mae": 0.625,
+        "busy_p95": 2.128,
+        "busy_max": 6.07,
+        "mae": 0.225,
+        "p95": 1.175,
+        "max": 6.07,
+        "busy_no_change_mae": 4.667,
+        "busy_effect_mae": 0.198,
+        "status_mismatches": 0,
+        "tp": 5,
+        "fp": 1,
+        "fn": 0,
+        "precision": 0.833,
+        "recall": 1.0
+      },
+      "link_failure": {
+        "scored": 12,
+        "busy_samples": 134,
+        "busy_mae": 0.559,
+        "busy_p95": 2.073,
+        "busy_max": 4.336,
+        "mae": 0.198,
+        "p95": 1.0,
+        "max": 4.336,
+        "busy_no_change_mae": 2.764,
+        "busy_effect_mae": 0.134,
+        "status_mismatches": 0,
+        "tp": 3,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "device_failure": {
+        "scored": 12,
+        "busy_samples": 121,
+        "busy_mae": 0.586,
+        "busy_p95": 1.979,
+        "busy_max": 4.336,
+        "mae": 0.184,
+        "p95": 0.872,
+        "max": 4.336,
+        "busy_no_change_mae": 3.085,
+        "busy_effect_mae": 0.175,
+        "status_mismatches": 0,
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "routing_change": {
+        "scored": 12,
+        "busy_samples": 130,
+        "busy_mae": 0.569,
+        "busy_p95": 1.888,
+        "busy_max": 4.336,
+        "mae": 0.191,
+        "p95": 1.0,
+        "max": 4.336,
+        "busy_no_change_mae": 3.308,
+        "busy_effect_mae": 0.177,
+        "status_mismatches": 0,
+        "tp": 4,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "reroute_traffic": {
+        "scored": 12,
+        "busy_samples": 137,
+        "busy_mae": 0.577,
+        "busy_p95": 1.958,
+        "busy_max": 4.336,
+        "mae": 0.201,
+        "p95": 1.0,
+        "max": 4.336,
+        "busy_no_change_mae": 1.922,
+        "busy_effect_mae": 0.11,
+        "status_mismatches": 0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "precision": null,
+        "recall": null
+      },
+      "capacity_change": {
+        "scored": 12,
+        "busy_samples": 135,
+        "busy_mae": 0.583,
+        "busy_p95": 1.855,
+        "busy_max": 4.982,
+        "mae": 0.2,
+        "p95": 1.135,
+        "max": 4.982,
+        "busy_no_change_mae": 4.25,
+        "busy_effect_mae": 0.105,
+        "status_mismatches": 0,
+        "tp": 5,
+        "fp": 2,
+        "fn": 0,
+        "precision": 0.714,
+        "recall": 1.0
+      },
+      "access_control_rule": {
+        "scored": 12,
+        "busy_samples": 114,
+        "busy_mae": 0.526,
+        "busy_p95": 1.65,
+        "busy_max": 4.298,
+        "mae": 0.165,
+        "p95": 0.858,
+        "max": 4.298,
+        "busy_no_change_mae": 6.154,
+        "busy_effect_mae": 0.252,
+        "status_mismatches": 0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "precision": null,
+        "recall": null
+      },
+      "qos_policy": {
+        "scored": 12,
+        "busy_samples": 130,
+        "busy_mae": 1.419,
+        "busy_p95": 6.91,
+        "busy_max": 13.002,
+        "mae": 0.428,
+        "p95": 2.212,
+        "max": 13.002,
+        "busy_no_change_mae": 3.401,
+        "busy_effect_mae": 1.212,
+        "status_mismatches": 0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "precision": null,
+        "recall": null
+      }
+    },
+    "worst_links_default": [
+      {
+        "link": "ISP-B-GW <-> EDGE-RTR-01",
+        "busy_samples": 88,
+        "busy_mae": 1.568,
+        "max": 13.002
+      },
+      {
+        "link": "DIST-HOSTEL <-> AP-HOSTEL-01",
+        "busy_samples": 94,
+        "busy_mae": 1.395,
+        "max": 6.989
+      },
+      {
+        "link": "DC-SW-01 <-> SRV-CBT",
+        "busy_samples": 15,
+        "busy_mae": 1.223,
+        "max": 3.424
+      },
+      {
+        "link": "DIST-HOSTEL <-> AP-HOSTEL-02",
+        "busy_samples": 94,
+        "busy_mae": 1.193,
+        "max": 6.814
+      },
+      {
+        "link": "ISP-A-GW <-> EDGE-RTR-01",
+        "busy_samples": 88,
+        "busy_mae": 0.981,
+        "max": 8.991
+      }
+    ],
+    "same_random_demand_in_every_pair": true,
+    "instances_not_scored": [],
+    "not_testable_scenario_types": {
+      "add_link": "the lab interface cannot install a new link in the emulated network"
+    },
+    "counter_only_demand_estimate": {
+      "run": false,
+      "reason": "not supported by the twin as built: its demand matrix comes only from flow records (D11); the counter-only (gravity) estimate belongs to the SNMP adapter, a Should item that was not built. Without flow records every simulation would route an empty demand matrix."
+    },
+    "seconds_part_a": 32362.3,
+    "recommendations": {
+      "cases": 12,
+      "cases_run": 11,
+      "triggers": {
+        "forecast": 24,
+        "current": 19
+      },
+      "triggers_without_recommendation": 0,
+      "immediate_fixes": {
+        "forecast": {
+          "recommended": 47,
+          "scorable": 39,
+          "success": 13,
+          "success_rate": 0.333,
+          "target_relieved": 23,
+          "target_relieved_rate": 0.59,
+          "not_scorable": 8,
+          "not_testable": 0
+        },
+        "current": {
+          "recommended": 30,
+          "scorable": 30,
+          "success": 11,
+          "success_rate": 0.367,
+          "target_relieved": 16,
+          "target_relieved_rate": 0.533,
+          "not_scorable": 0,
+          "not_testable": 0
+        }
+      },
+      "planning_advice_capacity_upgrade": {
+        "forecast": {
+          "recommended": 24,
+          "scorable": 18,
+          "success": 18,
+          "success_rate": 1.0,
+          "target_relieved": 18,
+          "target_relieved_rate": 1.0,
+          "not_scorable": 6,
+          "not_testable": 0
+        },
+        "current": {
+          "recommended": 19,
+          "scorable": 19,
+          "success": 19,
+          "success_rate": 1.0,
+          "target_relieved": 19,
+          "target_relieved_rate": 1.0,
+          "not_scorable": 0,
+          "not_testable": 0
+        }
+      },
+      "by_action": {
+        "forecast/routing_change": {
+          "recommended": 13,
+          "scorable": 12,
+          "success": 0,
+          "success_rate": 0.0,
+          "target_relieved": 3,
+          "not_scorable": 1,
+          "still_congested": 9,
+          "new_bottleneck": 3
+        },
+        "forecast/reroute_traffic": {
+          "recommended": 10,
+          "scorable": 9,
+          "success": 1,
+          "success_rate": 0.111,
+          "target_relieved": 8,
+          "not_scorable": 1,
+          "still_congested": 1,
+          "new_bottleneck": 7
+        },
+        "forecast/qos_policy": {
+          "recommended": 24,
+          "scorable": 18,
+          "success": 12,
+          "success_rate": 0.667,
+          "target_relieved": 12,
+          "not_scorable": 6,
+          "still_congested": 6,
+          "new_bottleneck": 0
+        },
+        "forecast/capacity_change": {
+          "recommended": 24,
+          "scorable": 18,
+          "success": 18,
+          "success_rate": 1.0,
+          "target_relieved": 18,
+          "not_scorable": 6,
+          "still_congested": 0,
+          "new_bottleneck": 0
+        },
+        "current/routing_change": {
+          "recommended": 4,
+          "scorable": 4,
+          "success": 0,
+          "success_rate": 0.0,
+          "target_relieved": 0,
+          "not_scorable": 0,
+          "still_congested": 4,
+          "new_bottleneck": 0
+        },
+        "current/reroute_traffic": {
+          "recommended": 7,
+          "scorable": 7,
+          "success": 1,
+          "success_rate": 0.143,
+          "target_relieved": 6,
+          "not_scorable": 0,
+          "still_congested": 1,
+          "new_bottleneck": 5
+        },
+        "current/qos_policy": {
+          "recommended": 19,
+          "scorable": 19,
+          "success": 10,
+          "success_rate": 0.526,
+          "target_relieved": 10,
+          "not_scorable": 0,
+          "still_congested": 9,
+          "new_bottleneck": 0
+        },
+        "current/capacity_change": {
+          "recommended": 19,
+          "scorable": 19,
+          "success": 19,
+          "success_rate": 1.0,
+          "target_relieved": 19,
+          "not_scorable": 0,
+          "still_congested": 0,
+          "new_bottleneck": 0
+        }
+      },
+      "same_random_demand_in_every_pair": true,
+      "actions_not_testable": [],
+      "models": {
+        "full": "rf-full-20261019T014146984670Z",
+        "short": "rf-short-20261019T015325555480Z"
+      }
+    },
+    "seconds_part_b": 279.0,
+    "timings": {
+      "Django set-up": {
+        "seconds": 3.75,
+        "calls": 1,
+        "ms_per_call": 3753.3
+      },
+      "branch of 35 cycles, no twin": {
+        "seconds": 54.47,
+        "calls": 163,
+        "ms_per_call": 334.2
+      },
+      "emulator cycle + twin ingest": {
+        "seconds": 61.4,
+        "calls": 3295,
+        "ms_per_call": 18.6
+      },
+      "emulator cycle, no twin (probes and branches)": {
+        "seconds": 21.0,
+        "calls": 2279,
+        "ms_per_call": 9.2
+      },
+      "forecasting cycle (ForecastService.on_cycle)": {
+        "seconds": 90.47,
+        "calls": 615,
+        "ms_per_call": 147.1
+      },
+      "loading the forecasting models": {
+        "seconds": 0.75,
+        "calls": 1,
+        "ms_per_call": 749.6
+      },
+      "part A warm-up (15 twin cycles)": {
+        "seconds": 17.67,
+        "calls": 36,
+        "ms_per_call": 490.8
+      },
+      "recommend()": {
+        "seconds": 8.37,
+        "calls": 43,
+        "ms_per_call": 194.7
+      }
+    }
+  }
+}

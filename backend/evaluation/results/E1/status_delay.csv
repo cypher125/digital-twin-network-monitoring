@@ -1,0 +1,25 @@
+preset,delay_bin,changes
+off,0 s,49
+off,10 s,0
+off,20 s,0
+off,30 s,0
+off,40 s,0
+off,50 s,0
+off,60 s,11
+off,> 60 s,0
+default,0 s,49
+default,10 s,0
+default,20 s,0
+default,30 s,0
+default,40 s,0
+default,50 s,0
+default,60 s,11
+default,> 60 s,0
+high,0 s,49
+high,10 s,0
+high,20 s,0
+high,30 s,0
+high,40 s,0
+high,50 s,0
+high,60 s,11
+high,> 60 s,0

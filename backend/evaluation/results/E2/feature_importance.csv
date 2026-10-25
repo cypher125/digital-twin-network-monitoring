@@ -1,0 +1,88 @@
+model,feature,label,forest_importance,forest_rank,permutation_importance_pp,permutation_rank
+full,seasonal_gap_30,Yesterday at +30 min minus now,0.340201,1,0.222893,1
+full,seasonal_gap_15,Yesterday at +15 min minus now,0.111033,2,0.043034,2
+full,yesterday_change_30,Yesterday's change over 30 min,0.103467,3,0.040004,3
+full,yesterday_change_15,Yesterday's change over 15 min,0.037506,4,0.016911,5
+full,seasonal_gap_10,Yesterday at +10 min minus now,0.031182,5,0.009309,11
+full,std_60,"Std. dev., last 60 min",0.022234,6,0.004737,26
+full,slope_15,"Slope, last 15 min",0.021874,7,0.006966,17
+full,slope_5,"Slope, last 5 min",0.021769,8,0.008763,13
+full,mean_15,"Mean, last 15 min",0.021215,9,0.013505,6
+full,yesterday_change_10,Yesterday's change over 10 min,0.02035,10,0.009055,12
+full,hour_sin,Time of day (sin),0.019846,11,0.004226,27
+full,lag_10,Utilisation 10 min ago,0.016735,12,0.006282,19
+full,hour_cos,Time of day (cos),0.016449,13,0.004195,28
+full,mean_60,"Mean, last 60 min",0.014334,14,0.009855,9
+full,lag_15,Utilisation 15 min ago,0.013897,15,0.005424,22
+full,lag_5,Utilisation 5 min ago,0.012105,16,0.006289,18
+full,lag_30,Utilisation 30 min ago,0.011497,17,0.005381,23
+full,yesterday_plus_10,"Yesterday, +10 min",0.010397,18,0.003845,31
+full,max_15,"Maximum, last 15 min",0.01009,19,0.010269,8
+full,projection_30,"Trend projection, +30 min",0.009681,20,0.009383,10
+full,yesterday_plus_15,"Yesterday, +15 min",0.009546,21,0.007694,15
+full,seasonal_gap_5,Yesterday at +5 min minus now,0.009435,22,0.00161,39
+full,lag_4,Utilisation 4 min ago,0.008654,23,0.007148,16
+full,max_60,"Maximum, last 60 min",0.008062,24,0.024435,4
+full,yesterday_change_5,Yesterday's change over 5 min,0.008042,25,0.004042,30
+full,yesterday_plus_30,"Yesterday, +30 min",0.007797,26,0.005697,21
+full,log_capacity,Link capacity (log),0.007497,27,0.005375,24
+full,mean_5,"Mean, last 5 min",0.006488,28,0.005079,25
+full,max_5,"Maximum, last 5 min",0.006146,29,0.00355,33
+full,yesterday_plus_5,"Yesterday, +5 min",0.00567,30,0.00359,32
+full,std_5,"Std. dev., last 5 min",0.005637,31,0.001432,40
+full,lag_60,Utilisation 60 min ago,0.005395,32,0.010996,7
+full,lag_3,Utilisation 3 min ago,0.005195,33,0.004177,29
+full,projection_15,"Trend projection, +15 min",0.00508,34,0.002175,37
+full,projection_10,"Trend projection, +10 min",0.004752,35,0.005746,20
+full,std_15,"Std. dev., last 15 min",0.004526,36,0.000315,41
+full,dow_sin,Day of week (sin),0.004406,37,-0.00013,50
+full,lag_1,Utilisation 1 min ago,0.004321,38,0.003083,35
+full,yesterday_now,"Yesterday, now",0.004076,39,0.003306,34
+full,lag_2,Utilisation 2 min ago,0.00387,40,0.002695,36
+full,projection_5,"Trend projection, +5 min",0.002939,41,0.007941,14
+full,util_now,Utilisation now,0.002506,42,0.002166,38
+full,dow_cos,Day of week (cos),0.002405,43,-0.0001,49
+full,tier_wan,Tier: WAN,0.000707,44,0.000129,42
+full,tier_access,Tier: Access,0.000313,45,8.4e-05,43
+full,weekend,Weekend flag,0.000227,46,3e-05,45
+full,tier_core,Tier: Core,0.000224,47,6.3e-05,44
+full,errors_5,"Errors, last 5 min",0.000192,48,7e-06,47
+full,tier_server,Tier: Server,1.7e-05,49,1e-06,48
+full,tier_distribution,Tier: Distribution,1.3e-05,50,1.2e-05,46
+short,hour_cos,Time of day (cos),0.147018,1,0.105068,1
+short,hour_sin,Time of day (sin),0.119207,2,0.063439,4
+short,mean_15,"Mean, last 15 min",0.072579,3,0.017478,12
+short,slope_15,"Slope, last 15 min",0.065972,4,0.076327,2
+short,slope_5,"Slope, last 5 min",0.050316,5,0.044506,7
+short,std_60,"Std. dev., last 60 min",0.047206,6,0.050297,6
+short,lag_15,Utilisation 15 min ago,0.041831,7,0.011315,14
+short,mean_60,"Mean, last 60 min",0.034874,8,0.059791,5
+short,lag_60,Utilisation 60 min ago,0.033109,9,0.074344,3
+short,max_15,"Maximum, last 15 min",0.031896,10,0.010665,15
+short,lag_10,Utilisation 10 min ago,0.031108,11,0.008145,17
+short,lag_5,Utilisation 5 min ago,0.027804,12,0.006575,20
+short,std_5,"Std. dev., last 5 min",0.026088,13,0.012273,13
+short,log_capacity,Link capacity (log),0.02558,14,0.041395,8
+short,lag_30,Utilisation 30 min ago,0.021697,15,0.010016,16
+short,max_60,"Maximum, last 60 min",0.021422,16,0.024128,9
+short,lag_4,Utilisation 4 min ago,0.017946,17,0.003595,28
+short,std_15,"Std. dev., last 15 min",0.017904,18,0.021459,10
+short,projection_30,"Trend projection, +30 min",0.014647,19,0.020793,11
+short,lag_1,Utilisation 1 min ago,0.013033,20,0.007455,18
+short,lag_3,Utilisation 3 min ago,0.012811,21,0.002875,32
+short,util_now,Utilisation now,0.012297,22,0.007385,19
+short,dow_sin,Day of week (sin),0.012108,23,0.003594,29
+short,mean_5,"Mean, last 5 min",0.012089,24,0.005577,23
+short,projection_15,"Trend projection, +15 min",0.011991,25,0.006214,21
+short,lag_2,Utilisation 2 min ago,0.011941,26,0.004085,27
+short,max_5,"Maximum, last 5 min",0.010276,27,0.00426,25
+short,tier_server,Tier: Server,0.010188,28,0.004112,26
+short,projection_5,"Trend projection, +5 min",0.009794,29,0.006177,22
+short,projection_10,"Trend projection, +10 min",0.009251,30,0.004314,24
+short,tier_access,Tier: Access,0.0065,31,0.001576,34
+short,weekend,Weekend flag,0.005678,32,0.003076,31
+short,tier_wan,Tier: WAN,0.004329,33,0.001742,33
+short,tier_core,Tier: Core,0.003927,34,0.003318,30
+short,dow_cos,Day of week (cos),0.002745,35,-0.000108,37
+short,errors_5,"Errors, last 5 min",0.001957,36,0.00012,36
+short,tier_distribution,Tier: Distribution,0.00088,37,0.000712,35

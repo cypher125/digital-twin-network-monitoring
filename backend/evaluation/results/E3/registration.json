@@ -1,0 +1,13 @@
+{
+  "protocol": "docs/evaluation/E3_PROTOCOL.md",
+  "protocol_sha256": "3bcc5537a4bfcc93cb199ba6516b7b05dd6e242666eb2240484cbe0b4fd73584",
+  "registration_sha256": "8ed6c050758bf413b0525914f1a9c1bcf01c5617b15082cf92fedba4647a6c96",
+  "registered_at": "2026-10-25T20:34:53+00:00",
+  "quick": false,
+  "deviation_from_plan": null,
+  "code_sha256": {
+    "e3_early_warning.py": "d12f4e97008d40b364f456e1d5798e75cc124bd235c6ab330e6bfc31c63321d7",
+    "twin.py": "9782682562916b42dbaf00469c54d138bab44ade7fae2138137357e955f6ecce",
+    "common.py": "534ab8f6d0e7a2e1b29ae4df988eef714704eb478265a724fd0e57a58c88c901"
+  }
+}

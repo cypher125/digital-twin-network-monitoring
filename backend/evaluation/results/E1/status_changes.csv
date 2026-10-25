@@ -1,0 +1,181 @@
+preset,kind,element,time,new_status,cause,origin,phase_s,lasted_s,first_agree_s,sync_delay_s,reverted,overwritten_by_poll,missed
+off,link,DIST-LIB <-> AP-LIB-01,2026-11-02T01:00:10+01:00,down,link,injected,10,1070,0,60,True,True,False
+off,link,DIST-LIB <-> AP-LIB-01,2026-11-02T01:18:00+01:00,up,link,injected,0,78180,0,0,False,False,False
+off,device,DIST-ICT,2026-11-02T03:00:10+01:00,down,device,injected,10,320,0,60,True,True,False
+off,link,DIST-ICT <-> ACC-ICT-01,2026-11-02T03:00:10+01:00,down,device,injected,10,320,0,60,True,True,False
+off,link,DIST-ICT <-> CORE-SW-01,2026-11-02T03:00:10+01:00,down,device,injected,10,320,0,60,True,True,False
+off,link,DIST-ICT <-> CORE-SW-02,2026-11-02T03:00:10+01:00,down,device,injected,10,320,0,60,True,True,False
+off,device,DIST-ICT,2026-11-02T03:05:30+01:00,up,device,injected,30,,0,0,False,False,False
+off,link,DIST-ICT <-> ACC-ICT-01,2026-11-02T03:05:30+01:00,up,device,injected,30,,0,0,False,False,False
+off,link,DIST-ICT <-> CORE-SW-01,2026-11-02T03:05:30+01:00,up,device,injected,30,,0,0,False,False,False
+off,link,DIST-ICT <-> CORE-SW-02,2026-11-02T03:05:30+01:00,up,device,injected,30,,0,0,False,False,False
+off,link,CORE-SW-01 <-> DC-SW-01,2026-11-02T05:00:20+01:00,down,link,injected,20,970,0,0,False,False,False
+off,link,CORE-SW-01 <-> DC-SW-01,2026-11-02T05:16:30+01:00,up,link,injected,30,,0,0,False,False,False
+off,device,ACC-ADMIN-01,2026-11-02T07:00:20+01:00,down,device,injected,20,140,0,0,False,False,False
+off,link,DIST-ADMIN <-> ACC-ADMIN-01,2026-11-02T07:00:20+01:00,down,device,injected,20,140,0,0,False,False,False
+off,device,ACC-ADMIN-01,2026-11-02T07:02:40+01:00,up,device,injected,40,,0,0,False,False,False
+off,link,DIST-ADMIN <-> ACC-ADMIN-01,2026-11-02T07:02:40+01:00,up,device,injected,40,,0,0,False,False,False
+off,link,CORE-SW-01 <-> CORE-SW-02,2026-11-02T09:00:30+01:00,down,link,injected,30,610,0,0,False,False,False
+off,link,CORE-SW-01 <-> CORE-SW-02,2026-11-02T09:10:40+01:00,up,link,injected,40,,0,0,False,False,False
+off,device,DIST-CBT,2026-11-02T11:00:30+01:00,down,device,injected,30,170,0,0,False,False,False
+off,link,DIST-CBT <-> ACC-CBT-01,2026-11-02T11:00:30+01:00,down,device,injected,30,170,0,0,False,False,False
+off,link,DIST-CBT <-> ACC-CBT-02,2026-11-02T11:00:30+01:00,down,device,injected,30,170,0,0,False,False,False
+off,link,DIST-CBT <-> CORE-SW-01,2026-11-02T11:00:30+01:00,down,device,injected,30,170,0,0,False,False,False
+off,link,DIST-CBT <-> CORE-SW-02,2026-11-02T11:00:30+01:00,down,device,injected,30,170,0,0,False,False,False
+off,device,DIST-CBT,2026-11-02T11:03:20+01:00,up,device,injected,20,,0,0,False,False,False
+off,link,DIST-CBT <-> ACC-CBT-01,2026-11-02T11:03:20+01:00,up,device,injected,20,,0,0,False,False,False
+off,link,DIST-CBT <-> ACC-CBT-02,2026-11-02T11:03:20+01:00,up,device,injected,20,5290,0,0,False,False,False
+off,link,DIST-CBT <-> CORE-SW-01,2026-11-02T11:03:20+01:00,up,device,injected,20,35860,0,0,False,False,False
+off,link,DIST-CBT <-> CORE-SW-02,2026-11-02T11:03:20+01:00,up,device,injected,20,7040,0,0,False,False,False
+off,link,DIST-CBT <-> ACC-CBT-02,2026-11-02T12:31:30+01:00,down,link,random,30,850,0,0,False,False,False
+off,link,DIST-CBT <-> ACC-CBT-02,2026-11-02T12:45:40+01:00,up,link,random,40,,0,0,False,False,False
+off,link,DIST-CBT <-> CORE-SW-02,2026-11-02T13:00:40+01:00,down,link,injected,40,500,0,0,False,False,False
+off,link,DIST-CBT <-> CORE-SW-02,2026-11-02T13:09:00+01:00,up,link,injected,0,,0,0,False,False,False
+off,device,SRV-PORTAL,2026-11-02T15:00:40+01:00,down,device,injected,40,500,0,0,False,False,False
+off,link,DC-SW-01 <-> SRV-PORTAL,2026-11-02T15:00:40+01:00,down,device,injected,40,500,0,0,False,False,False
+off,device,SRV-PORTAL,2026-11-02T15:09:00+01:00,up,device,injected,0,,0,0,False,False,False
+off,link,DC-SW-01 <-> SRV-PORTAL,2026-11-02T15:09:00+01:00,up,device,injected,0,,0,0,False,False,False
+off,link,CORE-SW-02 <-> DC-SW-01,2026-11-02T17:00:50+01:00,down,link,injected,50,560,0,0,False,False,False
+off,link,CORE-SW-02 <-> DC-SW-01,2026-11-02T17:10:10+01:00,up,link,injected,10,,0,60,True,True,False
+off,device,DIST-SOT,2026-11-02T19:00:50+01:00,down,device,injected,50,520,0,0,False,False,False
+off,link,DIST-SOT <-> ACC-SOT-01,2026-11-02T19:00:50+01:00,down,device,injected,50,520,0,0,False,False,False
+off,link,DIST-SOT <-> AP-SOT-01,2026-11-02T19:00:50+01:00,down,device,injected,50,520,0,0,False,False,False
+off,link,DIST-SOT <-> CORE-SW-01,2026-11-02T19:00:50+01:00,down,device,injected,50,520,0,0,False,False,False
+off,link,DIST-SOT <-> CORE-SW-02,2026-11-02T19:00:50+01:00,down,device,injected,50,520,0,0,False,False,False
+off,device,DIST-SOT,2026-11-02T19:09:30+01:00,up,device,injected,30,,0,0,False,False,False
+off,link,DIST-SOT <-> ACC-SOT-01,2026-11-02T19:09:30+01:00,up,device,injected,30,,0,0,False,False,False
+off,link,DIST-SOT <-> AP-SOT-01,2026-11-02T19:09:30+01:00,up,device,injected,30,,0,0,False,False,False
+off,link,DIST-SOT <-> CORE-SW-01,2026-11-02T19:09:30+01:00,up,device,injected,30,,0,0,False,False,False
+off,link,DIST-SOT <-> CORE-SW-02,2026-11-02T19:09:30+01:00,up,device,injected,30,,0,0,False,False,False
+off,link,DIST-CBT <-> CORE-SW-01,2026-11-02T21:01:00+01:00,down,link,injected,0,990,0,0,False,False,False
+off,link,DIST-CBT <-> CORE-SW-01,2026-11-02T21:17:30+01:00,up,link,injected,30,,0,0,False,False,False
+off,device,DIST-LIB,2026-11-02T23:01:00+01:00,down,device,injected,0,550,0,0,False,False,False
+off,link,DIST-LIB <-> ACC-LIB-01,2026-11-02T23:01:00+01:00,down,device,injected,0,550,0,0,False,False,False
+off,link,DIST-LIB <-> AP-LIB-01,2026-11-02T23:01:00+01:00,down,device,injected,0,550,0,0,False,False,False
+off,link,DIST-LIB <-> CORE-SW-01,2026-11-02T23:01:00+01:00,down,device,injected,0,550,0,0,False,False,False
+off,link,DIST-LIB <-> CORE-SW-02,2026-11-02T23:01:00+01:00,down,device,injected,0,550,0,0,False,False,False
+off,device,DIST-LIB,2026-11-02T23:10:10+01:00,up,device,injected,10,,0,60,True,True,False
+off,link,DIST-LIB <-> ACC-LIB-01,2026-11-02T23:10:10+01:00,up,device,injected,10,,0,60,True,True,False
+off,link,DIST-LIB <-> AP-LIB-01,2026-11-02T23:10:10+01:00,up,device,injected,10,,0,60,True,True,False
+off,link,DIST-LIB <-> CORE-SW-01,2026-11-02T23:10:10+01:00,up,device,injected,10,,0,60,True,True,False
+off,link,DIST-LIB <-> CORE-SW-02,2026-11-02T23:10:10+01:00,up,device,injected,10,,0,60,True,True,False
+default,link,DIST-LIB <-> AP-LIB-01,2026-11-02T01:00:10+01:00,down,link,injected,10,1070,0,60,True,True,False
+default,link,DIST-LIB <-> AP-LIB-01,2026-11-02T01:18:00+01:00,up,link,injected,0,78180,0,0,False,False,False
+default,device,DIST-ICT,2026-11-02T03:00:10+01:00,down,device,injected,10,320,0,60,True,True,False
+default,link,DIST-ICT <-> ACC-ICT-01,2026-11-02T03:00:10+01:00,down,device,injected,10,320,0,60,True,True,False
+default,link,DIST-ICT <-> CORE-SW-01,2026-11-02T03:00:10+01:00,down,device,injected,10,320,0,60,True,True,False
+default,link,DIST-ICT <-> CORE-SW-02,2026-11-02T03:00:10+01:00,down,device,injected,10,320,0,60,True,True,False
+default,device,DIST-ICT,2026-11-02T03:05:30+01:00,up,device,injected,30,,0,0,False,False,False
+default,link,DIST-ICT <-> ACC-ICT-01,2026-11-02T03:05:30+01:00,up,device,injected,30,26070,0,0,False,False,False
+default,link,DIST-ICT <-> CORE-SW-01,2026-11-02T03:05:30+01:00,up,device,injected,30,,0,0,False,False,False
+default,link,DIST-ICT <-> CORE-SW-02,2026-11-02T03:05:30+01:00,up,device,injected,30,,0,0,False,False,False
+default,link,CORE-SW-01 <-> DC-SW-01,2026-11-02T05:00:20+01:00,down,link,injected,20,970,0,0,False,False,False
+default,link,CORE-SW-01 <-> DC-SW-01,2026-11-02T05:16:30+01:00,up,link,injected,30,,0,0,False,False,False
+default,device,ACC-ADMIN-01,2026-11-02T07:00:20+01:00,down,device,injected,20,140,0,0,False,False,False
+default,link,DIST-ADMIN <-> ACC-ADMIN-01,2026-11-02T07:00:20+01:00,down,device,injected,20,140,0,0,False,False,False
+default,device,ACC-ADMIN-01,2026-11-02T07:02:40+01:00,up,device,injected,40,,0,0,False,False,False
+default,link,DIST-ADMIN <-> ACC-ADMIN-01,2026-11-02T07:02:40+01:00,up,device,injected,40,,0,0,False,False,False
+default,link,CORE-SW-01 <-> CORE-SW-02,2026-11-02T09:00:30+01:00,down,link,injected,30,610,0,0,False,False,False
+default,link,CORE-SW-01 <-> CORE-SW-02,2026-11-02T09:10:40+01:00,up,link,injected,40,,0,0,False,False,False
+default,link,DIST-ICT <-> ACC-ICT-01,2026-11-02T10:20:00+01:00,down,link,random,0,1790,0,0,False,False,False
+default,link,DIST-ICT <-> ACC-ICT-01,2026-11-02T10:49:50+01:00,up,link,random,50,,0,0,False,False,False
+default,device,DIST-CBT,2026-11-02T11:00:30+01:00,down,device,injected,30,170,0,0,False,False,False
+default,link,DIST-CBT <-> ACC-CBT-01,2026-11-02T11:00:30+01:00,down,device,injected,30,170,0,0,False,False,False
+default,link,DIST-CBT <-> ACC-CBT-02,2026-11-02T11:00:30+01:00,down,device,injected,30,170,0,0,False,False,False
+default,link,DIST-CBT <-> CORE-SW-01,2026-11-02T11:00:30+01:00,down,device,injected,30,170,0,0,False,False,False
+default,link,DIST-CBT <-> CORE-SW-02,2026-11-02T11:00:30+01:00,down,device,injected,30,170,0,0,False,False,False
+default,device,DIST-CBT,2026-11-02T11:03:20+01:00,up,device,injected,20,,0,0,False,False,False
+default,link,DIST-CBT <-> ACC-CBT-01,2026-11-02T11:03:20+01:00,up,device,injected,20,,0,0,False,False,False
+default,link,DIST-CBT <-> ACC-CBT-02,2026-11-02T11:03:20+01:00,up,device,injected,20,,0,0,False,False,False
+default,link,DIST-CBT <-> CORE-SW-01,2026-11-02T11:03:20+01:00,up,device,injected,20,35860,0,0,False,False,False
+default,link,DIST-CBT <-> CORE-SW-02,2026-11-02T11:03:20+01:00,up,device,injected,20,7040,0,0,False,False,False
+default,link,DIST-CBT <-> CORE-SW-02,2026-11-02T13:00:40+01:00,down,link,injected,40,500,0,0,False,False,False
+default,link,DIST-CBT <-> CORE-SW-02,2026-11-02T13:09:00+01:00,up,link,injected,0,,0,0,False,False,False
+default,device,SRV-PORTAL,2026-11-02T15:00:40+01:00,down,device,injected,40,500,0,0,False,False,False
+default,link,DC-SW-01 <-> SRV-PORTAL,2026-11-02T15:00:40+01:00,down,device,injected,40,500,0,0,False,False,False
+default,device,SRV-PORTAL,2026-11-02T15:09:00+01:00,up,device,injected,0,,0,0,False,False,False
+default,link,DC-SW-01 <-> SRV-PORTAL,2026-11-02T15:09:00+01:00,up,device,injected,0,,0,0,False,False,False
+default,link,CORE-SW-02 <-> DC-SW-01,2026-11-02T17:00:50+01:00,down,link,injected,50,560,0,0,False,False,False
+default,link,CORE-SW-02 <-> DC-SW-01,2026-11-02T17:10:10+01:00,up,link,injected,10,,0,60,True,True,False
+default,device,DIST-SOT,2026-11-02T19:00:50+01:00,down,device,injected,50,520,0,0,False,False,False
+default,link,DIST-SOT <-> ACC-SOT-01,2026-11-02T19:00:50+01:00,down,device,injected,50,520,0,0,False,False,False
+default,link,DIST-SOT <-> AP-SOT-01,2026-11-02T19:00:50+01:00,down,device,injected,50,520,0,0,False,False,False
+default,link,DIST-SOT <-> CORE-SW-01,2026-11-02T19:00:50+01:00,down,device,injected,50,520,0,0,False,False,False
+default,link,DIST-SOT <-> CORE-SW-02,2026-11-02T19:00:50+01:00,down,device,injected,50,520,0,0,False,False,False
+default,device,DIST-SOT,2026-11-02T19:09:30+01:00,up,device,injected,30,,0,0,False,False,False
+default,link,DIST-SOT <-> ACC-SOT-01,2026-11-02T19:09:30+01:00,up,device,injected,30,,0,0,False,False,False
+default,link,DIST-SOT <-> AP-SOT-01,2026-11-02T19:09:30+01:00,up,device,injected,30,,0,0,False,False,False
+default,link,DIST-SOT <-> CORE-SW-01,2026-11-02T19:09:30+01:00,up,device,injected,30,,0,0,False,False,False
+default,link,DIST-SOT <-> CORE-SW-02,2026-11-02T19:09:30+01:00,up,device,injected,30,,0,0,False,False,False
+default,link,DIST-CBT <-> CORE-SW-01,2026-11-02T21:01:00+01:00,down,link,injected,0,990,0,0,False,False,False
+default,link,DIST-CBT <-> CORE-SW-01,2026-11-02T21:17:30+01:00,up,link,injected,30,,0,0,False,False,False
+default,device,DIST-LIB,2026-11-02T23:01:00+01:00,down,device,injected,0,550,0,0,False,False,False
+default,link,DIST-LIB <-> ACC-LIB-01,2026-11-02T23:01:00+01:00,down,device,injected,0,550,0,0,False,False,False
+default,link,DIST-LIB <-> AP-LIB-01,2026-11-02T23:01:00+01:00,down,device,injected,0,550,0,0,False,False,False
+default,link,DIST-LIB <-> CORE-SW-01,2026-11-02T23:01:00+01:00,down,device,injected,0,550,0,0,False,False,False
+default,link,DIST-LIB <-> CORE-SW-02,2026-11-02T23:01:00+01:00,down,device,injected,0,550,0,0,False,False,False
+default,device,DIST-LIB,2026-11-02T23:10:10+01:00,up,device,injected,10,,0,60,True,True,False
+default,link,DIST-LIB <-> ACC-LIB-01,2026-11-02T23:10:10+01:00,up,device,injected,10,,0,60,True,True,False
+default,link,DIST-LIB <-> AP-LIB-01,2026-11-02T23:10:10+01:00,up,device,injected,10,,0,60,True,True,False
+default,link,DIST-LIB <-> CORE-SW-01,2026-11-02T23:10:10+01:00,up,device,injected,10,,0,60,True,True,False
+default,link,DIST-LIB <-> CORE-SW-02,2026-11-02T23:10:10+01:00,up,device,injected,10,,0,60,True,True,False
+high,link,DIST-LIB <-> AP-LIB-01,2026-11-02T01:00:10+01:00,down,link,injected,10,1070,0,60,True,True,False
+high,link,DIST-LIB <-> AP-LIB-01,2026-11-02T01:18:00+01:00,up,link,injected,0,78180,0,0,False,False,False
+high,device,DIST-ICT,2026-11-02T03:00:10+01:00,down,device,injected,10,320,0,60,True,True,False
+high,link,DIST-ICT <-> ACC-ICT-01,2026-11-02T03:00:10+01:00,down,device,injected,10,320,0,60,True,True,False
+high,link,DIST-ICT <-> CORE-SW-01,2026-11-02T03:00:10+01:00,down,device,injected,10,320,0,60,True,True,False
+high,link,DIST-ICT <-> CORE-SW-02,2026-11-02T03:00:10+01:00,down,device,injected,10,320,0,60,True,True,False
+high,device,DIST-ICT,2026-11-02T03:05:30+01:00,up,device,injected,30,,0,0,False,False,False
+high,link,DIST-ICT <-> ACC-ICT-01,2026-11-02T03:05:30+01:00,up,device,injected,30,,0,0,False,False,False
+high,link,DIST-ICT <-> CORE-SW-01,2026-11-02T03:05:30+01:00,up,device,injected,30,,0,0,False,False,False
+high,link,DIST-ICT <-> CORE-SW-02,2026-11-02T03:05:30+01:00,up,device,injected,30,,0,0,False,False,False
+high,link,CORE-SW-01 <-> DC-SW-01,2026-11-02T05:00:20+01:00,down,link,injected,20,970,0,0,False,False,False
+high,link,CORE-SW-01 <-> DC-SW-01,2026-11-02T05:16:30+01:00,up,link,injected,30,,0,0,False,False,False
+high,device,ACC-ADMIN-01,2026-11-02T07:00:20+01:00,down,device,injected,20,140,0,0,False,False,False
+high,link,DIST-ADMIN <-> ACC-ADMIN-01,2026-11-02T07:00:20+01:00,down,device,injected,20,140,0,0,False,False,False
+high,device,ACC-ADMIN-01,2026-11-02T07:02:40+01:00,up,device,injected,40,,0,0,False,False,False
+high,link,DIST-ADMIN <-> ACC-ADMIN-01,2026-11-02T07:02:40+01:00,up,device,injected,40,,0,0,False,False,False
+high,link,CORE-SW-01 <-> CORE-SW-02,2026-11-02T09:00:30+01:00,down,link,injected,30,610,0,0,False,False,False
+high,link,CORE-SW-01 <-> CORE-SW-02,2026-11-02T09:10:40+01:00,up,link,injected,40,,0,0,False,False,False
+high,device,DIST-CBT,2026-11-02T11:00:30+01:00,down,device,injected,30,170,0,0,False,False,False
+high,link,DIST-CBT <-> ACC-CBT-01,2026-11-02T11:00:30+01:00,down,device,injected,30,170,0,0,False,False,False
+high,link,DIST-CBT <-> ACC-CBT-02,2026-11-02T11:00:30+01:00,down,device,injected,30,170,0,0,False,False,False
+high,link,DIST-CBT <-> CORE-SW-01,2026-11-02T11:00:30+01:00,down,device,injected,30,170,0,0,False,False,False
+high,link,DIST-CBT <-> CORE-SW-02,2026-11-02T11:00:30+01:00,down,device,injected,30,170,0,0,False,False,False
+high,device,DIST-CBT,2026-11-02T11:03:20+01:00,up,device,injected,20,,0,0,False,False,False
+high,link,DIST-CBT <-> ACC-CBT-01,2026-11-02T11:03:20+01:00,up,device,injected,20,,0,0,False,False,False
+high,link,DIST-CBT <-> ACC-CBT-02,2026-11-02T11:03:20+01:00,up,device,injected,20,,0,0,False,False,False
+high,link,DIST-CBT <-> CORE-SW-01,2026-11-02T11:03:20+01:00,up,device,injected,20,35860,0,0,False,False,False
+high,link,DIST-CBT <-> CORE-SW-02,2026-11-02T11:03:20+01:00,up,device,injected,20,7040,0,0,False,False,False
+high,link,DIST-CBT <-> CORE-SW-02,2026-11-02T13:00:40+01:00,down,link,injected,40,500,0,0,False,False,False
+high,link,DIST-CBT <-> CORE-SW-02,2026-11-02T13:09:00+01:00,up,link,injected,0,,0,0,False,False,False
+high,device,SRV-PORTAL,2026-11-02T15:00:40+01:00,down,device,injected,40,500,0,0,False,False,False
+high,link,DC-SW-01 <-> SRV-PORTAL,2026-11-02T15:00:40+01:00,down,device,injected,40,500,0,0,False,False,False
+high,device,SRV-PORTAL,2026-11-02T15:09:00+01:00,up,device,injected,0,,0,0,False,False,False
+high,link,DC-SW-01 <-> SRV-PORTAL,2026-11-02T15:09:00+01:00,up,device,injected,0,,0,0,False,False,False
+high,link,CORE-SW-02 <-> DC-SW-01,2026-11-02T17:00:50+01:00,down,link,injected,50,560,0,0,False,False,False
+high,link,CORE-SW-02 <-> DC-SW-01,2026-11-02T17:10:10+01:00,up,link,injected,10,,0,60,True,True,False
+high,device,DIST-SOT,2026-11-02T19:00:50+01:00,down,device,injected,50,520,0,0,False,False,False
+high,link,DIST-SOT <-> ACC-SOT-01,2026-11-02T19:00:50+01:00,down,device,injected,50,520,0,0,False,False,False
+high,link,DIST-SOT <-> AP-SOT-01,2026-11-02T19:00:50+01:00,down,device,injected,50,520,0,0,False,False,False
+high,link,DIST-SOT <-> CORE-SW-01,2026-11-02T19:00:50+01:00,down,device,injected,50,520,0,0,False,False,False
+high,link,DIST-SOT <-> CORE-SW-02,2026-11-02T19:00:50+01:00,down,device,injected,50,520,0,0,False,False,False
+high,device,DIST-SOT,2026-11-02T19:09:30+01:00,up,device,injected,30,,0,0,False,False,False
+high,link,DIST-SOT <-> ACC-SOT-01,2026-11-02T19:09:30+01:00,up,device,injected,30,,0,0,False,False,False
+high,link,DIST-SOT <-> AP-SOT-01,2026-11-02T19:09:30+01:00,up,device,injected,30,,0,0,False,False,False
+high,link,DIST-SOT <-> CORE-SW-01,2026-11-02T19:09:30+01:00,up,device,injected,30,,0,0,False,False,False
+high,link,DIST-SOT <-> CORE-SW-02,2026-11-02T19:09:30+01:00,up,device,injected,30,,0,0,False,False,False
+high,link,DIST-CBT <-> CORE-SW-01,2026-11-02T21:01:00+01:00,down,link,injected,0,990,0,0,False,False,False
+high,link,DIST-CBT <-> CORE-SW-01,2026-11-02T21:17:30+01:00,up,link,injected,30,,0,0,False,False,False
+high,link,DIST-HOSTEL <-> AP-HOSTEL-01,2026-11-02T21:43:20+01:00,down,link,random,20,390,0,0,False,False,False
+high,link,DIST-HOSTEL <-> AP-HOSTEL-01,2026-11-02T21:49:50+01:00,up,link,random,50,,0,0,False,False,False
+high,device,DIST-LIB,2026-11-02T23:01:00+01:00,down,device,injected,0,550,0,0,False,False,False
+high,link,DIST-LIB <-> ACC-LIB-01,2026-11-02T23:01:00+01:00,down,device,injected,0,550,0,0,False,False,False
+high,link,DIST-LIB <-> AP-LIB-01,2026-11-02T23:01:00+01:00,down,device,injected,0,550,0,0,False,False,False
+high,link,DIST-LIB <-> CORE-SW-01,2026-11-02T23:01:00+01:00,down,device,injected,0,550,0,0,False,False,False
+high,link,DIST-LIB <-> CORE-SW-02,2026-11-02T23:01:00+01:00,down,device,injected,0,550,0,0,False,False,False
+high,device,DIST-LIB,2026-11-02T23:10:10+01:00,up,device,injected,10,,0,60,True,True,False
+high,link,DIST-LIB <-> ACC-LIB-01,2026-11-02T23:10:10+01:00,up,device,injected,10,,0,60,True,True,False
+high,link,DIST-LIB <-> AP-LIB-01,2026-11-02T23:10:10+01:00,up,device,injected,10,,0,60,True,True,False
+high,link,DIST-LIB <-> CORE-SW-01,2026-11-02T23:10:10+01:00,up,device,injected,10,,0,60,True,True,False
+high,link,DIST-LIB <-> CORE-SW-02,2026-11-02T23:10:10+01:00,up,device,injected,10,,0,60,True,True,False

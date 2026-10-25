@@ -51,14 +51,18 @@ Part A: configured growth (the target)
     interval contains 1 %, and the estimate per link and per world.
 
 Part B: ramped links, the projected date of reaching 90 %
-    One more world (seed 9201), run for 28 days, in which two zone/class demands are ramped
+    One more world (seed 9201), run for 28 days, in which two campus-wide demands are ramped
     linearly from the first day:
-    - hostel web traffic (an evening load);
-    - School of Science video (a daytime load).
-    Each ramp is a lab surge with a 28-day ramp. It is sized before the run, from a one-day fork
-    of the world with that demand multiplied, by bisection on the multiplier, so that the zone's
-    busiest link reaches a daily 95th percentile of 90 % around day 20. Its links then cross 90 %
-    some days after the page's 14-day window.
+    - e-learning traffic, to the LMS server;
+    - library traffic, to the library server.
+    These are internal traffic on links with headroom. A first design ramped hostel web and School
+    of Science video, but their links (the ISP-B uplink, the hostel access points) already reach
+    90 % on flash-crowd days without any ramp, so none could be scored.
+    Each ramp is a lab surge with a 28-day ramp. It is sized before the run, from one-day forks of
+    the world with that demand multiplied, by geometric bisection on the multiplier: the busiest
+    link with headroom (a day-0 daily p95 below 75 % without the ramp) reaches a daily 95th
+    percentile of 90 % around day 20. Its links then cross 90 % some days after the page's 14-day
+    window.
     - The ramped links are those whose daily 95th percentile rises by 10 points or more from the
       first day to the last; growth alone adds under 4 points.
     - For each ramped link still below 90 % in the window, the page's projection on day 14, from
@@ -121,7 +125,8 @@ WINDOW_DAYS = 14                                        # the page fits the last
 GROWTH_SEEDS = (9101, 9102, 9103, 9104, 9105)
 RAMP_SEED = 9201
 RAMP_WORLD_DAYS = 28
-RAMPS = (("HOSTEL", "web"), ("SCI", "video"))
+RAMPS = (("*", "elearning"), ("*", "library"))         # campus-wide: to the LMS and library servers
+HEADROOM_PCT = 75.0                                     # links sized on: day-0 daily p95 below this
 CROSS_DAY = 20                                          # the ramps are sized to reach 90 % around this day
 RAMPED_RISE_PTS = 10.0
 
@@ -200,18 +205,24 @@ def run_days(net: EmulatedNetwork, days: int, label: str = "") -> np.ndarray:
 
 
 def size_ramp(topo: Topology, seed: int, zone: str, cls: str) -> dict:
-    """The multiplier m90 at which the zone's busiest link has a day-0 daily p95 of 90 % (bisection on
-    one-day forks), and the 28-day ramp's final multiplier that reaches m90 around CROSS_DAY."""
+    """The multiplier m90 at which the busiest link with headroom (day-0 daily p95 below HEADROOM_PCT
+    without the ramp) reaches a day-0 daily p95 of 90 %, by geometric bisection on one-day forks; and
+    the 28-day ramp's final multiplier that reaches m90 around CROSS_DAY. Links already near the
+    threshold (the ISP-B uplink, the hostel access points) would cross on any busy day and are not
+    what the ramp is sized on."""
     base = new_world(topo, seed)
-    lo, hi, tries = 1.0, 8.0, []
-    for _ in range(7):
-        mid = (lo + hi) / 2
+    baseline = run_days(copy.deepcopy(base), 1)[0]
+    headroom = baseline < HEADROOM_PCT
+    lo, hi, tries = 1.0, 256.0, []
+    for _ in range(9):
+        mid = math.sqrt(lo * hi)
         fork = copy.deepcopy(base)
         fork.add_surge(zone, cls, mid, 1, CYCLES_PER_DAY * 2, 0.0)
-        peak = float(np.nanmax(run_days(fork, 1)[0]))
+        p95 = run_days(fork, 1)[0]
+        peak = float(np.nanmax(np.where(headroom, p95, np.nan)))
         tries.append((round(mid, 3), round(peak, 2)))
         lo, hi = (lo, mid) if peak >= CRITICAL_PCT else (mid, hi)
-    m90 = (lo + hi) / 2
+    m90 = math.sqrt(lo * hi)
     final = 1.0 + (m90 - 1.0) * RAMP_WORLD_DAYS / CROSS_DAY
     return {"zone": zone, "cls": cls, "m90": round(m90, 3), "final_multiplier": round(final, 3), "bisection": tries}
 

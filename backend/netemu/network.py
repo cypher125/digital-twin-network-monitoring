@@ -52,16 +52,18 @@ class NetEvent:
 
 class EmulatedNetwork:
     def __init__(self, topo: Topology, start: datetime, cycle_seconds: int = 60, seed: int = 7,
-                 history_cycles: int = 1440):
-        if start.tzinfo is None:
-            raise ValueError("start must be timezone-aware")
+                 history_cycles: int = 1440, origin: datetime | None = None):
+        """`origin` is when the traffic calendar began (growth and day-numbered events count from it).
+        It defaults to `start`; a resumed emulator passes the first run's origin, so growth carries on."""
+        if start.tzinfo is None or (origin is not None and origin.tzinfo is None):
+            raise ValueError("start and origin must be timezone-aware")
         self.topo = topo
         self.cycle_seconds = cycle_seconds
         self.t = start
         self.lock = threading.RLock()
         self.events_cond = threading.Condition(self.lock)
         self.rng = np.random.default_rng(seed + 1)
-        self.traffic = TrafficModel(topo, start, seed)
+        self.traffic = TrafficModel(topo, origin or start, seed)
         self.demands = self.traffic.demands
         self.random_faults = topo.faults.enabled
 

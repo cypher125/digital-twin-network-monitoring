@@ -46,6 +46,36 @@ def git_commit() -> str:
         return "unknown"
 
 
+def machine_load(seconds: float = 2.0) -> dict | None:
+    """CPU and memory in use on the laptop, and the busiest other programs. The laptop is shared
+    (another project sometimes runs on it), so each result records what else was running."""
+    try:
+        import os
+
+        import psutil
+    except ImportError:
+        return None
+    me = {os.getpid(), *(child.pid for child in psutil.Process().children(recursive=True))}
+    procs = [p for p in psutil.process_iter(["name", "cmdline"]) if p.pid not in me]
+    for p in procs:
+        try:
+            p.cpu_percent(None)
+        except psutil.Error:
+            pass
+    total = psutil.cpu_percent(interval=seconds)
+    busy = []
+    for p in procs:
+        try:
+            share = p.cpu_percent(None) / psutil.cpu_count()
+        except psutil.Error:
+            continue
+        if share >= 5:
+            busy.append({"name": p.info["name"], "cpu_pct_of_machine": round(share, 1),
+                         "command": " ".join(p.info["cmdline"] or [])[:100]})
+    return {"cpu_pct": total, "memory_used_pct": psutil.virtual_memory().percent,
+            "busy_other_programs": sorted(busy, key=lambda b: -b["cpu_pct_of_machine"])[:5]}
+
+
 @dataclass
 class Results:
     """One experiment's output folder and its running summary."""
@@ -55,6 +85,7 @@ class Results:
     config: dict = field(default_factory=dict)
     summary: dict = field(default_factory=dict)
     started: float = field(default_factory=time.time)
+    load_at_start: dict | None = field(default_factory=machine_load)
 
     @property
     def folder(self) -> Path:
@@ -94,6 +125,7 @@ class Results:
             "code_version": git_commit(),
             "python": sys.version.split()[0],
             "machine": f"{platform.system()} {platform.release()}, {platform.processor() or platform.machine()}",
+            "machine_load": {"at_start": self.load_at_start, "at_finish": machine_load()},
             "config": self.config,
             "summary": self.summary,
         }

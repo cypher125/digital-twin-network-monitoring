@@ -167,6 +167,23 @@ def project(days: list, p95: list, critical: float, today: date | None = None) -
             "fitted_p95_now": round(float(fitted_now), 2)}
 
 
+def daily_p95_by_link(today: datetime) -> dict[int, tuple[list, list]]:
+    """{link_id: (days, daily 95th percentiles)} over the 14 complete WAT days before `today`
+    (days with less than FULL_DAY_HOURS of readings are left out). Also used by evaluation E9."""
+    rows = _query(
+        "SELECT link_id, (timestamp AT TIME ZONE 'Africa/Lagos')::date AS d, "
+        "percentile_cont(0.95) WITHIN GROUP (ORDER BY utilisation_pct) FROM monitoring_record "
+        "WHERE link_id IS NOT NULL AND timestamp >= %s AND timestamp < %s GROUP BY 1, 2 "
+        "HAVING max(timestamp) - min(timestamp) >= %s ORDER BY 1, 2",
+        [today - RANGES["14d"], today, timedelta(hours=FULL_DAY_HOURS)])
+    by_link: dict[int, tuple[list, list]] = {}
+    for link_id, day, value in rows:
+        if value is not None:
+            by_link.setdefault(link_id, ([], []))[0].append(day)
+            by_link[link_id][1].append(float(value))
+    return by_link
+
+
 class CapacityView(APIView):
     """Growth and projected date of reaching the critical threshold, per link (capacity planning).
 
@@ -184,17 +201,7 @@ class CapacityView(APIView):
         if cached is not None:
             return Response(cached)
         today = datetime(now.year, now.month, now.day, tzinfo=WAT)
-        rows = _query(
-            "SELECT link_id, (timestamp AT TIME ZONE 'Africa/Lagos')::date AS d, "
-            "percentile_cont(0.95) WITHIN GROUP (ORDER BY utilisation_pct) FROM monitoring_record "
-            "WHERE link_id IS NOT NULL AND timestamp >= %s AND timestamp < %s GROUP BY 1, 2 "
-            "HAVING max(timestamp) - min(timestamp) >= %s ORDER BY 1, 2",
-            [today - RANGES["14d"], today, timedelta(hours=FULL_DAY_HOURS)])
-        by_link: dict[int, tuple[list, list]] = {}
-        for link_id, day, value in rows:
-            if value is not None:
-                by_link.setdefault(link_id, ([], []))[0].append(day)
-                by_link[link_id][1].append(float(value))
+        by_link = daily_p95_by_link(today)
         critical = thresholds()["critical_pct"]
         labels = link_labels()
         links = []

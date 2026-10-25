@@ -80,7 +80,8 @@ def clock_saver(state_file: Path, attempts: int = 5):
 
     def save(net) -> None:
         tmp = state_file.with_suffix(".tmp")
-        tmp.write_text(json.dumps({"time": net.t.isoformat(), "cycle_seq": net.cycle_seq}), encoding="utf-8")
+        tmp.write_text(json.dumps({"time": net.t.isoformat(), "cycle_seq": net.cycle_seq,
+                                   "origin": net.traffic.start.isoformat()}), encoding="utf-8")
         for attempt in range(attempts):
             try:
                 os.replace(tmp, state_file)
@@ -100,10 +101,14 @@ def cmd_serve(args) -> None:
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s %(message)s")
     topo = with_reality_gap(load_topology(args.topology), args.reality_gap)
     state_file = Path(args.state)
-    net = EmulatedNetwork(topo, parse_start(args.start, state_file), cycle_seconds=args.cycle, seed=args.seed)
-    if args.start == "resume" and state_file.exists():
+    saved = json.loads(state_file.read_text(encoding="utf-8")) if args.start == "resume" and state_file.exists() else {}
+    # a resumed emulator keeps the first run's traffic calendar, so growth and dated events carry on
+    origin = datetime.fromisoformat(saved["origin"]) if saved.get("origin") else None
+    net = EmulatedNetwork(topo, parse_start(args.start, state_file), cycle_seconds=args.cycle, seed=args.seed,
+                          origin=origin)
+    if saved:
         # keep numbering cycles where the last run stopped, so flow and truth cursors stay valid
-        net.cycle_seq = int(json.loads(state_file.read_text(encoding="utf-8")).get("cycle_seq", 0))
+        net.cycle_seq = int(saved.get("cycle_seq", 0))
     net.on_cycle.append(clock_saver(state_file))
     if args.no_faults:
         net.random_faults = False

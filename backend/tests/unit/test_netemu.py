@@ -195,3 +195,24 @@ def test_a_locked_clock_file_never_stops_the_network(small, tmp_path, monkeypatc
     run_cycles(net, 1)                         # still locked: this save is skipped, the network goes on
     assert "could not save the network clock" in caplog.text
     assert json.loads(state.read_text(encoding="utf-8"))["cycle_seq"] == net.cycle_seq - 1
+
+
+def test_a_resumed_emulator_keeps_its_growth_and_calendar(small, tmp_path):
+    """Growth (growth_per_week) and day-numbered events count from the first run's start, so a
+    restart part-way through a semester does not reset them (found while designing E9)."""
+    import json
+    from datetime import timedelta
+
+    from netemu.__main__ import clock_saver
+
+    state = tmp_path / "clock.json"
+    first = EmulatedNetwork(small, START)
+    first.on_cycle.append(clock_saver(state))
+    run_cycles(first, 2)
+    saved = json.loads(state.read_text(encoding="utf-8"))
+    assert saved["origin"] == START.isoformat()
+
+    later = START + timedelta(days=10)
+    resumed = EmulatedNetwork(small, later, origin=datetime.fromisoformat(saved["origin"]))
+    assert resumed.traffic.start == START and resumed.traffic.start_day == first.traffic.start_day
+    assert EmulatedNetwork(small, later).traffic.start == later        # without an origin: a new calendar

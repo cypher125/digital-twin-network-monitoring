@@ -105,6 +105,20 @@ Three presets (off, default, high) let E1 and E4 show how accuracy changes as th
 
 **Clock.** Network time and the cycle number are saved after every cycle, and a restart resumes from there, so time never goes back (D26). Demo mode runs network time faster than the wall clock (for example 20×). On Windows the save can fail for a moment while another program has the file open (a virus scanner, or someone reading it); this once stopped a history run. The save now retries briefly and otherwise skips that cycle's save with a warning, and a failing cycle observer can never stop the network. A test covers both.
 
+**Traffic calendar across restarts** (fixed on 25 October 2026, found while designing E9).
+
+The bug:
+- Growth (1 % a week) and the day-numbered events (the registration rush on days 2–3, the software-update day 11) count from the emulator's start.
+- A resumed emulator used to start that calendar again.
+- So the stored 14-day history, which was generated in two emulator runs, has its growth clock reset part-way through, and its first-days events happened twice.
+- E2 found the related symptom: the software-update day never fell in its test period.
+
+The fix:
+- The saved clock now also holds the calendar's `origin`, and a resumed emulator keeps it, so growth and events carry on.
+- A unit test covers it.
+
+The existing history is unchanged. Chapter 4 should describe its growth as not a clean 1 % a week. E9 measures growth on worlds with a continuous calendar.
+
 ## 3. Data collection layer (Figure 3.2, Figure 3.4 processes 1.0–2.0)
 
 **Read-only by design.** The adapter interface (`describe`, `poll`, `events`) has no operation that writes to devices. Unit tests check this, and an import rule prevents the simulation engine from reaching the adapters at all.
@@ -219,7 +233,7 @@ The model must be under 100 MB.
 
 **Training history must be consistent (D20).** The first end-to-end history mixed two emulator configurations: the traffic was recalibrated part-way through, so only the last few days had real evening congestion. That left 8 congestion events to train on, and the 10/14 split put the whole weekend in the test period. The models are therefore trained on 14 days generated with the final configuration, with weekends on both sides of the split.
 
-**What can and cannot be predicted.** Flash crowds start at random times. From the start of a surge to the link reaching 90 % takes a median of 22 minutes, and 30 minutes before onset the link usually sits at its normal evening level. No method can warn 30 minutes ahead of such an event; the realistic lead is 10–20 minutes, which still meets E3's target of a median of 10 minutes or more.
+**What can and cannot be predicted.** Flash crowds start at random times. From the start of a surge to the link reaching 90 % takes a median of 22 minutes, and 30 minutes before onset the link usually sits at its normal evening level. No method can warn 30 minutes ahead of such an event; the realistic lead is about 10–20 minutes. E3 measures whether the median reaches its target of 10 minutes.
 
 **Training report.** Training also reports how well warnings would work if they were taken from the regression forecast or from the linear trend instead. That is evidence for the choice above.
 

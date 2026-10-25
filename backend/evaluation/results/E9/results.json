@@ -1,0 +1,221 @@
+{
+  "experiment": "E9",
+  "title": "Capacity planning (Chapter 3 weakness 3)",
+  "finished": "2026-10-25T21:39:46+00:00",
+  "seconds": 2072.9,
+  "code_version": "240b0f3+uncommitted",
+  "python": "3.13.1",
+  "machine": "Windows 11, Intel64 Family 6 Model 122 Stepping 8, GenuineIntel",
+  "machine_load": {
+    "at_start": {
+      "cpu_pct": 60.1,
+      "memory_used_pct": 90.5,
+      "busy_other_programs": [
+        {
+          "name": "System Idle Process",
+          "cpu_pct_of_machine": 25.6,
+          "command": ""
+        },
+        {
+          "name": "claude.exe",
+          "cpu_pct_of_machine": 13.8,
+          "command": "c:\\Users\\cirex\\.void-editor\\extensions\\anthropic.claude-code-2.1.309-win32-x64\\resources\\native-bina"
+        },
+        {
+          "name": "Void.exe",
+          "cpu_pct_of_machine": 12.6,
+          "command": "C:\\Program Files\\Void\\Void.exe --type=renderer --user-data-dir=C:\\Users\\cirex\\AppData\\Roaming\\Void -"
+        },
+        {
+          "name": "System",
+          "cpu_pct_of_machine": 9.1,
+          "command": ""
+        },
+        {
+          "name": "Void.exe",
+          "cpu_pct_of_machine": 6.2,
+          "command": "C:\\Program Files\\Void\\Void.exe --type=renderer --user-data-dir=C:\\Users\\cirex\\AppData\\Roaming\\Void -"
+        }
+      ]
+    },
+    "at_finish": {
+      "cpu_pct": 61.8,
+      "memory_used_pct": 94.7,
+      "busy_other_programs": [
+        {
+          "name": "System Idle Process",
+          "cpu_pct_of_machine": 34.0,
+          "command": ""
+        }
+      ]
+    }
+  },
+  "config": {
+    "quick": false,
+    "start": "2026-11-02T00:00:00+01:00",
+    "traffic_calendar_origin": "2026-10-05T00:00:00+01:00",
+    "growth_seeds": [
+      9101,
+      9102,
+      9103,
+      9104,
+      9105
+    ],
+    "growth_days": 14,
+    "ramp_seed": 9201,
+    "ramp_days": 28,
+    "fit_window_days": 14,
+    "ramps": [
+      "*/elearning",
+      "*/library"
+    ],
+    "cross_day_target": 20,
+    "busy_link_mean_p95_pct": 10.0,
+    "ramped_link_rise_pts": 10.0,
+    "critical_pct": 90.0,
+    "configured_growth_pct_per_week": 1.0,
+    "method": "apps.api.views.trends.project on daily p95 (percentile_cont = numpy linear); emulator ground truth stands in for the twin's readings (E1)"
+  },
+  "summary": {
+    "quick": false,
+    "target": "configured growth (1 % a week) inside the 95 % interval of the Trends page's growth (mean over busy links, interval across independent worlds)",
+    "target_met": true,
+    "configured_growth_pct_per_week": 1.0,
+    "growth": {
+      "worlds": 5,
+      "days": 14,
+      "busy_links_per_world": 14.0,
+      "world_mean_growth_pct_per_week": [
+        -4.331,
+        -1.78,
+        4.703,
+        1.874,
+        -0.063
+      ],
+      "mean_growth_pct_per_week": 0.081,
+      "interval_95": [
+        -4.199,
+        4.36
+      ],
+      "per_link_median_growth_pct_per_week": 0.125,
+      "share_of_links_whose_interval_contains_configured": 0.957
+    },
+    "crossing": {
+      "sizing": [
+        {
+          "zone": "*",
+          "cls": "elearning",
+          "m90": 14.593,
+          "final_multiplier": 20.03,
+          "bisection": [
+            [
+              16.0,
+              98.82
+            ],
+            [
+              4.0,
+              53.19
+            ],
+            [
+              8.0,
+              53.19
+            ],
+            [
+              11.314,
+              69.87
+            ],
+            [
+              13.454,
+              83.09
+            ],
+            [
+              14.672,
+              90.62
+            ],
+            [
+              14.05,
+              86.77
+            ],
+            [
+              14.358,
+              88.67
+            ],
+            [
+              14.514,
+              89.64
+            ]
+          ]
+        },
+        {
+          "zone": "*",
+          "cls": "library",
+          "m90": 11.624,
+          "final_multiplier": 15.874,
+          "bisection": [
+            [
+              16.0,
+              100.0
+            ],
+            [
+              4.0,
+              53.19
+            ],
+            [
+              8.0,
+              61.63
+            ],
+            [
+              11.314,
+              87.16
+            ],
+            [
+              13.454,
+              100.0
+            ],
+            [
+              12.338,
+              95.05
+            ],
+            [
+              11.815,
+              91.02
+            ],
+            [
+              11.561,
+              89.07
+            ],
+            [
+              11.687,
+              90.04
+            ]
+          ]
+        }
+      ],
+      "days": 28,
+      "window_days": 14,
+      "ramped_links": 28,
+      "scored_links": 3,
+      "error_days_median": 1.0,
+      "abs_error_days_median": 1.0,
+      "within_2_days": 3,
+      "statuses": {
+        "scored": 3,
+        "never crossed by the last day": 23,
+        "at 90 % already in the window": 2
+      }
+    },
+    "example_ramped_link": {
+      "link": "ISP-B-GW - EDGE-RTR-01",
+      "projected_day": 19,
+      "actual_day": 18
+    },
+    "stored_history": {
+      "available": true,
+      "latest_cycle": "2026-10-28T11:17:00+00:00",
+      "links": 43,
+      "busy_links": 12,
+      "mean_growth_pct_per_week_busy": 0.828,
+      "links_with_a_projected_date": 7
+    }
+  }
+}

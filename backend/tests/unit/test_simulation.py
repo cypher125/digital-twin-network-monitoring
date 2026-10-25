@@ -214,6 +214,25 @@ def test_recommendations_for_a_link_with_no_alternative_path(setup):
     assert qos.target_after_pct < 90
 
 
+def test_a_fix_that_takes_nothing_off_the_link_is_never_recommended(setup):
+    """Found by E4: raising the routing cost of a link with no alternative path moves no traffic,
+    yet it was recommended first because the forecast load (85 %) was already below 90 %.
+    Every immediate fix is now also tested with the link at full load."""
+    from digital_twin.simulation_engine import recommend
+    from digital_twin.simulation_engine.recommendations import STRESS_PCT
+    model, _, links = setup
+    target = links["DIST <-> ACC"]                  # the only path to ACC
+    model.link(target)["utilisation_pct"] = 50.0
+    recs = recommend(model, target, predicted_pct={target: 85.0}, basis="forecast +30 min")
+    assert "routing_change" not in {r.scenario_type for r in recs}
+    for r in recs:
+        assert r.outcome.basis == "forecast +30 min"           # what is shown stays the forecast run
+        if r.kind == "immediate":
+            stressed = run_scenario(model, r.scenario_type, r.parameters,
+                                    predicted_pct={target: STRESS_PCT}, basis="stress")
+            assert next(lk for lk in stressed.links if lk.link_id == target).after_pct < 90
+
+
 def test_recommendations_prefer_least_disruptive_fix(setup):
     from digital_twin.simulation_engine import recommend
     model, _, links = setup

@@ -1292,7 +1292,8 @@ def run(args) -> None:
     presets = [p.strip() for p in args.presets.split(",") if p.strip()]
     if any(p not in PRESETS for p in presets):
         raise SystemExit(f"unknown preset in {presets}; use {PRESETS}")
-    n_moments = args.moments or (QUICK_MOMENTS if quick else len(MOMENTS))
+    only_b = args.recommendations_only            # part B again, e.g. after a change to the recommendation engine
+    n_moments = 0 if only_b else args.moments or (QUICK_MOMENTS if quick else len(MOMENTS))
     n_cases = args.cases or (QUICK_CASES if quick else len(CASES))
     moments = MOMENTS[:n_moments]
     base = load_topology(CAMPUS)
@@ -1319,14 +1320,17 @@ def run(args) -> None:
                                         "belongs to the SNMP adapter, a Should item that was not built (D11)",
         "add_link": "not tested: a Could scenario type with no lab equivalent in the emulator",
     }
-    if n_moments < 10:
+    if only_b:
+        deviation["part_a"] = "not run: part B (recommendations) only; part A's results are in results/E4"
+    elif n_moments < 10:
         deviation["instances"] = f"{n_moments} instance(s) per scenario type and preset (plan: at least 10)"
     if presets != list(PRESETS):
         deviation["presets"] = f"only {', '.join(presets)} (plan: off, default and high)"
     if quick:
         deviation["quick"] = "pipeline check only: not for Chapter 4"
     config["deviation_from_plan"] = deviation
-    results = Results("E4", "Safe, accurate change testing and recommendations (G3, UC3)", config)
+    results = Results("E4_recommendations" if only_b else "E4",
+                      "Safe, accurate change testing and recommendations (G3, UC3)", config)
     for stale in results.folder.glob("*"):
         if stale.suffix in (".csv", ".png", ".json"):
             stale.unlink()
@@ -1344,23 +1348,26 @@ def run(args) -> None:
     contracts = import_contracts()
 
     # ---- part A outputs
-    by_type, by_preset = accuracy_tables(part_a, presets)
+    by_type, by_preset = accuracy_tables(part_a, presets) if not only_b else ([], [])
     link_fields = ["preset", "moment", "scenario_type", "link_id", "link", "capacity_mbps", "observed_now_pct",
                    "before_pct", "after_pct", "predicted_pct", "predicted_up", "measured_pct", "measured_up",
                    "base_pct", "base_up", "error", "busy", "no_change_error", "effect_error"]
-    results.write_csv("link_errors.csv", part_a.link_rows, link_fields)
+    if not only_b:
+        results.write_csv("link_errors.csv", part_a.link_rows, link_fields)
     instance_fields = ["preset", "moment", "time_wat", "scenario_type", "instance", "status", "note", "spec",
                        "twin_parameters", "lab_change", "calibration_factor", "simulation_ms", "links_scored",
                        "status_mismatches", "mae", "busy_mae", "max_error", "predicted_bottlenecks",
                        "measured_bottlenecks", "tp", "fp", "fn", "same_random_demand"]
-    results.write_csv("instances.csv", part_a.instance_rows, instance_fields)
-    results.write_csv("accuracy_by_type.csv", by_type + by_preset)
-    by_link = link_table(part_a, presets, base)
-    results.write_csv("error_by_link.csv", by_link)
+    by_link: list[dict] = []
     chart_preset = "default" if "default" in presets else presets[0]
-    chart_error_by_type(results, by_type, chart_preset)
-    chart_bottlenecks(results, by_type, chart_preset)
-    chart_by_preset(results, by_preset)
+    if not only_b:
+        results.write_csv("instances.csv", part_a.instance_rows, instance_fields)
+        results.write_csv("accuracy_by_type.csv", by_type + by_preset)
+        by_link = link_table(part_a, presets, base)
+        results.write_csv("error_by_link.csv", by_link)
+        chart_error_by_type(results, by_type, chart_preset)
+        chart_bottlenecks(results, by_type, chart_preset)
+        chart_by_preset(results, by_preset)
 
     # ---- part B outputs
     checks = part_a.checks + (part_b.checks if part_b else [])
@@ -1409,7 +1416,7 @@ def run(args) -> None:
             {k: r[k] for k in ("link", "busy_samples", "busy_mae", "max")}
             for r in sorted((r for r in by_link if r["preset"] == chart_preset and r["busy_mae"] is not None),
                             key=lambda r: -r["busy_mae"])[:5]],
-        "same_random_demand_in_every_pair": all(r["same_random_demand"] for r in by_preset),
+        "same_random_demand_in_every_pair": all(r["same_random_demand"] for r in by_preset) if by_preset else None,
         "instances_not_scored": [{"instance": r["instance"], "status": r["status"], "note": r.get("note")}
                                  for r in part_a.instance_rows if r["status"] != "scored"],
         "not_testable_scenario_types": NOT_TESTABLE_TYPES,
@@ -1585,6 +1592,8 @@ def main(argv: list[str] | None = None) -> None:
     parser.add_argument("--moments", type=int, default=0, help=f"part-A moments (default {len(MOMENTS)}, quick 2)")
     parser.add_argument("--cases", type=int, default=0, help=f"part-B surge cases (default {len(CASES)}, quick 1)")
     parser.add_argument("--no-recommendations", action="store_true", help="skip part B")
+    parser.add_argument("--recommendations-only", action="store_true",
+                        help="part B only, into results/E4_recommendations (part A's results stay in results/E4)")
     args = parser.parse_args(argv)
     if args.selftest:
         _selftest()

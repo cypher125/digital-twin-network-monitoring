@@ -1,0 +1,455 @@
+{
+  "experiment": "E4_recommendations",
+  "title": "Safe, accurate change testing and recommendations (G3, UC3)",
+  "finished": "2026-10-25T23:13:43+00:00",
+  "seconds": 297.2,
+  "code_version": "0e84d10+uncommitted",
+  "python": "3.13.1",
+  "machine": "Windows 11, Intel64 Family 6 Model 122 Stepping 8, GenuineIntel",
+  "machine_load": {
+    "at_start": {
+      "cpu_pct": 24.1,
+      "memory_used_pct": 89.6,
+      "busy_other_programs": [
+        {
+          "name": "System Idle Process",
+          "cpu_pct_of_machine": 60.9,
+          "command": ""
+        },
+        {
+          "name": "Void.exe",
+          "cpu_pct_of_machine": 8.4,
+          "command": "C:\\Program Files\\Void\\Void.exe --type=renderer --user-data-dir=C:\\Users\\cirex\\AppData\\Roaming\\Void -"
+        }
+      ]
+    },
+    "at_finish": {
+      "cpu_pct": 23.4,
+      "memory_used_pct": 91.0,
+      "busy_other_programs": [
+        {
+          "name": "System Idle Process",
+          "cpu_pct_of_machine": 63.0,
+          "command": ""
+        },
+        {
+          "name": "Void.exe",
+          "cpu_pct_of_machine": 7.5,
+          "command": "C:\\Program Files\\Void\\Void.exe --type=renderer --user-data-dir=C:\\Users\\cirex\\AppData\\Roaming\\Void -"
+        }
+      ]
+    }
+  },
+  "config": {
+    "quick": false,
+    "presets": [
+      "off",
+      "default",
+      "high"
+    ],
+    "moments": [],
+    "scenario_types": [
+      "traffic_increase",
+      "link_failure",
+      "device_failure",
+      "routing_change",
+      "reroute_traffic",
+      "capacity_change",
+      "access_control_rule",
+      "qos_policy"
+    ],
+    "not_testable_types": {
+      "add_link": "the lab interface cannot install a new link in the emulated network"
+    },
+    "instances_per_type_per_preset": 0,
+    "warmup_cycles": 15,
+    "settle_cycles": 3,
+    "cycle_seconds": 60,
+    "busy_pct": 5.0,
+    "critical_pct": 90.0,
+    "seed_part_a": "2426 + moment index",
+    "flash_crowd_seed_part_a": "4400 + moment index",
+    "random_faults": false,
+    "data_quality_faults": "campus.yaml (on)",
+    "topology": "data/topologies/campus.yaml",
+    "topology_sha256": "a70d07bca35b5d87d06abf7cda8ef317dba4a5497a0863fc5a747182efc38e23",
+    "recommendations": true,
+    "cases": [
+      {
+        "case": "R01",
+        "time": "2026-11-03T08:00:00+01:00",
+        "zone": "SCI",
+        "cls": "video"
+      },
+      {
+        "case": "R02",
+        "time": "2026-11-03T09:20:00+01:00",
+        "zone": "SOT",
+        "cls": "web"
+      },
+      {
+        "case": "R03",
+        "time": "2026-11-03T10:40:00+01:00",
+        "zone": "ENG",
+        "cls": "video"
+      },
+      {
+        "case": "R04",
+        "time": "2026-11-03T12:00:00+01:00",
+        "zone": "LIB",
+        "cls": "video"
+      },
+      {
+        "case": "R05",
+        "time": "2026-11-03T13:20:00+01:00",
+        "zone": "ICT",
+        "cls": "web"
+      },
+      {
+        "case": "R06",
+        "time": "2026-11-03T14:40:00+01:00",
+        "zone": "SCI",
+        "cls": "web"
+      },
+      {
+        "case": "R07",
+        "time": "2026-11-03T16:00:00+01:00",
+        "zone": "SOT",
+        "cls": "video"
+      },
+      {
+        "case": "R08",
+        "time": "2026-11-03T17:20:00+01:00",
+        "zone": "HOSTEL",
+        "cls": "video"
+      },
+      {
+        "case": "R09",
+        "time": "2026-11-03T18:40:00+01:00",
+        "zone": "HOSTEL",
+        "cls": "web"
+      },
+      {
+        "case": "R10",
+        "time": "2026-11-03T20:00:00+01:00",
+        "zone": "HOSTEL",
+        "cls": "video"
+      },
+      {
+        "case": "R11",
+        "time": "2026-11-03T21:20:00+01:00",
+        "zone": "HOSTEL",
+        "cls": "elearning"
+      },
+      {
+        "case": "R12",
+        "time": "2026-11-03T22:40:00+01:00",
+        "zone": "HOSTEL",
+        "cls": "web"
+      }
+    ],
+    "seed_part_b": 2526,
+    "flash_crowd_seed_part_b": 4500,
+    "ramp_min": 15,
+    "hold_min": 30,
+    "ladder": [
+      1.5,
+      2.0,
+      3.0,
+      4.0,
+      6.0,
+      8.0,
+      12.0
+    ],
+    "probe_peak_pct": 95.0,
+    "window_cycles": 35,
+    "max_triggers_per_basis_and_case": 3,
+    "success_rule": "success: the no-action branch has the target link at 90 % or more in some cycle of the window and the action branch never does, and the action adds no other link at 90 % or more; target_relieved counts the target link only (success + new_bottleneck)",
+    "code_version": "0e84d10+uncommitted",
+    "deviation_from_plan": {
+      "counter_only_demand_estimate": "not run: the twin as built has no counter-only (gravity) estimate; it belongs to the SNMP adapter, a Should item that was not built (D11)",
+      "add_link": "not tested: a Could scenario type with no lab equivalent in the emulator",
+      "part_a": "not run: part B (recommendations) only; part A's results are in results/E4"
+    },
+    "part_b": {
+      "models": {
+        "full": "rf-full-20261019T014146984670Z",
+        "short": "rf-short-20261019T015325555480Z"
+      },
+      "world_start": "2026-11-02T00:00:00+01:00",
+      "flash_crowds_off_from": "2026-11-03T07:50:00+01:00",
+      "forecasting_minutes_before_each_case": 10,
+      "critical_pct": 90.0,
+      "warning_probability_setting": 0.5,
+      "clear_below_pct": 85.0,
+      "clear_cycles": 5,
+      "flash_crowds_switched_off": {
+        "switched_off_at": "2026-11-03T07:51+01:00",
+        "removed_not_started": [
+          {
+            "zone": "HOSTEL",
+            "cls": "web",
+            "multiplier": 1.752,
+            "start": "2026-11-03T19:15+01:00",
+            "end": "2026-11-03T20:27+01:00"
+          },
+          {
+            "zone": "LIB",
+            "cls": "video",
+            "multiplier": 2.692,
+            "start": "2026-11-03T13:02+01:00",
+            "end": "2026-11-03T14:13+01:00"
+          },
+          {
+            "zone": "LIB",
+            "cls": "video",
+            "multiplier": 2.022,
+            "start": "2026-11-03T14:35+01:00",
+            "end": "2026-11-03T15:53+01:00"
+          },
+          {
+            "zone": "ENG",
+            "cls": "web",
+            "multiplier": 1.892,
+            "start": "2026-11-03T15:02+01:00",
+            "end": "2026-11-03T16:24+01:00"
+          }
+        ],
+        "in_progress": []
+      },
+      "model_cycles_served_main_world": {
+        "rf-full-20261019T014146984670Z": 120
+      }
+    }
+  },
+  "summary": {
+    "target": "configuration always unchanged (plan section 11)",
+    "target_met": true,
+    "unchanged_checks": {
+      "network_configuration": {
+        "checked": 43,
+        "all_unchanged": true,
+        "changed": 0
+      },
+      "twin_model_configuration": {
+        "checked": 43,
+        "all_unchanged": true,
+        "changed": 0
+      },
+      "twin_model_state": {
+        "checked": 43,
+        "all_unchanged": true,
+        "changed": 0
+      }
+    },
+    "lab_calls": {
+      "calls": 170,
+      "from_twin_code": 0,
+      "during_twin_simulation": 0,
+      "by_method": {
+        "add_surge": 69,
+        "apply_change": 101
+      },
+      "callers": [
+        "evaluation.e4_sim_vs_reality"
+      ]
+    },
+    "import_contracts": {
+      "ran": true,
+      "passed": true,
+      "result": "Contracts: 5 kept, 0 broken."
+    },
+    "accuracy_by_preset": {},
+    "accuracy_by_type_default": {},
+    "worst_links_default": [],
+    "same_random_demand_in_every_pair": null,
+    "instances_not_scored": [],
+    "not_testable_scenario_types": {
+      "add_link": "the lab interface cannot install a new link in the emulated network"
+    },
+    "counter_only_demand_estimate": {
+      "run": false,
+      "reason": "not supported by the twin as built: its demand matrix comes only from flow records (D11); the counter-only (gravity) estimate belongs to the SNMP adapter, a Should item that was not built. Without flow records every simulation would route an empty demand matrix."
+    },
+    "seconds_part_a": 0.0,
+    "recommendations": {
+      "cases": 12,
+      "cases_run": 11,
+      "triggers": {
+        "forecast": 24,
+        "current": 19
+      },
+      "triggers_without_recommendation": 0,
+      "immediate_fixes": {
+        "forecast": {
+          "recommended": 34,
+          "scorable": 27,
+          "success": 13,
+          "success_rate": 0.481,
+          "target_relieved": 20,
+          "target_relieved_rate": 0.741,
+          "not_scorable": 7,
+          "not_testable": 0
+        },
+        "current": {
+          "recommended": 24,
+          "scorable": 24,
+          "success": 11,
+          "success_rate": 0.458,
+          "target_relieved": 14,
+          "target_relieved_rate": 0.583,
+          "not_scorable": 0,
+          "not_testable": 0
+        }
+      },
+      "planning_advice_capacity_upgrade": {
+        "forecast": {
+          "recommended": 24,
+          "scorable": 18,
+          "success": 18,
+          "success_rate": 1.0,
+          "target_relieved": 18,
+          "target_relieved_rate": 1.0,
+          "not_scorable": 6,
+          "not_testable": 0
+        },
+        "current": {
+          "recommended": 19,
+          "scorable": 19,
+          "success": 19,
+          "success_rate": 1.0,
+          "target_relieved": 19,
+          "target_relieved_rate": 1.0,
+          "not_scorable": 0,
+          "not_testable": 0
+        }
+      },
+      "by_action": {
+        "forecast/routing_change": {
+          "recommended": 0,
+          "scorable": 0,
+          "success": 0,
+          "success_rate": null,
+          "target_relieved": 0,
+          "not_scorable": 0,
+          "still_congested": 0,
+          "new_bottleneck": 0
+        },
+        "forecast/reroute_traffic": {
+          "recommended": 10,
+          "scorable": 9,
+          "success": 1,
+          "success_rate": 0.111,
+          "target_relieved": 8,
+          "not_scorable": 1,
+          "still_congested": 1,
+          "new_bottleneck": 7
+        },
+        "forecast/qos_policy": {
+          "recommended": 24,
+          "scorable": 18,
+          "success": 12,
+          "success_rate": 0.667,
+          "target_relieved": 12,
+          "not_scorable": 6,
+          "still_congested": 6,
+          "new_bottleneck": 0
+        },
+        "forecast/capacity_change": {
+          "recommended": 24,
+          "scorable": 18,
+          "success": 18,
+          "success_rate": 1.0,
+          "target_relieved": 18,
+          "not_scorable": 6,
+          "still_congested": 0,
+          "new_bottleneck": 0
+        },
+        "current/routing_change": {
+          "recommended": 0,
+          "scorable": 0,
+          "success": 0,
+          "success_rate": null,
+          "target_relieved": 0,
+          "not_scorable": 0,
+          "still_congested": 0,
+          "new_bottleneck": 0
+        },
+        "current/reroute_traffic": {
+          "recommended": 5,
+          "scorable": 5,
+          "success": 1,
+          "success_rate": 0.2,
+          "target_relieved": 4,
+          "not_scorable": 0,
+          "still_congested": 1,
+          "new_bottleneck": 3
+        },
+        "current/qos_policy": {
+          "recommended": 19,
+          "scorable": 19,
+          "success": 10,
+          "success_rate": 0.526,
+          "target_relieved": 10,
+          "not_scorable": 0,
+          "still_congested": 9,
+          "new_bottleneck": 0
+        },
+        "current/capacity_change": {
+          "recommended": 19,
+          "scorable": 19,
+          "success": 19,
+          "success_rate": 1.0,
+          "target_relieved": 19,
+          "not_scorable": 0,
+          "still_congested": 0,
+          "new_bottleneck": 0
+        }
+      },
+      "same_random_demand_in_every_pair": true,
+      "actions_not_testable": [],
+      "models": {
+        "full": "rf-full-20261019T014146984670Z",
+        "short": "rf-short-20261019T015325555480Z"
+      }
+    },
+    "seconds_part_b": 272.8,
+    "timings": {
+      "Django set-up": {
+        "seconds": 3.28,
+        "calls": 1,
+        "ms_per_call": 3282.5
+      },
+      "branch of 35 cycles, no twin": {
+        "seconds": 49.4,
+        "calls": 144,
+        "ms_per_call": 343.0
+      },
+      "emulator cycle + twin ingest": {
+        "seconds": 58.53,
+        "calls": 3295,
+        "ms_per_call": 17.8
+      },
+      "emulator cycle, no twin (probes and branches)": {
+        "seconds": 23.31,
+        "calls": 2279,
+        "ms_per_call": 10.2
+      },
+      "forecasting cycle (ForecastService.on_cycle)": {
+        "seconds": 85.19,
+        "calls": 615,
+        "ms_per_call": 138.5
+      },
+      "loading the forecasting models": {
+        "seconds": 0.46,
+        "calls": 1,
+        "ms_per_call": 455.5
+      },
+      "recommend()": {
+        "seconds": 17.37,
+        "calls": 43,
+        "ms_per_call": 404.0
+      }
+    }
+  }
+}

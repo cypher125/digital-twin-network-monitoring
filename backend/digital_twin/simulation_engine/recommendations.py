@@ -6,9 +6,20 @@ candidate configurations on the virtual model before suggesting one:
 
 1. Build candidate fixes for the link: raise its routing cost, reroute the largest
    flow crossing it, limit its largest traffic class (QoS), upgrade its capacity.
-2. Run each through the simulation engine, against the forecast load if given.
+2. Run each through the simulation engine, against the forecast load if given (what the
+   administrator is shown), and again with the link pushed to full load (STRESS_PCT).
 3. Drop any candidate that creates a new bottleneck, cuts off traffic, or (for an
-   immediate fix) leaves the link at or above the critical threshold.
+   immediate fix) leaves the link at or above the critical threshold, or barely
+   lowers it, in either run.
+
+   The stress run was added after evaluation E4. At an alert the point forecast was
+   20-44 points below the peak the surge then reached, so a fix that looked enough at the
+   forecast load often was not. Worse, a fix that changed nothing was kept, because the
+   forecast load alone was already below the threshold: for example, raising the routing
+   cost of a link that has no alternative path. Tested at full load, a fix must actually
+   take traffic off the link (at least 5 % of its load), and its new path must have room
+   for it. The full load is approximate: the forecast basis scales a demand by the link that
+   is busiest on its path, so a link that is not the busiest one on any path is not raised.
 4. Rank immediate fixes by least disruption, then by resulting peak utilisation.
    A capacity upgrade always relieves a link, so it is not ranked against them:
    it is returned separately as planning advice.
@@ -28,6 +39,8 @@ from .scenarios import INTERNET_KEY, ScenarioError
 CAPACITY_TIERS = (10, 100, 200, 300, 500, 1000, 2500, 10000, 40000, 100000)
 DISRUPTION = {"routing_change": 1, "reroute_traffic": 2, "qos_policy": 3}   # lower = less disruptive
 QOS_SHARE = 0.7          # a QoS candidate limits the class to 70 % of its current load on the link
+STRESS_PCT = 100.0       # immediate fixes must also hold with the link at full load (E4)
+MIN_RELIEF_SHARE = 0.05  # ... and take at least 5 % of the link's load off it there
 
 
 @dataclass
@@ -82,21 +95,34 @@ def candidates(model: NetworkModel, link_id: int) -> list[tuple[str, dict, str, 
     return out
 
 
+def _rejected(outcome: SimulationOutcome, link_id: int, kind: str, critical: float, stressed: bool) -> bool:
+    target = next(lk for lk in outcome.links if lk.link_id == link_id)
+    if outcome.created or outcome.isolated_devices:
+        return True                       # fixes one link by breaking another
+    if outcome.undeliverable_mbps_after > outcome.undeliverable_mbps_before + 0.05:
+        return True                       # would drop traffic
+    if kind == "immediate" and target.after_pct >= critical:
+        return True                       # does not actually relieve the link
+    if kind == "immediate" and stressed and target.after_pct > target.before_pct * (1 - MIN_RELIEF_SHARE):
+        return True                       # takes (almost) nothing off the link: no fix at all
+    return False
+
+
 def recommend(model: NetworkModel, link_id: int, predicted_pct: dict[int, float] | None = None, *,
               basis: str = "current", max_immediate: int = 3) -> list[Recommendation]:
+    now = model.link(link_id)["utilisation_pct"] or 0.0
+    expected = (predicted_pct or {}).get(link_id, now)
+    stressed_pct = {**(predicted_pct or {}), link_id: max(expected, STRESS_PCT)}
     kept: list[Recommendation] = []
     for scenario_type, params, title, kind in candidates(model, link_id):
         try:
             outcome = run_scenario(model, scenario_type, params, predicted_pct=predicted_pct, basis=basis)
+            stress = run_scenario(model, scenario_type, params, predicted_pct=stressed_pct, basis=basis)
         except ScenarioError:
             continue                      # e.g. no other path exists for a reroute
+        if _rejected(outcome, link_id, kind, model.critical_pct, stressed=False) or                 _rejected(stress, link_id, kind, model.critical_pct, stressed=True):
+            continue
         target = next(lk for lk in outcome.links if lk.link_id == link_id)
-        if outcome.created or outcome.isolated_devices:
-            continue                      # fixes one link by breaking another
-        if outcome.undeliverable_mbps_after > outcome.undeliverable_mbps_before + 0.05:
-            continue                      # would drop traffic
-        if kind == "immediate" and target.after_pct >= model.critical_pct:
-            continue                      # does not actually relieve the link
         kept.append(Recommendation(scenario_type, params, title, kind, outcome, target.after_pct))
     immediate = sorted((r for r in kept if r.kind == "immediate"),
                        key=lambda r: (DISRUPTION[r.scenario_type], r.outcome.max_after["pct"]))[:max_immediate]

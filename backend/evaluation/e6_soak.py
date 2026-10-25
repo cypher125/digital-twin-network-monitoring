@@ -123,7 +123,8 @@ def main() -> None:
         """Partial results, so a crash of this script hours into the run loses nothing."""
         results.write_csv("timeline.csv", timeline, ["t_s", "utc", "api_ok", "fresh", "engine_state", "last_cycle",
                                                      "error"])
-        results.write_csv("resources.csv", resources, ["t_s", "service", "pid", "rss_mb", "cpu_pct", "processes",
+        results.write_csv("resources.csv", resources, ["t_s", "service", "pid", "private_mb", "rss_mb", "cpu_pct",
+                                                       "processes",
                                                        "cycles_stored", "cycles_missed"])
         results.write_csv("faults.csv", fault_rows, FAULT_FIELDS)
 
@@ -208,12 +209,12 @@ def main() -> None:
         in_fault |= (times >= row["at_s"]) & (times <= end)
     growth = {}
     for name in sorted({r["service"] for r in resources}):
-        points = [(r["t_s"], r["rss_mb"]) for r in resources if r["service"] == name]
+        points = [(r["t_s"], r["private_mb"]) for r in resources if r["service"] == name]   # committed memory
         if len(points) >= 3:
             x = np.array([p[0] for p in points]) / 3600
             y = np.array([p[1] for p in points])
-            growth[name] = {"rss_start_mb": round(float(y[0]), 1), "rss_end_mb": round(float(y[-1]), 1),
-                            "rss_max_mb": round(float(y.max()), 1),
+            growth[name] = {"private_start_mb": round(float(y[0]), 1), "private_end_mb": round(float(y[-1]), 1),
+                            "private_max_mb": round(float(y.max()), 1),
                             "growth_mb_per_hour": round(float(np.polyfit(x, y, 1)[0]), 2)}
     missed = [r["cycles_missed"] for r in resources if r["service"] == "engine" and r["cycles_missed"] is not None]
     stored = [r["cycles_stored"] for r in resources if r["service"] == "engine" and r["cycles_stored"] is not None]
@@ -249,7 +250,7 @@ def main() -> None:
 
     figure, axes = chart(8.0, 3.0)
     for index, name in enumerate(["engine", "api", "emulator"]):
-        points = [(r["t_s"] / 3600, r["rss_mb"]) for r in resources if r["service"] == name]
+        points = [(r["t_s"] / 3600, r["private_mb"]) for r in resources if r["service"] == name]
         if points:
             axes.plot([p[0] for p in points], [p[1] for p in points], color=SERIES[index], label=name)
     axes.set_xlabel("Hours since the start of the soak test")

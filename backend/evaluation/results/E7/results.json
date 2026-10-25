@@ -1,16 +1,58 @@
 {
   "experiment": "E7",
   "title": "Resources and scalability (G4)",
-  "finished": "2026-10-22T10:03:46+00:00",
-  "seconds": 275.1,
-  "code_version": "31ee760+uncommitted",
+  "finished": "2026-10-25T23:04:54+00:00",
+  "seconds": 904.4,
+  "code_version": "301987d+uncommitted",
   "python": "3.13.1",
   "machine": "Windows 11, Intel64 Family 6 Model 122 Stepping 8, GenuineIntel",
+  "machine_load": {
+    "at_start": {
+      "cpu_pct": 73.1,
+      "memory_used_pct": 90.8,
+      "busy_other_programs": [
+        {
+          "name": "System Idle Process",
+          "cpu_pct_of_machine": 16.2,
+          "command": ""
+        },
+        {
+          "name": "Void.exe",
+          "cpu_pct_of_machine": 12.2,
+          "command": "C:\\Program Files\\Void\\Void.exe --type=renderer --user-data-dir=C:\\Users\\cirex\\AppData\\Roaming\\Void -"
+        },
+        {
+          "name": "claude.exe",
+          "cpu_pct_of_machine": 11.3,
+          "command": "c:\\Users\\cirex\\.void-editor\\extensions\\anthropic.claude-code-2.1.309-win32-x64\\resources\\native-bina"
+        }
+      ]
+    },
+    "at_finish": {
+      "cpu_pct": 49.1,
+      "memory_used_pct": 82.8,
+      "busy_other_programs": [
+        {
+          "name": "System Idle Process",
+          "cpu_pct_of_machine": 41.5,
+          "command": ""
+        },
+        {
+          "name": "Void.exe",
+          "cpu_pct_of_machine": 11.8,
+          "command": "C:\\Program Files\\Void\\Void.exe --type=renderer --user-data-dir=C:\\Users\\cirex\\AppData\\Roaming\\Void -"
+        }
+      ]
+    }
+  },
   "config": {
     "parts": [
+      "steady",
+      "database",
+      "api",
       "scale"
     ],
-    "quick": true,
+    "quick": false,
     "url": "https://localhost"
   },
   "summary": {
@@ -20,21 +62,204 @@
           "devices": 34,
           "links": 43,
           "label": "campus",
-          "ingest_cycle_ms_median": 8.6,
-          "simulation_ms_median": 52.3,
-          "forecast_all_links_ms_median": 266.6,
-          "map_first_frame_ms_median": 191.6
+          "ingest_cycle_ms_median": 6.7,
+          "simulation_ms_median": 38.6,
+          "forecast_all_links_ms_median": 113.6,
+          "map_first_frame_ms_median": 74.3
         },
         "42": {
           "devices": 42,
           "links": 53,
           "label": "about 40",
-          "ingest_cycle_ms_median": 27.3,
-          "simulation_ms_median": 169.4,
-          "forecast_all_links_ms_median": 1125.5,
-          "map_first_frame_ms_median": 900.3
+          "ingest_cycle_ms_median": 8.5,
+          "simulation_ms_median": 59.3,
+          "forecast_all_links_ms_median": 102.7,
+          "map_first_frame_ms_median": 90.2
+        },
+        "102": {
+          "devices": 102,
+          "links": 128,
+          "label": "about 100",
+          "ingest_cycle_ms_median": 23.8,
+          "simulation_ms_median": 324.3,
+          "forecast_all_links_ms_median": 102.6,
+          "map_first_frame_ms_median": 192
+        },
+        "202": {
+          "devices": 202,
+          "links": 253,
+          "label": "about 200",
+          "ingest_cycle_ms_median": 53.1,
+          "simulation_ms_median": 1209.1,
+          "forecast_all_links_ms_median": 111.5,
+          "map_first_frame_ms_median": 437
         }
       }
-    }
+    },
+    "steady": {
+      "services": {
+        "api": {
+          "private_mean_mb": 338.7,
+          "private_max_mb": 338.7,
+          "rss_mean_mb": 19.5,
+          "rss_max_mb": 19.6,
+          "cpu_mean_pct": 0.1,
+          "cpu_p95_pct": 0.3,
+          "budget_mb": 150,
+          "within_budget": false
+        },
+        "caddy": {
+          "private_mean_mb": 63.1,
+          "private_max_mb": 63.1,
+          "rss_mean_mb": 13.4,
+          "rss_max_mb": 13.9,
+          "cpu_mean_pct": 0.0,
+          "cpu_p95_pct": 0.0,
+          "budget_mb": null,
+          "within_budget": null
+        },
+        "emulator": {
+          "private_mean_mb": 113.6,
+          "private_max_mb": 115.6,
+          "rss_mean_mb": 27.0,
+          "rss_max_mb": 29.6,
+          "cpu_mean_pct": 0.5,
+          "cpu_p95_pct": 1.2,
+          "budget_mb": 150,
+          "within_budget": true
+        },
+        "engine": {
+          "private_mean_mb": 277.1,
+          "private_max_mb": 289.2,
+          "rss_mean_mb": 55.6,
+          "rss_max_mb": 67.7,
+          "cpu_mean_pct": 5.9,
+          "cpu_p95_pct": 7.8,
+          "budget_mb": 300,
+          "within_budget": true
+        }
+      },
+      "total_peak_mb": 806.6,
+      "laptop_total_mb": 4109,
+      "minutes": 10
+    },
+    "database": {
+      "server": "PostgreSQL 16.2",
+      "host": "local",
+      "database_bytes": 510349795,
+      "tables": {
+        "monitoring_record": {
+          "bytes": 410976256,
+          "rows": 1541263,
+          "bytes_per_row": 266.6
+        },
+        "prediction": {
+          "bytes": 88784896,
+          "rows": 189716,
+          "bytes_per_row": 468.0
+        },
+        "simulation_scenario": {
+          "bytes": 139264,
+          "rows": 155,
+          "bytes_per_row": 898.5
+        },
+        "simulation_result": {
+          "bytes": 729088,
+          "rows": 154,
+          "bytes_per_row": 4734.3
+        },
+        "network_device": {
+          "bytes": 131072,
+          "rows": 34,
+          "bytes_per_row": 3855.1
+        },
+        "network_link": {
+          "bytes": 106496,
+          "rows": 43,
+          "bytes_per_row": 2476.7
+        }
+      },
+      "rows_per_day_network_time": {
+        "monitoring_record": 110880,
+        "prediction": 247680
+      },
+      "rows_at_retention": {
+        "monitoring_record": 1552320,
+        "prediction": 495360
+      },
+      "storage_at_retention_mb": 645.7,
+      "query_round_trip_ms_median": 0.24,
+      "query_round_trip_ms_max": 0.47
+    },
+    "api": {
+      "seconds_per_level": 60,
+      "levels": {
+        "1": {
+          "live": {
+            "requests": 57,
+            "p50_ms": 19.9,
+            "p95_ms": 127.9,
+            "max_ms": 197.8
+          },
+          "topology": {
+            "requests": 10,
+            "p50_ms": 70.0,
+            "p95_ms": 178.6,
+            "max_ms": 235.0
+          },
+          "alerts/active": {
+            "requests": 10,
+            "p50_ms": 18.6,
+            "p95_ms": 149.3,
+            "max_ms": 163.6
+          },
+          "failures": 0
+        },
+        "3": {
+          "live": {
+            "requests": 180,
+            "p50_ms": 19.4,
+            "p95_ms": 73.0,
+            "max_ms": 137.4
+          },
+          "topology": {
+            "requests": 33,
+            "p50_ms": 57.2,
+            "p95_ms": 112.0,
+            "max_ms": 115.5
+          },
+          "alerts/active": {
+            "requests": 33,
+            "p50_ms": 22.5,
+            "p95_ms": 51.9,
+            "max_ms": 71.2
+          },
+          "failures": 0
+        },
+        "5": {
+          "live": {
+            "requests": 298,
+            "p50_ms": 18.2,
+            "p95_ms": 106.4,
+            "max_ms": 356.3
+          },
+          "topology": {
+            "requests": 51,
+            "p50_ms": 51.8,
+            "p95_ms": 130.1,
+            "max_ms": 720.8
+          },
+          "alerts/active": {
+            "requests": 51,
+            "p50_ms": 28.6,
+            "p95_ms": 88.5,
+            "max_ms": 121.3
+          },
+          "failures": 0
+        }
+      }
+    },
+    "target": "runs within 4 GB of RAM",
+    "target_met": true
   }
 }

@@ -101,9 +101,25 @@ def kill_tree(pid: int) -> None:
     subprocess.run(["taskkill", "/PID", str(pid), "/T", "/F"], capture_output=True, check=False)
 
 
+def committed_bytes(proc) -> int:
+    """Memory the process holds: private bytes on Windows (the working set, psutil's rss, is what
+    Windows has left in RAM, and it trims and compresses it when memory is short: on the 4 GB laptop
+    the engine showed 47 MB resident while holding 262 MB), unique set size elsewhere."""
+    info = proc.memory_info()
+    private = getattr(info, "private", None)
+    if private is not None:
+        return private
+    try:
+        return proc.memory_full_info().uss
+    except Exception:  # noqa: BLE001 - not available everywhere
+        return info.rss
+
+
 class ResourceSampler:
-    """CPU (% of one core) and resident memory per service, counting each service's whole process
-    tree (the virtual environment's python.exe is a launcher whose child is the real interpreter).
+    """CPU (% of one core) and memory per service, counting each service's whole process tree (the
+    virtual environment's python.exe is a launcher whose child is the real interpreter). Memory is
+    recorded twice: committed (private_mb, what the service holds) and resident (rss_mb, the part
+    in RAM at that moment).
 
     psutil measures CPU since the previous reading of the same process object, so the objects are
     kept between samples; a service restarted by the supervisor is picked up by its new PID."""
@@ -130,14 +146,16 @@ class ResourceSampler:
                 tree = [root, *[self._proc(c.pid) for c in root.children(recursive=True)]]
             except psutil.Error:
                 continue
-            rss, cpu = 0, 0.0
+            rss, private, cpu = 0, 0, 0.0
             for proc in tree:
                 try:
                     rss += proc.memory_info().rss
+                    private += committed_bytes(proc)
                     cpu += proc.cpu_percent(interval=None)
                 except psutil.Error:
                     continue
-            out[name] = {"pid": pid, "rss_mb": round(rss / 1e6, 1), "cpu_pct": round(cpu, 1), "processes": len(tree)}
+            out[name] = {"pid": pid, "private_mb": round(private / 1e6, 1), "rss_mb": round(rss / 1e6, 1),
+                         "cpu_pct": round(cpu, 1), "processes": len(tree)}
         return out
 
 

@@ -60,27 +60,30 @@ def steady(results: Results, minutes: float) -> dict:
         time.sleep(5)
         for name, info in sampler.sample().items():
             rows.append({"t": datetime.now().isoformat(timespec="seconds"), "service": name, **info})
-    results.write_csv("steady.csv", rows, ["t", "service", "pid", "cpu_pct", "rss_mb", "processes"])
+    results.write_csv("steady.csv", rows, ["t", "service", "pid", "cpu_pct", "private_mb", "rss_mb", "processes"])
     out = {}
     for name in sorted({r["service"] for r in rows}):
+        private = np.array([r["private_mb"] for r in rows if r["service"] == name])
         rss = np.array([r["rss_mb"] for r in rows if r["service"] == name])
         cpu = np.array([r["cpu_pct"] for r in rows if r["service"] == name])
-        out[name] = {"rss_mean_mb": round(float(rss.mean()), 1), "rss_max_mb": round(float(rss.max()), 1),
+        # budgets are judged on committed memory: the resident set is only what Windows left in RAM
+        out[name] = {"private_mean_mb": round(float(private.mean()), 1), "private_max_mb": round(float(private.max()), 1),
+                     "rss_mean_mb": round(float(rss.mean()), 1), "rss_max_mb": round(float(rss.max()), 1),
                      "cpu_mean_pct": round(float(cpu.mean()), 1), "cpu_p95_pct": round(float(np.percentile(cpu, 95)), 1),
                      "budget_mb": BUDGETS_MB.get(name),
-                     "within_budget": None if name not in BUDGETS_MB else bool(rss.max() <= BUDGETS_MB[name])}
-    total = sum(v["rss_max_mb"] for v in out.values())
+                     "within_budget": None if name not in BUDGETS_MB else bool(private.max() <= BUDGETS_MB[name])}
+    total = sum(v["private_max_mb"] for v in out.values())
     import psutil
     memory = psutil.virtual_memory()
     figure, axes = chart(6.5, 3.0)
     names = sorted(out)
-    axes.barh(names, [out[n]["rss_max_mb"] for n in names], height=0.5, color=SERIES[0], label="Peak memory")
+    axes.barh(names, [out[n]["private_max_mb"] for n in names], height=0.5, color=SERIES[0], label="Peak memory held")
     for i, name in enumerate(names):
-        axes.text(out[name]["rss_max_mb"] + 4, i, f"{out[name]['rss_max_mb']:.0f} MB", va="center", fontsize=8)
+        axes.text(out[name]["private_max_mb"] + 4, i, f"{out[name]['private_max_mb']:.0f} MB", va="center", fontsize=8)
         if out[name]["budget_mb"]:
             axes.plot([out[name]["budget_mb"]] * 2, [i - 0.35, i + 0.35], color=SERIES[1], linewidth=2)
     axes.plot([], [], color=SERIES[1], linewidth=2, label="Budget (plan 12.1)")
-    axes.set_xlabel("Resident memory, whole process tree (MB)")
+    axes.set_xlabel("Committed (private) memory, whole process tree (MB)")
     axes.grid(axis="x")
     axes.grid(axis="y", visible=False)
     legend(axes, ncol=2)

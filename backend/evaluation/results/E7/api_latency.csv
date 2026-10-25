@@ -1,0 +1,10 @@
+dashboards,endpoint,requests,p50_ms,p95_ms,max_ms
+1,live,57,19.9,127.9,197.8
+1,topology,10,70.0,178.6,235.0
+1,alerts/active,10,18.6,149.3,163.6
+3,live,180,19.4,73.0,137.4
+3,topology,33,57.2,112.0,115.5
+3,alerts/active,33,22.5,51.9,71.2
+5,live,298,18.2,106.4,356.3
+5,topology,51,51.8,130.1,720.8
+5,alerts/active,51,28.6,88.5,121.3

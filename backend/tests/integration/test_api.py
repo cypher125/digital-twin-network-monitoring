@@ -436,8 +436,8 @@ def test_capacity_projection_leaves_out_a_crossing_decades_away():
 
 
 def test_capacity_growth_is_not_pulled_by_where_the_weekends_fall():
-    """Two weeks of quiet weekends and 1 % a week of growth (found by E9: a plain line over a window
-    that ends on a Sunday showed traffic falling by a third a week)."""
+    """Two weeks with a weekly pattern and 1 % a week of growth (found by E9: a plain line over a
+    window that ends on a Sunday showed traffic falling by a third a week)."""
     from apps.api.views.trends import project
     days = [date(2026, 11, 2) + timedelta(days=i) for i in range(14)]           # Monday 2 November to Sunday 15
     level = [(40.0 if d.weekday() >= 5 else 60.0) * 1.01 ** (i / 7) for i, d in enumerate(days)]
@@ -447,6 +447,9 @@ def test_capacity_growth_is_not_pulled_by_where_the_weekends_fall():
     starts_saturday = project(days[5:] + [days[-1] + timedelta(days=k) for k in (1, 2, 3, 4, 5)],
                               level[5:] + [60.0 * 1.01 ** ((14 + k) / 7) for k in range(5)], 90.0)
     assert starts_saturday["growth_pts_per_week"] == pytest.approx(0.55, abs=0.05)
+    hostel = {5: 75.0, 6: 35.0}                                                # a busy Saturday, a quiet Sunday
+    level = [hostel.get(d.weekday(), 60.0) * 1.01 ** (i / 7) for i, d in enumerate(days)]
+    assert project(days, level, 90.0)["growth_pct_per_week"] == pytest.approx(1.0, abs=0.05)
 
 
 def test_network_trend_covers_up_to_14_days(campus, junior):

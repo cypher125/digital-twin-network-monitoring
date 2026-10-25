@@ -143,25 +143,31 @@ class HeatmapView(APIView):
 
 
 def trend_design(days: list) -> np.ndarray:
-    """Columns of the capacity fit: 1, day number, and (when the days include both kinds, with at
-    least 5 days) 1 on Saturdays and Sundays. `days` are WAT dates."""
+    """Columns of the capacity fit (`days` are WAT dates): 1 and the day number, then levels for the
+    weekly pattern.
+    - 9 days or more: one level per day of the week, so the growth compares each weekday with the
+      same weekday a week earlier.
+    - 5 to 8 days: one level for Saturdays and Sundays together.
+    - Fewer days: a plain line."""
     x = np.array([(d - days[0]).days for d in days], dtype=float)
-    weekend = np.array([d.weekday() >= 5 for d in days], dtype=float)
     columns = [np.ones_like(x), x]
-    if len(days) >= 5 and 0 < weekend.sum() < len(days):
-        columns.append(weekend)
+    weekday = np.array([d.weekday() for d in days])
+    if len(days) >= 9:
+        columns += [(weekday == k).astype(float) for k in sorted(set(weekday.tolist()))[1:]]
+    elif len(days) >= 5 and 0 < (weekday >= 5).sum() < len(days):
+        columns.append((weekday >= 5).astype(float))
     return np.column_stack(columns)
 
 
 def project(days: list, p95: list, critical: float, today: date | None = None) -> dict:
     """Growth of the daily 95th percentile, and when it would reach the critical threshold.
 
-    A least-squares line with the weekend as a second level: p95 = a + b * day (+ c on Saturdays
-    and Sundays). Weekends carry a different load from weekdays, and a plain line over two weeks
-    is pulled by where the weekends fall in the window: one that ends on a Sunday shows falling
-    traffic, one that starts on a Saturday rising traffic (found by evaluation E9). The growth is
-    b. The projection starts from the busier of the two levels today, because that is the day
-    the link reaches the threshold first.
+    A least-squares line with levels for the weekly pattern (trend_design): p95 = a + b * day + the
+    level of that day of the week. The days of the week carry different loads (a quiet Sunday, a
+    busy hostel Saturday), and a plain line over two weeks is pulled by where they fall in the
+    window: one that ends on a Sunday shows falling traffic, one that starts on a Saturday rising
+    traffic (found by evaluation E9). The growth is b. The projection starts from the busiest
+    level today, because that is the day the link reaches the threshold first.
 
     `days_until_critical` is counted from `today` (by default the last day fitted), so the
     projected date is today plus that many days. A crossing more than MAX_PROJECTION_DAYS
@@ -172,7 +178,7 @@ def project(days: list, p95: list, critical: float, today: date | None = None) -
     y = np.array(p95, dtype=float)
     coef = np.linalg.lstsq(design, y, rcond=None)[0]
     intercept, slope = float(coef[0]), float(coef[1])
-    busier = max(0.0, float(coef[2])) if len(coef) > 2 else 0.0
+    busier = max([0.0, *(float(c) for c in coef[2:])])               # the busiest day-of-week level
     x_now = (today - days[0]).days if today is not None else float(design[-1, 1])
     fitted_now = intercept + slope * x_now + busier
     until = None
@@ -239,8 +245,8 @@ class CapacityView(APIView):
         links.sort(key=lambda lk: (lk["days_until_critical"] is None, lk["days_until_critical"] or 0))
         # the period (the last 14 days) is named by the page, which always shows the same two weeks
         payload = {"thresholds": thresholds(),
-                   "method": "Linear fit of the daily 95th-percentile utilisation, with weekends and weekdays as two "
-                             "levels (complete WAT days only)",
+                   "method": "Linear fit of the daily 95th-percentile utilisation, allowing each day of the week its "
+                             "own level (complete WAT days only)",
                    "links": links}
         cache.set(cache_key, payload)
         return Response(payload)

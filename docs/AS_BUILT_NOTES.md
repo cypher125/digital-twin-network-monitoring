@@ -340,9 +340,9 @@ All under `/api/v1/`, JSON. The live documentation is at `/api/v1/docs` (Swagger
 - `trends/heatmap`: weekday × hour, over the last 14 days.
 - `trends/capacity`: a linear fit of the daily 95th percentile over the last 14 days.
   - **Days used:** complete West Africa Time days only. Today is left out until it is over, and so is any day with less than 20 hours of readings.
-  - **Fit:** the weekend is a second level, so the fit is p95 = a + b·day (+ c on Saturdays and Sundays).
-  - **Output:** the growth per week (b) and the projected date of reaching the critical threshold (90 %), counted from today. The projection starts from the busier of the weekday and weekend levels. A crossing more than ten years ahead is not projected.
-  - **Why the weekend level (found by E9):** the original plain line was pulled by where the quieter weekends fall in the window. A window ending on a Sunday showed traffic falling fast on a growing network, and the sign of the error changed with the day of the week. A test covers the fix.
+  - **Fit:** each day of the week has its own level, so the fit is p95 = a + b·day + the level of that weekday. With 9 days or more the growth therefore compares each weekday with the same weekday a week earlier. With 5–8 days, Saturdays and Sundays share one level; with fewer days the fit is a plain line.
+  - **Output:** the growth per week (b) and the projected date of reaching the critical threshold (90 %), counted from today. The projection starts from the busiest day's level. A crossing more than ten years ahead is not projected.
+  - **Why the day-of-week levels (found by E9):** the original plain line was pulled by where the quieter days fall in the window. A window ending on a Sunday showed traffic falling fast on a growing network, and the sign of the error changed with the day of the week. A single weekend level was not enough, because the hostels make Saturday busy while Sunday is quiet. A test covers the fix.
 - `trends/export.csv`.
 
 **Administration.** `system/status` (engine, with `topology_changed`; models with their test accuracy; database size and row counts, exact for the small tables and PostgreSQL's estimate for the two large ones), `settings`, `users` (senior), `topology/import` (senior, with dry run; the report lists skipped links and says whether the engine needs a restart).

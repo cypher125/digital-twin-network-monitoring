@@ -10,14 +10,16 @@ each link, the 95th percentile of its one-minute utilisation per complete West A
 over the last 14 days and reports:
 - growth_pct_per_week = slope x 7 / mean of the daily values x 100;
 - days_until_critical, counted from today.
-The fit has the weekend as a second level: p95 = a + b x day (+ c on Saturdays and Sundays).
+The fit gives the weekly pattern its own levels: one per day of the week with 9 days or more,
+one for Saturdays and Sundays with 5-8 days (apps.api.views.trends.trend_design).
 
 E9's first quick run found that the page's original plain line was pulled by where the quieter
 weekends fall in the window:
 - a 7-day window ending on a Sunday showed -39 % a week on a campus configured to grow by 1 %;
 - over 14 days the bias is about a third of the weekend dip per week, and it changes sign with
   the day of the week.
-The page was changed to the two-level fit (with a test) before the runs reported here.
+A single weekend level was not enough either (a busy hostel Saturday, a quiet Sunday). The page
+was changed to day-of-week levels (with a test) before the runs reported here.
 E9 calls project() itself and computes the daily 95th percentiles the same way (numpy's "linear"
 percentile is percentile_cont's interpolation).
 
@@ -38,7 +40,8 @@ Part A: configured growth (the target)
     - For every busy link, meaning a mean daily 95th percentile of 10 % or more, so the
       percentage is not just noise on an idle link: the page's growth_pct_per_week over the 14
       days, and the 95 % interval of the same least-squares fit. That interval is the slope's
-      t-interval with n - 3 degrees of freedom, scaled exactly like the page's figure. The page
+      t-interval with n - p degrees of freedom (p columns of the fit), scaled exactly like the page's
+      figure. The page
       itself shows no interval.
     - The configured growth is 1 % a week of the demand. Below saturation, a link's utilisation
       is proportional to its demand, so it grows by the same share.
@@ -135,7 +138,7 @@ def page_project(p95: np.ndarray, today_index: int, first_day: date) -> dict:
 
 def growth_interval(p95: np.ndarray, first_day: date, level: float = 0.975) -> tuple[float, float, float] | None:
     """The page's growth figure (% of the daily values' mean per week) with the 95 % t-interval of the
-    slope of the same least-squares fit (the page's design: day number and the weekend level)."""
+    slope of the same least-squares fit (the page's design: day number and the weekly levels)."""
     from scipy import stats
 
     from apps.api.views.trends import trend_design

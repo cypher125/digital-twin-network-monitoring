@@ -88,7 +88,7 @@ A scenario that has been run cannot be edited: use **Copy** to change it, so eve
 For planning. The **Period** and **Link** filters at the top apply to the first chart and the busiest links.
 
 - **Weekly pattern:** average use by weekday and hour over the last 14 days. Cells near the 0 % end of the key are the quiet times for maintenance.
-- **Capacity planning:** each link's growth per week and, if growth continues in a straight line, when it would reach 90 %. Weekends are allowed to be quieter than weekdays, so a quiet weekend does not look like falling traffic. Treat it as an early hint for budgeting, not a promise.
+- **Capacity planning:** each link's growth per week and, if growth continues in a straight line, when it would reach 90 %. Each day of the week may have its own level, so a quiet Sunday does not look like falling traffic. Treat it as an early hint for budgeting, not a promise.
 - **Export CSV:** hourly figures for every link, for a spreadsheet or a report.
 
 ### System

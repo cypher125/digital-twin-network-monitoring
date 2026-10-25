@@ -338,7 +338,11 @@ All under `/api/v1/`, JSON. The live documentation is at `/api/v1/docs` (Swagger
 - `trends/links`: 24 h, 7 d or 14 d; per-link summary or one link's series.
 - `trends/network`: the average and the busiest link across the network, for up to 336 hours (14 days): every cycle up to 6 h, 10-minute buckets up to 24 h, hourly buckets beyond. Periods over 24 hours are cached for 10 minutes.
 - `trends/heatmap`: weekday × hour, over the last 14 days.
-- `trends/capacity`: a linear fit of the daily 95th percentile over the last 14 days, using complete West Africa Time days only: today is left out until it is over, and so is any day with less than 20 hours of readings. It gives the growth per week and the projected date of reaching the critical threshold (90 %), counted from today; a crossing more than ten years ahead is not projected.
+- `trends/capacity`: a linear fit of the daily 95th percentile over the last 14 days.
+  - **Days used:** complete West Africa Time days only. Today is left out until it is over, and so is any day with less than 20 hours of readings.
+  - **Fit:** the weekend is a second level, so the fit is p95 = a + b·day (+ c on Saturdays and Sundays).
+  - **Output:** the growth per week (b) and the projected date of reaching the critical threshold (90 %), counted from today. The projection starts from the busier of the weekday and weekend levels. A crossing more than ten years ahead is not projected.
+  - **Why the weekend level (found by E9):** the original plain line was pulled by where the quieter weekends fall in the window. A window ending on a Sunday showed traffic falling fast on a growing network, and the sign of the error changed with the day of the week. A test covers the fix.
 - `trends/export.csv`.
 
 **Administration.** `system/status` (engine, with `topology_changed`; models with their test accuracy; database size and row counts, exact for the small tables and PostgreSQL's estimate for the two large ones), `settings`, `users` (senior), `topology/import` (senior, with dry run; the report lists skipped links and says whether the engine needs a restart).

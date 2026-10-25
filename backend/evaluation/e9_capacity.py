@@ -8,8 +8,16 @@ The method under test is exactly the page's. apps/api/views/trends.py (CapacityV
 each link, the 95th percentile of its one-minute utilisation per complete West Africa Time day
 (daily_p95_by_link, percentile_cont). It then calls project(), which fits a least-squares line
 over the last 14 days and reports:
-- growth_pct_per_week = slope x 7 / mean of the fitted values x 100;
+- growth_pct_per_week = slope x 7 / mean of the daily values x 100;
 - days_until_critical, counted from today.
+The fit has the weekend as a second level: p95 = a + b x day (+ c on Saturdays and Sundays).
+
+E9's first quick run found that the page's original plain line was pulled by where the quieter
+weekends fall in the window:
+- a 7-day window ending on a Sunday showed -39 % a week on a campus configured to grow by 1 %;
+- over 14 days the bias is about a third of the weekend dip per week, and it changes sign with
+  the day of the week.
+The page was changed to the two-level fit (with a test) before the runs reported here.
 E9 calls project() itself and computes the daily 95th percentiles the same way (numpy's "linear"
 percentile is percentile_cont's interpolation).
 
@@ -29,8 +37,8 @@ Part A: configured growth (the target)
     What is compared.
     - For every busy link, meaning a mean daily 95th percentile of 10 % or more, so the
       percentage is not just noise on an idle link: the page's growth_pct_per_week over the 14
-      days, and the 95 % interval of the same least-squares line. That interval is the slope's
-      t-interval with n - 2 degrees of freedom, scaled exactly like the page's figure. The page
+      days, and the 95 % interval of the same least-squares fit. That interval is the slope's
+      t-interval with n - 3 degrees of freedom, scaled exactly like the page's figure. The page
       itself shows no interval.
     - The configured growth is 1 % a week of the demand. Below saturation, a link's utilisation
       is proportional to its demand, so it grows by the same share.
@@ -125,20 +133,27 @@ def page_project(p95: np.ndarray, today_index: int, first_day: date) -> dict:
     return project(days, values, CRITICAL_PCT, today=first_day + timedelta(days=today_index))
 
 
-def growth_interval(p95: np.ndarray, level: float = 0.975) -> tuple[float, float, float] | None:
-    """The page's growth figure (% of the fitted values' mean per week) with the 95 % t-interval of
-    the same least-squares slope."""
+def growth_interval(p95: np.ndarray, first_day: date, level: float = 0.975) -> tuple[float, float, float] | None:
+    """The page's growth figure (% of the daily values' mean per week) with the 95 % t-interval of the
+    slope of the same least-squares fit (the page's design: day number and the weekend level)."""
     from scipy import stats
 
-    y = p95[~np.isnan(p95)]
-    x = np.arange(len(p95), dtype=float)[~np.isnan(p95)]
-    if len(y) < 4:
+    from apps.api.views.trends import trend_design
+
+    keep = ~np.isnan(p95)
+    days = [first_day + timedelta(days=int(i)) for i in np.nonzero(keep)[0]]
+    y = p95[keep]
+    if len(y) < 5:
         return None
-    slope, intercept = np.polyfit(x, y, 1)
-    residuals = y - (intercept + slope * x)
-    se = math.sqrt(float((residuals ** 2).sum()) / (len(y) - 2) / float(((x - x.mean()) ** 2).sum()))
-    t = float(stats.t.ppf(level, len(y) - 2))
+    design = trend_design(days)
+    coef = np.linalg.lstsq(design, y, rcond=None)[0]
+    dof = len(y) - design.shape[1]
+    residuals = y - design @ coef
+    cov = float(residuals @ residuals) / dof * np.linalg.inv(design.T @ design)
+    se = math.sqrt(float(cov[1, 1]))
+    t = float(stats.t.ppf(level, dof))
     scale = 7 / max(float(y.mean()), 1e-6) * 100
+    slope = float(coef[1])
     return slope * scale, (slope - t * se) * scale, (slope + t * se) * scale
 
 
@@ -210,7 +225,7 @@ def part_a(results: Results, seeds: tuple[int, ...], days: int, labels: list[str
             if np.nanmean(series) < BUSY_P95_PCT:
                 continue
             page = page_project(series, days, START.date())
-            interval = growth_interval(series)
+            interval = growth_interval(series, START.date())
             if interval is None:
                 continue
             estimates.append(page["growth_pct_per_week"])
@@ -280,12 +295,16 @@ def part_b(results: Results, days: int, window: int, labels: list[str]) -> dict:
             "rows": rows, "p95": p95}
 
 
-def part_c() -> dict:
-    """The page's computation on the stored history (local database, read-only)."""
+def setup_django() -> None:
+    """The page's code (apps.api.views.trends) needs Django's settings, also for parts A and B."""
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings.dev")
     import django
 
     django.setup()
+
+
+def part_c() -> dict:
+    """The page's computation on the stored history (local database, read-only)."""
     from apps.api.services import latest_cycle
     from apps.api.views.alerts import link_labels
     from apps.api.views.trends import daily_p95_by_link, project
@@ -302,7 +321,7 @@ def part_c() -> dict:
         series = np.full((days[-1] - days[0]).days + 1, np.nan)
         for d, v in zip(days, p95, strict=True):
             series[(d - days[0]).days] = v
-        interval = growth_interval(series)
+        interval = growth_interval(series, days[0])
         rows.append({"link_id": link_id, "link": labels.get(link_id, str(link_id)), "days_of_data": len(days),
                      "first_day": days[0].isoformat(), "last_day": days[-1].isoformat(),
                      "mean_daily_p95_pct": float(np.mean(p95)), **page,
@@ -364,11 +383,13 @@ def chart_example(results: Results, part: dict) -> dict:
     figure, axes = chart(6.6, 3.4)
     axes.plot(np.arange(days), series, color=SERIES[0], linewidth=2.0, marker="o", markersize=3,
               label="Daily 95th percentile")
-    x = np.arange(window)
-    slope, intercept = np.polyfit(x, series[:window], 1)
-    ext = np.arange(0, days)
-    axes.plot(ext, intercept + slope * ext, color=SERIES[1], linestyle=(0, (5, 3)), linewidth=1.6,
-              label=f"Trends page's line from days 0-{window - 1}")
+    from apps.api.views.trends import trend_design
+
+    dates = [START.date() + timedelta(days=i) for i in range(days)]
+    coef = np.linalg.lstsq(trend_design(dates[:window]), series[:window], rcond=None)[0]
+    line = trend_design(dates)[:, :len(coef)] @ coef
+    axes.plot(np.arange(days), line, color=SERIES[1], linestyle=(0, (5, 3)), linewidth=1.6,
+              label=f"Trends page's fit from days 0-{window - 1}, continued")
     axes.axvspan(-0.5, window - 0.5, color=MUTED, alpha=0.08, lw=0)
     threshold_lines(axes)
     axes.axvline(r["actual_crossing_day"], color=INK_2, linewidth=1.0)
@@ -406,6 +427,8 @@ def main() -> None:
         if stale.suffix in (".csv", ".png", ".json"):
             stale.unlink()
 
+    setup_django()
+    page_project(np.array([1.0, 2.0, 3.0, 4.0]), 4, START.date())      # fail now, not after a simulated week
     print("part A: configured growth", flush=True)
     a = part_a(results, seeds, growth_days, labels)
     print("part B: ramped links", flush=True)

@@ -142,18 +142,39 @@ class HeatmapView(APIView):
         return Response(payload)
 
 
+def trend_design(days: list) -> np.ndarray:
+    """Columns of the capacity fit: 1, day number, and (when the days include both kinds, with at
+    least 5 days) 1 on Saturdays and Sundays. `days` are WAT dates."""
+    x = np.array([(d - days[0]).days for d in days], dtype=float)
+    weekend = np.array([d.weekday() >= 5 for d in days], dtype=float)
+    columns = [np.ones_like(x), x]
+    if len(days) >= 5 and 0 < weekend.sum() < len(days):
+        columns.append(weekend)
+    return np.column_stack(columns)
+
+
 def project(days: list, p95: list, critical: float, today: date | None = None) -> dict:
-    """Linear growth of the daily 95th percentile, and when it would reach the critical threshold.
+    """Growth of the daily 95th percentile, and when it would reach the critical threshold.
+
+    A least-squares line with the weekend as a second level: p95 = a + b * day (+ c on Saturdays
+    and Sundays). Weekends carry a different load from weekdays, and a plain line over two weeks
+    is pulled by where the weekends fall in the window: one that ends on a Sunday shows falling
+    traffic, one that starts on a Saturday rising traffic (found by evaluation E9). The growth is
+    b. The projection starts from the busier of the two levels today, because that is the day
+    the link reaches the threshold first.
 
     `days_until_critical` is counted from `today` (by default the last day fitted), so the
     projected date is today plus that many days. A crossing more than MAX_PROJECTION_DAYS
     ahead is left out (None), as for a flat or falling line."""
     if len(days) < 3:
         return {"growth_pts_per_week": None, "growth_pct_per_week": None, "days_until_critical": None}
-    x = np.array([(d - days[0]).days for d in days], dtype=float)
+    design = trend_design(days)
     y = np.array(p95, dtype=float)
-    slope, intercept = np.polyfit(x, y, 1)
-    fitted_now = intercept + slope * ((today - days[0]).days if today is not None else x[-1])
+    coef = np.linalg.lstsq(design, y, rcond=None)[0]
+    intercept, slope = float(coef[0]), float(coef[1])
+    busier = max(0.0, float(coef[2])) if len(coef) > 2 else 0.0
+    x_now = (today - days[0]).days if today is not None else float(design[-1, 1])
+    fitted_now = intercept + slope * x_now + busier
     until = None
     if slope > 1e-6 and fitted_now < critical:
         until = float((critical - fitted_now) / slope)
@@ -218,7 +239,8 @@ class CapacityView(APIView):
         links.sort(key=lambda lk: (lk["days_until_critical"] is None, lk["days_until_critical"] or 0))
         # the period (the last 14 days) is named by the page, which always shows the same two weeks
         payload = {"thresholds": thresholds(),
-                   "method": "Linear fit of the daily 95th-percentile utilisation (complete WAT days only)",
+                   "method": "Linear fit of the daily 95th-percentile utilisation, with weekends and weekdays as two "
+                             "levels (complete WAT days only)",
                    "links": links}
         cache.set(cache_key, payload)
         return Response(payload)

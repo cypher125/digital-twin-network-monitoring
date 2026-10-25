@@ -49,6 +49,13 @@ https://localhost, https://127.0.0.1 {
 
 	handle {
 		root * frontend/out
+		# Next.js prefetches each page's data as /trends/__next.<group>.trends.__PAGE__.txt, but the
+		# static export writes it as /trends/__next.<group>/trends/__PAGE__.txt (segment names
+		# never contain a dot): map one name onto the other, or every prefetch is a 404
+		@prefetch2 path_regexp prefetch2 ^(.*)/__next\.([^/.]+)\.([^/.]+)\.__PAGE__\.txt$
+		rewrite @prefetch2 {re.prefetch2.1}/__next.{re.prefetch2.2}/{re.prefetch2.3}/__PAGE__.txt
+		@prefetch1 path_regexp prefetch1 ^(.*)/__next\.([^/.]+)\.__PAGE__\.txt$
+		rewrite @prefetch1 {re.prefetch1.1}/__next.{re.prefetch1.2}/__PAGE__.txt
 		# static export: /link is out/link.html
 		try_files {path} {path}.html {path}/index.html
 		file_server

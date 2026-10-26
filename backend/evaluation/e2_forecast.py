@@ -4,7 +4,7 @@
 What is measured. The two active Random Forest models are scored on the held-out test period of
 their own training split. The models are the full model, which uses the same time "yesterday",
 and the short-history model, which serves the first day. They are compared with gradient
-boosting (HistGradientBoostingRegressor, one model per horizon, the candidate from Table 3.5) and
+boosting (HistGradientBoostingRegressor, one model per horizon, the candidate from Table 3.4) and
 three baselines computed by the training code (models.baseline_predictions):
   * persistence: utilisation stays where it is now;
   * linear trend: the 15-minute least-squares slope, continued for h minutes;

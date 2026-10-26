@@ -1,5 +1,5 @@
-"""Schema conformance (Tables 3.2 and 3.3): the database built by the migrations has the six
-tables of Figure 3.3, every principal field Table 3.2 lists, and the relationships of Table 3.3
+"""Schema conformance (Tables 3.1 and 3.2): the database built by the migrations has the six
+tables of Figure 3.3, every principal field Table 3.1 lists, and the relationships of Table 3.2
 as real foreign keys. Read from the live PostgreSQL catalogue, not from the Django models.
 """
 import pytest
@@ -16,7 +16,7 @@ from apps.twin.models import (
 
 pytestmark = pytest.mark.django_db
 
-# Table 3.2: the principal fields of each table (database column names)
+# Table 3.1: the principal fields of each table (database column names)
 PRINCIPAL_FIELDS = {
     "network_device": ["device_id", "name", "device_type", "ip_address", "location", "status"],
     "network_link": ["link_id", "source_device_id", "dest_device_id", "capacity_mbps", "status"],
@@ -30,7 +30,7 @@ PRINCIPAL_FIELDS = {
                           "result_summary"],
 }
 
-# Table 3.3: (child table, foreign-key column, parent table), each one parent to many children
+# Table 3.2: (child table, foreign-key column, parent table), each one parent to many children
 RELATIONSHIPS = [
     ("network_link", "source_device_id", "network_device"),
     ("network_link", "dest_device_id", "network_device"),
@@ -61,7 +61,7 @@ def test_primary_keys_are_the_named_id_fields():
             assert connection.introspection.get_primary_key_column(cursor, table) == pk
 
 
-def test_table_3_3_relationships_are_foreign_keys_in_the_database():
+def test_the_relationships_are_foreign_keys_in_the_database():
     with connection.cursor() as cursor:
         for child, column, parent in RELATIONSHIPS:
             relations = connection.introspection.get_relations(cursor, child)

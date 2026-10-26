@@ -1,129 +1,129 @@
 requirement,source,requirement_text,row_status,evidence_kind,evidence,evidence_status,detail
-FR1,"§3.4.1, O1",Represent the topology as a dynamic graph with node and edge attributes and configuration,pass,test,tests/unit/test_network_model.py::test_graph_mirrors_topology,pass,0.00 s
-FR1,"§3.4.1, O1",Represent the topology as a dynamic graph with node and edge attributes and configuration,pass,test,tests/integration/test_database.py::test_topology_import_creates_devices_links_and_configuration,pass,0.32 s
-FR1,"§3.4.1, O1",Represent the topology as a dynamic graph with node and edge attributes and configuration,pass,test,tests/integration/test_database.py::test_topology_import_is_idempotent,pass,0.89 s
-FR1,"§3.4.1, O1",Represent the topology as a dynamic graph with node and edge attributes and configuration,pass,test,tests/integration/test_database.py::test_topology_import_refuses_bad_files,pass,all 5 cases
-FR1,"§3.4.1, O1",Represent the topology as a dynamic graph with node and edge attributes and configuration,pass,test,tests/integration/test_api.py::test_topology_payload,pass,1.67 s
-FR1,"§3.4.1, O1",Represent the topology as a dynamic graph with node and edge attributes and configuration,pass,experiment,E1,pass,mean absolute utilisation error < 1 percentage point at the default reality-gap preset: met; every ground-truth status change shown by the twin within one cycle (60 s) and kept: met
-FR2,"§3.4.1, O2",Synchronise the model with monitoring data periodically and on events,pass,test,tests/unit/test_pipeline_smoke.py::test_twin_replicates_emulator_state,pass,26.56 s
-FR2,"§3.4.1, O2",Synchronise the model with monitoring data periodically and on events,pass,test,tests/unit/test_pipeline_smoke.py::test_events_arrive_through_the_feed,pass,3.89 s
-FR2,"§3.4.1, O2",Synchronise the model with monitoring data periodically and on events,pass,test,tests/unit/test_preprocessing.py::test_counter_delta_handles_wrap_and_reset,pass,0.00 s
-FR2,"§3.4.1, O2",Synchronise the model with monitoring data periodically and on events,pass,test,tests/unit/test_preprocessing.py::test_spike_is_rejected_and_baseline_kept,pass,0.00 s
-FR2,"§3.4.1, O2",Synchronise the model with monitoring data periodically and on events,pass,test,tests/unit/test_preprocessing.py::test_unreachable_device_marks_link_down,pass,0.01 s
-FR2,"§3.4.1, O2",Synchronise the model with monitoring data periodically and on events,pass,test,tests/unit/test_network_model.py::test_apply_updates_state_and_reports_status_changes,pass,0.00 s
-FR2,"§3.4.1, O2",Synchronise the model with monitoring data periodically and on events,pass,test,tests/integration/test_engine.py::test_each_cycle_is_stored_once_and_published,pass,3.94 s
-FR2,"§3.4.1, O2",Synchronise the model with monitoring data periodically and on events,pass,test,tests/integration/test_engine.py::test_a_late_poll_counts_and_reports_the_cycles_it_missed,pass,3.21 s
-FR2,"§3.4.1, O2",Synchronise the model with monitoring data periodically and on events,pass,test,tests/unit/test_adapter.py::test_flow_and_event_cursors_survive_a_source_restart,pass,2.38 s
-FR2,"§3.4.1, O2",Synchronise the model with monitoring data periodically and on events,pass,experiment,E1,pass,mean absolute utilisation error < 1 percentage point at the default reality-gap preset: met; every ground-truth status change shown by the twin within one cycle (60 s) and kept: met
-FR3,"§3.4.1, O3","Analyse trends, forecast utilisation and warn before congestion, with lead time",pass,test,tests/unit/test_prediction.py::test_forest_beats_naive_baselines_at_thirty_minutes,pass,0.00 s
-FR3,"§3.4.1, O3","Analyse trends, forecast utilisation and warn before congestion, with lead time",pass,test,tests/unit/test_prediction.py::test_rising_link_is_flagged_at_least_ten_minutes_early,pass,14.92 s
-FR3,"§3.4.1, O3","Analyse trends, forecast utilisation and warn before congestion, with lead time",pass,test,tests/unit/test_prediction.py::test_features_never_look_ahead,pass,1.10 s
-FR3,"§3.4.1, O3","Analyse trends, forecast utilisation and warn before congestion, with lead time",pass,test,tests/unit/test_prediction.py::test_online_and_offline_features_agree,pass,0.27 s
-FR3,"§3.4.1, O3","Analyse trends, forecast utilisation and warn before congestion, with lead time",pass,test,tests/unit/test_prediction.py::test_alert_episode_lifecycle_with_hysteresis,pass,0.01 s
-FR3,"§3.4.1, O3","Analyse trends, forecast utilisation and warn before congestion, with lead time",pass,test,tests/integration/test_api.py::test_link_metrics_and_forecast,pass,1.78 s
-FR3,"§3.4.1, O3","Analyse trends, forecast utilisation and warn before congestion, with lead time",pass,experiment,E2,pass,Random Forest MAE below every baseline at every horizon (plan section 11)
-FR3,"§3.4.1, O3","Analyse trends, forecast utilisation and warn before congestion, with lead time",pass,experiment,E3,pass,"median lead time >= 10 min (Random Forest, detected primary onsets, all classes)"
-FR4,"§3.4.1, O4",Test changes on a detached copy and show bottlenecks created or relieved,pass,test,tests/unit/test_simulation.py::test_live_model_is_never_modified,pass,0.02 s
-FR4,"§3.4.1, O4",Test changes on a detached copy and show bottlenecks created or relieved,pass,test,tests/unit/test_simulation.py::test_registry_covers_every_scenario_type,pass,0.01 s
-FR4,"§3.4.1, O4",Test changes on a detached copy and show bottlenecks created or relieved,pass,test,tests/unit/test_simulation.py::test_link_failure_reroutes_over_the_other_core,pass,0.01 s
-FR4,"§3.4.1, O4",Test changes on a detached copy and show bottlenecks created or relieved,pass,test,tests/unit/test_simulation.py::test_traffic_increase_creates_a_bottleneck,pass,0.01 s
-FR4,"§3.4.1, O4",Test changes on a detached copy and show bottlenecks created or relieved,pass,test,tests/unit/test_simulation.py::test_capacity_upgrade_relieves_load,pass,0.01 s
-FR4,"§3.4.1, O4",Test changes on a detached copy and show bottlenecks created or relieved,pass,test,tests/unit/test_simulation.py::test_invalid_parameters_give_clear_messages,pass,all 9 cases
-FR4,"§3.4.1, O4",Test changes on a detached copy and show bottlenecks created or relieved,pass,test,tests/unit/test_sim_vs_reality.py::test_prediction_matches_reality,pass,all 5 cases
-FR4,"§3.4.1, O4",Test changes on a detached copy and show bottlenecks created or relieved,pass,test,tests/integration/test_api.py::test_scenario_lifecycle,pass,1.72 s
-FR4,"§3.4.1, O4",Test changes on a detached copy and show bottlenecks created or relieved,pass,experiment,E4,pass,configuration always unchanged (plan section 11)
-FR5,"§3.4.1, O5",Web dashboard with a live topology view,fail,walkthrough,UC1 overview shows the live map and summary,pass,"engine running, state version 232"
-FR5,"§3.4.1, O5",Web dashboard with a live topology view,fail,walkthrough,"System page shows the engine, models and database",pass,last cycle took 2395.1 ms in the engine
-FR5,"§3.4.1, O5",Web dashboard with a live topology view,fail,test,tests/integration/test_api.py::test_live_reports_state_version,pass,1.64 s
-FR5,"§3.4.1, O5",Web dashboard with a live topology view,fail,test,tests/integration/test_api.py::test_an_edit_shows_at_once_not_at_the_next_cycle,pass,1.84 s
-FR5,"§3.4.1, O5",Web dashboard with a live topology view,fail,experiment,E5,fail,maximum within 5 s
+FR1,"§3.3, O1",Represent the topology as a dynamic graph with node and edge attributes and configuration,pass,test,tests/unit/test_network_model.py::test_graph_mirrors_topology,pass,0.01 s
+FR1,"§3.3, O1",Represent the topology as a dynamic graph with node and edge attributes and configuration,pass,test,tests/integration/test_database.py::test_topology_import_creates_devices_links_and_configuration,pass,0.31 s
+FR1,"§3.3, O1",Represent the topology as a dynamic graph with node and edge attributes and configuration,pass,test,tests/integration/test_database.py::test_topology_import_is_idempotent,pass,0.61 s
+FR1,"§3.3, O1",Represent the topology as a dynamic graph with node and edge attributes and configuration,pass,test,tests/integration/test_database.py::test_topology_import_refuses_bad_files,pass,all 5 cases
+FR1,"§3.3, O1",Represent the topology as a dynamic graph with node and edge attributes and configuration,pass,test,tests/integration/test_api.py::test_topology_payload,pass,1.92 s
+FR1,"§3.3, O1",Represent the topology as a dynamic graph with node and edge attributes and configuration,pass,experiment,E1,pass,mean absolute utilisation error < 1 percentage point at the default reality-gap preset: met; every ground-truth status change shown by the twin within one cycle (60 s) and kept: met
+FR2,"§3.3, O2",Synchronise the model with monitoring data periodically and on events,pass,test,tests/unit/test_pipeline_smoke.py::test_twin_replicates_emulator_state,pass,41.80 s
+FR2,"§3.3, O2",Synchronise the model with monitoring data periodically and on events,pass,test,tests/unit/test_pipeline_smoke.py::test_events_arrive_through_the_feed,pass,5.92 s
+FR2,"§3.3, O2",Synchronise the model with monitoring data periodically and on events,pass,test,tests/unit/test_preprocessing.py::test_counter_delta_handles_wrap_and_reset,pass,0.01 s
+FR2,"§3.3, O2",Synchronise the model with monitoring data periodically and on events,pass,test,tests/unit/test_preprocessing.py::test_spike_is_rejected_and_baseline_kept,pass,0.01 s
+FR2,"§3.3, O2",Synchronise the model with monitoring data periodically and on events,pass,test,tests/unit/test_preprocessing.py::test_unreachable_device_marks_link_down,pass,0.01 s
+FR2,"§3.3, O2",Synchronise the model with monitoring data periodically and on events,pass,test,tests/unit/test_network_model.py::test_apply_updates_state_and_reports_status_changes,pass,0.01 s
+FR2,"§3.3, O2",Synchronise the model with monitoring data periodically and on events,pass,test,tests/integration/test_engine.py::test_each_cycle_is_stored_once_and_published,pass,6.05 s
+FR2,"§3.3, O2",Synchronise the model with monitoring data periodically and on events,pass,test,tests/integration/test_engine.py::test_a_late_poll_counts_and_reports_the_cycles_it_missed,pass,4.97 s
+FR2,"§3.3, O2",Synchronise the model with monitoring data periodically and on events,pass,test,tests/unit/test_adapter.py::test_flow_and_event_cursors_survive_a_source_restart,pass,2.98 s
+FR2,"§3.3, O2",Synchronise the model with monitoring data periodically and on events,pass,experiment,E1,pass,mean absolute utilisation error < 1 percentage point at the default reality-gap preset: met; every ground-truth status change shown by the twin within one cycle (60 s) and kept: met
+FR3,"§3.3, O3","Analyse trends, forecast utilisation and warn before congestion, with lead time",pass,test,tests/unit/test_prediction.py::test_forest_beats_naive_baselines_at_thirty_minutes,pass,0.00 s
+FR3,"§3.3, O3","Analyse trends, forecast utilisation and warn before congestion, with lead time",pass,test,tests/unit/test_prediction.py::test_rising_link_is_flagged_at_least_ten_minutes_early,pass,28.47 s
+FR3,"§3.3, O3","Analyse trends, forecast utilisation and warn before congestion, with lead time",pass,test,tests/unit/test_prediction.py::test_features_never_look_ahead,pass,0.36 s
+FR3,"§3.3, O3","Analyse trends, forecast utilisation and warn before congestion, with lead time",pass,test,tests/unit/test_prediction.py::test_online_and_offline_features_agree,pass,1.07 s
+FR3,"§3.3, O3","Analyse trends, forecast utilisation and warn before congestion, with lead time",pass,test,tests/unit/test_prediction.py::test_alert_episode_lifecycle_with_hysteresis,pass,0.01 s
+FR3,"§3.3, O3","Analyse trends, forecast utilisation and warn before congestion, with lead time",pass,test,tests/integration/test_api.py::test_link_metrics_and_forecast,pass,2.52 s
+FR3,"§3.3, O3","Analyse trends, forecast utilisation and warn before congestion, with lead time",pass,experiment,E2,pass,Random Forest MAE below every baseline at every horizon (plan section 11)
+FR3,"§3.3, O3","Analyse trends, forecast utilisation and warn before congestion, with lead time",pass,experiment,E3,pass,"median lead time >= 10 min (Random Forest, detected primary onsets, all classes)"
+FR4,"§3.3, O4",Test changes on a detached copy and show bottlenecks created or relieved,pass,test,tests/unit/test_simulation.py::test_live_model_is_never_modified,pass,0.02 s
+FR4,"§3.3, O4",Test changes on a detached copy and show bottlenecks created or relieved,pass,test,tests/unit/test_simulation.py::test_registry_covers_every_scenario_type,pass,0.01 s
+FR4,"§3.3, O4",Test changes on a detached copy and show bottlenecks created or relieved,pass,test,tests/unit/test_simulation.py::test_link_failure_reroutes_over_the_other_core,pass,0.01 s
+FR4,"§3.3, O4",Test changes on a detached copy and show bottlenecks created or relieved,pass,test,tests/unit/test_simulation.py::test_traffic_increase_creates_a_bottleneck,pass,0.01 s
+FR4,"§3.3, O4",Test changes on a detached copy and show bottlenecks created or relieved,pass,test,tests/unit/test_simulation.py::test_capacity_upgrade_relieves_load,pass,0.01 s
+FR4,"§3.3, O4",Test changes on a detached copy and show bottlenecks created or relieved,pass,test,tests/unit/test_simulation.py::test_invalid_parameters_give_clear_messages,pass,all 9 cases
+FR4,"§3.3, O4",Test changes on a detached copy and show bottlenecks created or relieved,pass,test,tests/unit/test_sim_vs_reality.py::test_prediction_matches_reality,pass,all 5 cases
+FR4,"§3.3, O4",Test changes on a detached copy and show bottlenecks created or relieved,pass,test,tests/integration/test_api.py::test_scenario_lifecycle,pass,2.62 s
+FR4,"§3.3, O4",Test changes on a detached copy and show bottlenecks created or relieved,pass,experiment,E4,pass,configuration always unchanged (plan section 11)
+FR5,"§3.3, O5",Web dashboard with a live topology view,fail,walkthrough,UC1 overview shows the live map and summary,pass,"engine running, state version 232"
+FR5,"§3.3, O5",Web dashboard with a live topology view,fail,walkthrough,"System page shows the engine, models and database",pass,last cycle took 2395.1 ms in the engine
+FR5,"§3.3, O5",Web dashboard with a live topology view,fail,test,tests/integration/test_api.py::test_live_reports_state_version,pass,1.96 s
+FR5,"§3.3, O5",Web dashboard with a live topology view,fail,test,tests/integration/test_api.py::test_an_edit_shows_at_once_not_at_the_next_cycle,pass,2.02 s
+FR5,"§3.3, O5",Web dashboard with a live topology view,fail,experiment,E5,fail,maximum within 5 s
 UC1,Figure 3.5,Monitor network topology in real time,pass,walkthrough,Senior Administrator signs in,pass,5.591 s
 UC1,Figure 3.5,Monitor network topology in real time,pass,walkthrough,UC1 overview shows the live map and summary,pass,"engine running, state version 232"
 UC1,Figure 3.5,Monitor network topology in real time,pass,walkthrough,NFR1: the overview shows each new cycle within 5 s of it being stored,pass,"seconds: 1.07, 1.14, 0.14, 2.48, 0.86"
 UC1-ext,Figure 3.5,View device / link detail,pass,walkthrough,UC1 extension: open a link's detail from the links table,pass,link 2
 UC1-ext,Figure 3.5,View device / link detail,pass,walkthrough,UC1 extension: open a device's detail,pass,2.24 s
 UC2,Figure 3.5,"Receive predictive congestion alerts (link, time, confidence, recommendation)",pass,walkthrough,UC2: a surge in the network raises a predictive alert,pass,"video x8 (hostel AP at 39%): ISP-B-GW <-> EDGE-RTR-01: predicted, 30 min ahead, Low confidence, after 20 s"
-UC2,Figure 3.5,"Receive predictive congestion alerts (link, time, confidence, recommendation)",pass,test,tests/integration/test_engine.py::test_fixes_for_a_new_alert_are_worked_out_off_the_cycle,pass,3.41 s
-UC2,Figure 3.5,"Receive predictive congestion alerts (link, time, confidence, recommendation)",pass,test,tests/integration/test_api.py::test_active_alerts_say_when_the_model_was_trained,pass,1.74 s
+UC2,Figure 3.5,"Receive predictive congestion alerts (link, time, confidence, recommendation)",pass,test,tests/integration/test_engine.py::test_fixes_for_a_new_alert_are_worked_out_off_the_cycle,pass,4.63 s
+UC2,Figure 3.5,"Receive predictive congestion alerts (link, time, confidence, recommendation)",pass,test,tests/integration/test_api.py::test_active_alerts_say_when_the_model_was_trained,pass,2.83 s
 UC2,Figure 3.5,"Receive predictive congestion alerts (link, time, confidence, recommendation)",pass,experiment,E3,pass,"median lead time >= 10 min (Random Forest, detected primary onsets, all classes)"
 UC2-ext,Figure 3.5,View trend and forecast chart,pass,walkthrough,UC2 alerts page shows alerts (or that none are expected) and the history,pass,1 active alert(s)
-UC2-ext,Figure 3.5,View trend and forecast chart,pass,test,tests/integration/test_api.py::test_link_metrics_and_forecast,pass,1.78 s
+UC2-ext,Figure 3.5,View trend and forecast chart,pass,test,tests/integration/test_api.py::test_link_metrics_and_forecast,pass,2.52 s
 UC3,Figure 3.5,Run a what-if simulation,pass,walkthrough,UC3: create and run a link-failure scenario with the guided form,pass,Walkthrough link failure 22:21:19
-UC3,Figure 3.5,Run a what-if simulation,pass,test,tests/integration/test_api.py::test_scenario_lifecycle,pass,1.72 s
-UC3,Figure 3.5,Run a what-if simulation,pass,test,tests/integration/test_database.py::test_queued_simulation_is_run_and_stored,pass,0.31 s
+UC3,Figure 3.5,Run a what-if simulation,pass,test,tests/integration/test_api.py::test_scenario_lifecycle,pass,2.62 s
+UC3,Figure 3.5,Run a what-if simulation,pass,test,tests/integration/test_database.py::test_queued_simulation_is_run_and_stored,pass,0.42 s
 UC3,Figure 3.5,Run a what-if simulation,pass,experiment,E4,pass,configuration always unchanged (plan section 11)
 UC3-ext,Figure 3.5,Compare scenario result with current state,pass,walkthrough,UC3 extension: compare the result with the network now,pass,1.24 s
-UC3-ext,Figure 3.5,Compare scenario result with current state,pass,test,tests/integration/test_api.py::test_result_compare,pass,1.69 s
-UC4,Weakness 3 (§3.7),Analyse long-term trends and plan capacity,pass,walkthrough,"UC4: trends, weekly pattern and capacity planning",pass,2.068 s
-UC4,Weakness 3 (§3.7),Analyse long-term trends and plan capacity,pass,test,tests/integration/test_api.py::test_trends_capacity_and_export,pass,1.78 s
-UC4,Weakness 3 (§3.7),Analyse long-term trends and plan capacity,pass,test,tests/integration/test_api.py::test_network_trend_covers_up_to_14_days,pass,1.82 s
-UC4,Weakness 3 (§3.7),Analyse long-term trends and plan capacity,pass,test,tests/integration/test_api.py::test_capacity_planning_fits_complete_days_only,pass,1.73 s
-UC4,Weakness 3 (§3.7),Analyse long-term trends and plan capacity,pass,test,tests/integration/test_api.py::test_capacity_growth_is_not_pulled_by_where_the_weekends_fall,pass,0.01 s
-UC4,Weakness 3 (§3.7),Analyse long-term trends and plan capacity,pass,test,tests/unit/test_netemu.py::test_a_resumed_emulator_keeps_its_growth_and_calendar,pass,0.05 s
-UC4,Weakness 3 (§3.7),Analyse long-term trends and plan capacity,pass,experiment,E9,pass,"configured growth (1 % a week) inside the 95 % interval of the Trends page's growth (mean over busy links, interval across independent worlds)"
+UC3-ext,Figure 3.5,Compare scenario result with current state,pass,test,tests/integration/test_api.py::test_result_compare,pass,2.05 s
+UC4,Weakness 3 (§3.1.1),Analyse long-term trends and plan capacity,pass,walkthrough,"UC4: trends, weekly pattern and capacity planning",pass,2.068 s
+UC4,Weakness 3 (§3.1.1),Analyse long-term trends and plan capacity,pass,test,tests/integration/test_api.py::test_trends_capacity_and_export,pass,3.83 s
+UC4,Weakness 3 (§3.1.1),Analyse long-term trends and plan capacity,pass,test,tests/integration/test_api.py::test_network_trend_covers_up_to_14_days,pass,2.36 s
+UC4,Weakness 3 (§3.1.1),Analyse long-term trends and plan capacity,pass,test,tests/integration/test_api.py::test_capacity_planning_fits_complete_days_only,pass,4.40 s
+UC4,Weakness 3 (§3.1.1),Analyse long-term trends and plan capacity,pass,test,tests/integration/test_api.py::test_capacity_growth_is_not_pulled_by_where_the_weekends_fall,pass,0.01 s
+UC4,Weakness 3 (§3.1.1),Analyse long-term trends and plan capacity,pass,test,tests/unit/test_netemu.py::test_a_resumed_emulator_keeps_its_growth_and_calendar,pass,0.07 s
+UC4,Weakness 3 (§3.1.1),Analyse long-term trends and plan capacity,pass,experiment,E9,pass,"configured growth (1 % a week) inside the 95 % interval of the Trends page's growth (mean over busy links, interval across independent worlds)"
 Auth,Figure 3.5 «include»,Authenticate (log in) with two roles,pass,walkthrough,Sign-in refuses a wrong password,pass,7.765 s
 Auth,Figure 3.5 «include»,Authenticate (log in) with two roles,pass,walkthrough,Senior Administrator signs in,pass,5.591 s
 Auth,Figure 3.5 «include»,Authenticate (log in) with two roles,pass,walkthrough,Senior Administrator signs out,pass,1.12 s
 Auth,Figure 3.5 «include»,Authenticate (log in) with two roles,pass,walkthrough,Junior Administrator can look but not change anything,pass,15.344 s
-Auth,Figure 3.5 «include»,Authenticate (log in) with two roles,pass,test,tests/integration/test_api.py::test_every_endpoint_needs_a_login,pass,1.80 s
-Auth,Figure 3.5 «include»,Authenticate (log in) with two roles,pass,test,tests/integration/test_api.py::test_junior_can_read_everything_but_change_nothing,pass,3.00 s
+Auth,Figure 3.5 «include»,Authenticate (log in) with two roles,pass,test,tests/integration/test_api.py::test_every_endpoint_needs_a_login,pass,2.35 s
+Auth,Figure 3.5 «include»,Authenticate (log in) with two roles,pass,test,tests/integration/test_api.py::test_junior_can_read_everything_but_change_nothing,pass,3.77 s
 Auth,Figure 3.5 «include»,Authenticate (log in) with two roles,pass,test,tests/integration/test_api.py::test_user_without_a_role_cannot_log_in,pass,0.02 s
-NFR1,§3.4.2,Responsiveness: new data on screen within 5 s,fail,walkthrough,NFR1: the overview shows each new cycle within 5 s of it being stored,pass,"seconds: 1.07, 1.14, 0.14, 2.48, 0.86"
-NFR1,§3.4.2,Responsiveness: new data on screen within 5 s,fail,test,tests/integration/test_engine.py::test_the_published_network_time_is_never_behind_the_stored_cycle,pass,3.06 s
-NFR1,§3.4.2,Responsiveness: new data on screen within 5 s,fail,test,tests/integration/test_api.py::test_polls_do_not_count_as_activity,pass,1.56 s
-NFR1,§3.4.2,Responsiveness: new data on screen within 5 s,fail,test,tests/integration/test_engine.py::test_retention_runs_after_the_cycle_is_published,pass,3.06 s
-NFR1,§3.4.2,Responsiveness: new data on screen within 5 s,fail,experiment,E5,fail,maximum within 5 s
-NFR2,§3.4.2,Reliability: runs unattended and recovers from faults,pass,test,tests/unit/test_netemu.py::test_a_locked_clock_file_never_stops_the_network,pass,1.81 s
-NFR2,§3.4.2,Reliability: runs unattended and recovers from faults,pass,test,tests/unit/test_adapter.py::test_flow_and_event_cursors_survive_a_source_restart,pass,2.38 s
-NFR2,§3.4.2,Reliability: runs unattended and recovers from faults,pass,test,tests/integration/test_database.py::test_duplicate_readings_are_impossible,pass,0.40 s
-NFR2,§3.4.2,Reliability: runs unattended and recovers from faults,pass,test,tests/integration/test_database.py::test_model_starts_warm_from_the_latest_readings,pass,0.48 s
-NFR2,§3.4.2,Reliability: runs unattended and recovers from faults,pass,file,docs/evidence/P6_recovery.json,pass,
-NFR2,§3.4.2,Reliability: runs unattended and recovers from faults,pass,experiment,E6,pass,recovers with no manual steps
-NFR2,§3.4.2,Reliability: runs unattended and recovers from faults,pass,experiment,E6_database,pass,recovers with no manual step
-NFR3,§3.4.2,Usability for administrators without data-science training,pending,file,docs/evaluation/E8_USABILITY_KIT.md,pass,
-NFR3,§3.4.2,Usability for administrators without data-science training,pending,experiment,E8-SUS,pending,usability sessions not run yet
-NFR4,"§3.4.2, §3.8","Security: authentication, roles, HTTPS, CSRF, throttling, audit",pass,test,tests/integration/test_api.py::test_login_is_csrf_protected,pass,0.15 s
-NFR4,"§3.4.2, §3.8","Security: authentication, roles, HTTPS, CSRF, throttling, audit",pass,test,tests/integration/test_api.py::test_password_checks_are_rate_limited,pass,0.11 s
-NFR4,"§3.4.2, §3.8","Security: authentication, roles, HTTPS, CSRF, throttling, audit",pass,test,tests/integration/test_api.py::test_repeated_failures_lock_the_account,pass,0.20 s
-NFR4,"§3.4.2, §3.8","Security: authentication, roles, HTTPS, CSRF, throttling, audit",pass,test,tests/integration/test_api.py::test_senior_needs_recent_activity_to_make_changes,pass,1.74 s
-NFR4,"§3.4.2, §3.8","Security: authentication, roles, HTTPS, CSRF, throttling, audit",pass,test,tests/integration/test_api.py::test_reading_after_an_absence_does_not_unlock_changes,pass,1.67 s
-NFR4,"§3.4.2, §3.8","Security: authentication, roles, HTTPS, CSRF, throttling, audit",pass,test,tests/integration/test_api.py::test_junior_is_never_write_allowed,pass,0.09 s
-NFR4,"§3.4.2, §3.8","Security: authentication, roles, HTTPS, CSRF, throttling, audit",pass,test,tests/integration/test_api.py::test_sign_ins_changes_and_runs_are_audited,pass,2.15 s
-NFR4,"§3.4.2, §3.8","Security: authentication, roles, HTTPS, CSRF, throttling, audit",pass,test,tests/integration/test_admin.py::test_a_senior_manages_accounts_but_cannot_grant_superuser_or_extra_groups,pass,5.83 s
-NFR4,"§3.4.2, §3.8","Security: authentication, roles, HTTPS, CSRF, throttling, audit",pass,test,tests/unit/test_settings_prod.py::test_production_settings_are_locked_down,pass,0.02 s
-NFR4,"§3.4.2, §3.8","Security: authentication, roles, HTTPS, CSRF, throttling, audit",pass,test,tests/unit/test_settings_prod.py::test_production_refuses_to_start_without_a_secret_key,pass,0.01 s
-NFR4,"§3.4.2, §3.8","Security: authentication, roles, HTTPS, CSRF, throttling, audit",pass,test,tests/unit/test_pipeline_smoke.py::test_lab_needs_the_token,pass,2.69 s
-NFR4,"§3.4.2, §3.8","Security: authentication, roles, HTTPS, CSRF, throttling, audit",pass,file,docs/evidence/P6_security_headers.txt,pass,
-NFR5,§3.4.2,"Modularity: layered packages, pluggable adapters and scenario types",pass,lint,lint-imports (import-linter contracts in pyproject.toml),pass,"The emulator (stand-in real network) does not import the twin KEPT; The twin does not import the emulator (it reads it only over the network) KEPT; The simulation engine has no path to the network adapters (no write path, G3) KEPT; client (G3) KEPT; The engine core is independent of the web framework (NFR5) KEPT"
-NFR5,§3.4.2,"Modularity: layered packages, pluggable adapters and scenario types",pass,test,tests/unit/test_simulation.py::test_registry_covers_every_scenario_type,pass,0.01 s
-NFR5,§3.4.2,"Modularity: layered packages, pluggable adapters and scenario types",pass,test,tests/unit/test_read_only.py::test_adapter_interface_has_only_read_operations,pass,0.01 s
-NFR5,§3.4.2,"Modularity: layered packages, pluggable adapters and scenario types",pass,test,tests/unit/test_read_only.py::test_every_registered_adapter_is_read_only_and_complete,pass,0.00 s
-NFR5,§3.4.2,"Modularity: layered packages, pluggable adapters and scenario types",pass,file,docs/EXTENDING.md,pass,
-G1,§3.2,A live replica of the network,pass,experiment,E1,pass,mean absolute utilisation error < 1 percentage point at the default reality-gap preset: met; every ground-truth status change shown by the twin within one cycle (60 s) and kept: met
-G2,§3.2,"Forecasts bound to links, with alerts",pass,experiment,E3,pass,"median lead time >= 10 min (Random Forest, detected primary onsets, all classes)"
-G3,"§3.2, §3.8",Changes tested on a detached copy with no write path to the network,pass,test,tests/unit/test_read_only.py::test_collection_and_engine_never_send_write_requests,pass,0.80 s
-G3,"§3.2, §3.8",Changes tested on a detached copy with no write path to the network,pass,test,tests/unit/test_read_only.py::test_no_part_of_the_twin_uses_the_lab_interface,pass,0.77 s
-G3,"§3.2, §3.8",Changes tested on a detached copy with no write path to the network,pass,test,tests/unit/test_read_only.py::test_telemetry_adapter_exposes_only_read_operations,pass,0.00 s
-G3,"§3.2, §3.8",Changes tested on a detached copy with no write path to the network,pass,test,tests/unit/test_simulation.py::test_live_model_is_never_modified,pass,0.02 s
-G3,"§3.2, §3.8",Changes tested on a detached copy with no write path to the network,pass,lint,lint-imports (import-linter contracts in pyproject.toml),pass,"The emulator (stand-in real network) does not import the twin KEPT; The twin does not import the emulator (it reads it only over the network) KEPT; The simulation engine has no path to the network adapters (no write path, G3) KEPT; client (G3) KEPT; The engine core is independent of the web framework (NFR5) KEPT"
-G3,"§3.2, §3.8",Changes tested on a detached copy with no write path to the network,pass,experiment,E4,pass,configuration always unchanged (plan section 11)
-G4,§3.2,"Affordable, open source, administrator-first",pending,file,docs/INSTALL.md,pass,
-G4,§3.2,"Affordable, open source, administrator-first",pending,file,docs/USER_GUIDE.md,pass,
-G4,§3.2,"Affordable, open source, administrator-first",pending,experiment,E7,pass,runs within 4 GB of RAM
-G4,§3.2,"Affordable, open source, administrator-first",pending,experiment,E8-SUS,pending,usability sessions not run yet
+NFR1,§3.3,Responsiveness: new data on screen within 5 s,fail,walkthrough,NFR1: the overview shows each new cycle within 5 s of it being stored,pass,"seconds: 1.07, 1.14, 0.14, 2.48, 0.86"
+NFR1,§3.3,Responsiveness: new data on screen within 5 s,fail,test,tests/integration/test_engine.py::test_the_published_network_time_is_never_behind_the_stored_cycle,pass,7.09 s
+NFR1,§3.3,Responsiveness: new data on screen within 5 s,fail,test,tests/integration/test_api.py::test_polls_do_not_count_as_activity,pass,2.05 s
+NFR1,§3.3,Responsiveness: new data on screen within 5 s,fail,test,tests/integration/test_engine.py::test_retention_runs_after_the_cycle_is_published,pass,3.98 s
+NFR1,§3.3,Responsiveness: new data on screen within 5 s,fail,experiment,E5,fail,maximum within 5 s
+NFR2,§3.3,Reliability: runs unattended and recovers from faults,pass,test,tests/unit/test_netemu.py::test_a_locked_clock_file_never_stops_the_network,pass,1.90 s
+NFR2,§3.3,Reliability: runs unattended and recovers from faults,pass,test,tests/unit/test_adapter.py::test_flow_and_event_cursors_survive_a_source_restart,pass,2.98 s
+NFR2,§3.3,Reliability: runs unattended and recovers from faults,pass,test,tests/integration/test_database.py::test_duplicate_readings_are_impossible,pass,0.28 s
+NFR2,§3.3,Reliability: runs unattended and recovers from faults,pass,test,tests/integration/test_database.py::test_model_starts_warm_from_the_latest_readings,pass,0.54 s
+NFR2,§3.3,Reliability: runs unattended and recovers from faults,pass,file,docs/evidence/P6_recovery.json,pass,
+NFR2,§3.3,Reliability: runs unattended and recovers from faults,pass,experiment,E6,pass,recovers with no manual steps
+NFR2,§3.3,Reliability: runs unattended and recovers from faults,pass,experiment,E6_database,pass,recovers with no manual step
+NFR3,§3.3,Usability for administrators without data-science training,pending,file,docs/evaluation/E8_USABILITY_KIT.md,pass,
+NFR3,§3.3,Usability for administrators without data-science training,pending,experiment,E8-SUS,pending,usability sessions not run yet
+NFR4,"§3.3, §3.8","Security: authentication, roles, HTTPS, CSRF, throttling, audit",pass,test,tests/integration/test_api.py::test_login_is_csrf_protected,pass,0.11 s
+NFR4,"§3.3, §3.8","Security: authentication, roles, HTTPS, CSRF, throttling, audit",pass,test,tests/integration/test_api.py::test_password_checks_are_rate_limited,pass,0.18 s
+NFR4,"§3.3, §3.8","Security: authentication, roles, HTTPS, CSRF, throttling, audit",pass,test,tests/integration/test_api.py::test_repeated_failures_lock_the_account,pass,0.20 s
+NFR4,"§3.3, §3.8","Security: authentication, roles, HTTPS, CSRF, throttling, audit",pass,test,tests/integration/test_api.py::test_senior_needs_recent_activity_to_make_changes,pass,2.25 s
+NFR4,"§3.3, §3.8","Security: authentication, roles, HTTPS, CSRF, throttling, audit",pass,test,tests/integration/test_api.py::test_reading_after_an_absence_does_not_unlock_changes,pass,2.50 s
+NFR4,"§3.3, §3.8","Security: authentication, roles, HTTPS, CSRF, throttling, audit",pass,test,tests/integration/test_api.py::test_junior_is_never_write_allowed,pass,0.21 s
+NFR4,"§3.3, §3.8","Security: authentication, roles, HTTPS, CSRF, throttling, audit",pass,test,tests/integration/test_api.py::test_sign_ins_changes_and_runs_are_audited,pass,2.19 s
+NFR4,"§3.3, §3.8","Security: authentication, roles, HTTPS, CSRF, throttling, audit",pass,test,tests/integration/test_admin.py::test_a_senior_manages_accounts_but_cannot_grant_superuser_or_extra_groups,pass,10.88 s
+NFR4,"§3.3, §3.8","Security: authentication, roles, HTTPS, CSRF, throttling, audit",pass,test,tests/unit/test_settings_prod.py::test_production_settings_are_locked_down,pass,0.27 s
+NFR4,"§3.3, §3.8","Security: authentication, roles, HTTPS, CSRF, throttling, audit",pass,test,tests/unit/test_settings_prod.py::test_production_refuses_to_start_without_a_secret_key,pass,0.06 s
+NFR4,"§3.3, §3.8","Security: authentication, roles, HTTPS, CSRF, throttling, audit",pass,test,tests/unit/test_pipeline_smoke.py::test_lab_needs_the_token,pass,3.33 s
+NFR4,"§3.3, §3.8","Security: authentication, roles, HTTPS, CSRF, throttling, audit",pass,file,docs/evidence/P6_security_headers.txt,pass,
+NFR5,§3.3,"Modularity: layered packages, pluggable adapters and scenario types",pass,lint,lint-imports (import-linter contracts in pyproject.toml),pass,"The emulator (stand-in real network) does not import the twin KEPT; The twin does not import the emulator (it reads it only over the network) KEPT; The simulation engine has no path to the network adapters (no write path, G3) KEPT; client (G3) KEPT; The engine core is independent of the web framework (NFR5) KEPT"
+NFR5,§3.3,"Modularity: layered packages, pluggable adapters and scenario types",pass,test,tests/unit/test_simulation.py::test_registry_covers_every_scenario_type,pass,0.01 s
+NFR5,§3.3,"Modularity: layered packages, pluggable adapters and scenario types",pass,test,tests/unit/test_read_only.py::test_adapter_interface_has_only_read_operations,pass,0.01 s
+NFR5,§3.3,"Modularity: layered packages, pluggable adapters and scenario types",pass,test,tests/unit/test_read_only.py::test_every_registered_adapter_is_read_only_and_complete,pass,0.01 s
+NFR5,§3.3,"Modularity: layered packages, pluggable adapters and scenario types",pass,file,docs/EXTENDING.md,pass,
+G1,§2.6,A live replica of the network,pass,experiment,E1,pass,mean absolute utilisation error < 1 percentage point at the default reality-gap preset: met; every ground-truth status change shown by the twin within one cycle (60 s) and kept: met
+G2,§2.6,"Forecasts bound to links, with alerts",pass,experiment,E3,pass,"median lead time >= 10 min (Random Forest, detected primary onsets, all classes)"
+G3,"§2.6, §3.8",Changes tested on a detached copy with no write path to the network,pass,test,tests/unit/test_read_only.py::test_collection_and_engine_never_send_write_requests,pass,0.11 s
+G3,"§2.6, §3.8",Changes tested on a detached copy with no write path to the network,pass,test,tests/unit/test_read_only.py::test_no_part_of_the_twin_uses_the_lab_interface,pass,0.12 s
+G3,"§2.6, §3.8",Changes tested on a detached copy with no write path to the network,pass,test,tests/unit/test_read_only.py::test_telemetry_adapter_exposes_only_read_operations,pass,0.01 s
+G3,"§2.6, §3.8",Changes tested on a detached copy with no write path to the network,pass,test,tests/unit/test_simulation.py::test_live_model_is_never_modified,pass,0.02 s
+G3,"§2.6, §3.8",Changes tested on a detached copy with no write path to the network,pass,lint,lint-imports (import-linter contracts in pyproject.toml),pass,"The emulator (stand-in real network) does not import the twin KEPT; The twin does not import the emulator (it reads it only over the network) KEPT; The simulation engine has no path to the network adapters (no write path, G3) KEPT; client (G3) KEPT; The engine core is independent of the web framework (NFR5) KEPT"
+G3,"§2.6, §3.8",Changes tested on a detached copy with no write path to the network,pass,experiment,E4,pass,configuration always unchanged (plan section 11)
+G4,§2.6,"Affordable, open source, administrator-first",pending,file,docs/INSTALL.md,pass,
+G4,§2.6,"Affordable, open source, administrator-first",pending,file,docs/USER_GUIDE.md,pass,
+G4,§2.6,"Affordable, open source, administrator-first",pending,experiment,E7,pass,runs within 4 GB of RAM
+G4,§2.6,"Affordable, open source, administrator-first",pending,experiment,E8-SUS,pending,usability sessions not run yet
 Optimisation,§3.2 (title),Recommend tested fixes for predicted congestion,pass,test,tests/unit/test_simulation.py::test_recommendations_prefer_least_disruptive_fix,pass,0.02 s
-Optimisation,§3.2 (title),Recommend tested fixes for predicted congestion,pass,test,tests/unit/test_simulation.py::test_recommendations_for_a_link_with_no_alternative_path,pass,0.02 s
+Optimisation,§3.2 (title),Recommend tested fixes for predicted congestion,pass,test,tests/unit/test_simulation.py::test_recommendations_for_a_link_with_no_alternative_path,pass,0.03 s
 Optimisation,§3.2 (title),Recommend tested fixes for predicted congestion,pass,test,tests/unit/test_simulation.py::test_a_fix_that_takes_nothing_off_the_link_is_never_recommended,pass,0.02 s
-Optimisation,§3.2 (title),Recommend tested fixes for predicted congestion,pass,test,tests/integration/test_engine.py::test_fixes_for_a_new_alert_are_worked_out_off_the_cycle,pass,3.41 s
+Optimisation,§3.2 (title),Recommend tested fixes for predicted congestion,pass,test,tests/integration/test_engine.py::test_fixes_for_a_new_alert_are_worked_out_off_the_cycle,pass,4.63 s
 Optimisation,§3.2 (title),Recommend tested fixes for predicted congestion,pass,experiment,E4,pass,configuration always unchanged (plan section 11)
 Optimisation,§3.2 (title),Recommend tested fixes for predicted congestion,pass,experiment,E4_recommendations,pass,configuration always unchanged (plan section 11)
-Tables 3.2/3.3,§3.6,"The six tables, their principal fields and relationships",pass,test,tests/integration/test_schema.py::test_the_six_tables_exist_with_every_principal_field,pass,0.06 s
-Tables 3.2/3.3,§3.6,"The six tables, their principal fields and relationships",pass,test,tests/integration/test_schema.py::test_primary_keys_are_the_named_id_fields,pass,0.07 s
-Tables 3.2/3.3,§3.6,"The six tables, their principal fields and relationships",pass,test,tests/integration/test_schema.py::test_table_3_3_relationships_are_foreign_keys_in_the_database,pass,0.02 s
-Tables 3.2/3.3,§3.6,"The six tables, their principal fields and relationships",pass,test,tests/integration/test_schema.py::test_history_is_protected_from_cascading_deletes,pass,0.01 s
-Tables 3.2/3.3,§3.6,"The six tables, their principal fields and relationships",pass,test,tests/integration/test_database.py::test_monitoring_record_is_device_or_link_never_both,pass,0.35 s
-Tables 3.2/3.3,§3.6,"The six tables, their principal fields and relationships",pass,test,tests/integration/test_database.py::test_utilisation_must_be_a_percentage,pass,0.29 s
-Tables 3.2/3.3,§3.6,"The six tables, their principal fields and relationships",pass,test,tests/unit/test_simulation.py::test_result_fits_the_simulation_result_table,pass,3.17 s
-Figure 3.4,§3.5,Data flow: processes 1.0-6.0 and stores D1-D4,pass,test,tests/unit/test_pipeline_smoke.py::test_twin_replicates_emulator_state,pass,26.56 s
-Figure 3.4,§3.5,Data flow: processes 1.0-6.0 and stores D1-D4,pass,test,tests/integration/test_database.py::test_write_cycle_stores_one_row_per_link_and_device,pass,0.47 s
-Figure 3.4,§3.5,Data flow: processes 1.0-6.0 and stores D1-D4,pass,file,docs/diagrams/dfd.svg,pass,
+Tables 3.1/3.2,§3.5,"The six tables, their principal fields and relationships",pass,test,tests/integration/test_schema.py::test_the_six_tables_exist_with_every_principal_field,pass,0.08 s
+Tables 3.1/3.2,§3.5,"The six tables, their principal fields and relationships",pass,test,tests/integration/test_schema.py::test_primary_keys_are_the_named_id_fields,pass,0.10 s
+Tables 3.1/3.2,§3.5,"The six tables, their principal fields and relationships",pass,test,tests/integration/test_schema.py::test_the_relationships_are_foreign_keys_in_the_database,pass,0.03 s
+Tables 3.1/3.2,§3.5,"The six tables, their principal fields and relationships",pass,test,tests/integration/test_schema.py::test_history_is_protected_from_cascading_deletes,pass,0.01 s
+Tables 3.1/3.2,§3.5,"The six tables, their principal fields and relationships",pass,test,tests/integration/test_database.py::test_monitoring_record_is_device_or_link_never_both,pass,0.36 s
+Tables 3.1/3.2,§3.5,"The six tables, their principal fields and relationships",pass,test,tests/integration/test_database.py::test_utilisation_must_be_a_percentage,pass,0.30 s
+Tables 3.1/3.2,§3.5,"The six tables, their principal fields and relationships",pass,test,tests/unit/test_simulation.py::test_result_fits_the_simulation_result_table,pass,7.15 s
+Figure 3.4,§3.6,Data flow: processes 1.0-6.0 and stores D1-D4,pass,test,tests/unit/test_pipeline_smoke.py::test_twin_replicates_emulator_state,pass,41.80 s
+Figure 3.4,§3.6,Data flow: processes 1.0-6.0 and stores D1-D4,pass,test,tests/integration/test_database.py::test_write_cycle_stores_one_row_per_link_and_device,pass,0.52 s
+Figure 3.4,§3.6,Data flow: processes 1.0-6.0 and stores D1-D4,pass,file,docs/diagrams/dfd.svg,pass,

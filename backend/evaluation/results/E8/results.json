@@ -1,61 +1,56 @@
 {
   "experiment": "E8",
   "title": "Functional acceptance matrix",
-  "finished": "2026-10-26T08:17:33+00:00",
-  "seconds": 7.6,
-  "code_version": "b3ddbea+uncommitted",
+  "finished": "2026-10-26T10:08:21+00:00",
+  "seconds": 627.7,
+  "code_version": "bb64cbf+uncommitted",
   "python": "3.13.1",
   "machine": "Windows 11, Intel64 Family 6 Model 122 Stepping 8, GenuineIntel",
   "machine_load": {
     "at_start": {
-      "cpu_pct": 50.9,
-      "memory_used_pct": 92.1,
+      "cpu_pct": 100.0,
+      "memory_used_pct": 87.2,
       "busy_other_programs": [
         {
-          "name": "System Idle Process",
-          "cpu_pct_of_machine": 30.3,
+          "name": "Void.exe",
+          "cpu_pct_of_machine": 15.4,
+          "command": "C:\\Program Files\\Void\\Void.exe --type=renderer --user-data-dir=C:\\Users\\cirex\\AppData\\Roaming\\Void -"
+        },
+        {
+          "name": "MemCompression",
+          "cpu_pct_of_machine": 14.2,
           "command": ""
         },
         {
           "name": "MsMpEng.exe",
-          "cpu_pct_of_machine": 12.4,
+          "cpu_pct_of_machine": 9.8,
           "command": ""
         },
         {
-          "name": "Void.exe",
-          "cpu_pct_of_machine": 7.5,
-          "command": "C:\\Program Files\\Void\\Void.exe --type=renderer --user-data-dir=C:\\Users\\cirex\\AppData\\Roaming\\Void -"
-        },
-        {
-          "name": "System",
-          "cpu_pct_of_machine": 6.4,
-          "command": ""
-        },
-        {
-          "name": "Void.exe",
-          "cpu_pct_of_machine": 5.7,
-          "command": "C:\\Program Files\\Void\\Void.exe --type=utility --utility-sub-type=node.mojom.NodeService --lang=en-US"
+          "name": "claude.exe",
+          "cpu_pct_of_machine": 5.5,
+          "command": "c:\\Users\\cirex\\.void-editor\\extensions\\anthropic.claude-code-2.1.309-win32-x64\\resources\\native-bina"
         }
       ]
     },
     "at_finish": {
-      "cpu_pct": 47.8,
-      "memory_used_pct": 91.0,
+      "cpu_pct": 100.0,
+      "memory_used_pct": 90.4,
       "busy_other_programs": [
         {
-          "name": "System Idle Process",
-          "cpu_pct_of_machine": 34.1,
-          "command": ""
+          "name": "Void.exe",
+          "cpu_pct_of_machine": 18.1,
+          "command": "C:\\Program Files\\Void\\Void.exe --type=renderer --user-data-dir=C:\\Users\\cirex\\AppData\\Roaming\\Void -"
         },
         {
           "name": "MsMpEng.exe",
-          "cpu_pct_of_machine": 12.3,
+          "cpu_pct_of_machine": 16.9,
           "command": ""
         },
         {
-          "name": "Void.exe",
-          "cpu_pct_of_machine": 6.0,
-          "command": "C:\\Program Files\\Void\\Void.exe --type=utility --utility-sub-type=node.mojom.NodeService --lang=en-US"
+          "name": "System",
+          "cpu_pct_of_machine": 13.7,
+          "command": ""
         }
       ]
     }

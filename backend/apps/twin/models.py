@@ -1,7 +1,7 @@
-"""The six application tables of Figure 3.3 / Table 3.2.
+"""The six application tables of Figure 3.3 / Table 3.1.
 
 Model and field names follow Chapter 3 exactly. Fields marked "non-principal"
-are additions allowed because Table 3.2 lists only principal fields; each one
+are additions allowed because Table 3.1 lists only principal fields; each one
 is recorded in docs/AS_BUILT_NOTES.md (plan decision D13).
 
 All foreign keys use PROTECT: history and the audit trail are never deleted by

@@ -6,7 +6,7 @@ This is the running record of where the software extends, refines or differs fro
 
 ---
 
-## 1. Database (§3.5, Figure 3.3, Tables 3.2–3.3)
+## 1. Database (§3.5, Figure 3.3, Tables 3.1–3.2)
 
 **Six application tables, as designed.**
 
@@ -19,9 +19,9 @@ This is the running record of where the software extends, refines or differs fro
 | SimulationScenario | `SimulationScenario` | `simulation_scenario` |
 | SimulationResult | `SimulationResult` | `simulation_result` |
 
-All principal fields of Table 3.2 exist with the same names. The foreign-key column of SimulationScenario is literally `created_by`, as in Figure 3.3.
+All principal fields of Table 3.1 exist with the same names. The foreign-key column of SimulationScenario is literally `created_by`, as in Figure 3.3.
 
-**Extra (non-principal) fields.** Table 3.2 lists "principal fields", so additions are allowed:
+**Extra (non-principal) fields.** Table 3.1 lists "Principal Fields", so additions are allowed:
 
 | Table | Field | Why |
 |---|---|---|
@@ -40,7 +40,7 @@ All principal fields of Table 3.2 exist with the same names. The foreign-key col
 These are all framework tables, not application data.
 
 **Rules enforced by the database:**
-- A MonitoringRecord row describes exactly one device or exactly one link (check constraint `monitoringrecord_device_xor_link`). Table 3.3's "each record belongs to one device" and "one link" therefore read as "each device-level record belongs to one device; each link-level record belongs to one link".
+- A MonitoringRecord row describes exactly one device or exactly one link (check constraint `monitoringrecord_device_xor_link`). Table 3.2's "each record belongs to one device" and "one link" therefore read as "each device-level record belongs to one device; each link-level record belongs to one link".
 - No duplicate readings: (link, timestamp) and (device, timestamp) are unique, so re-ingesting a cycle is harmless.
 - Utilisation and CPU must lie between 0 and 100; capacity must be positive; confidence must lie between 0 and 1.
 - A link cannot connect a device to itself, and there is at most one link per pair of devices.
@@ -123,7 +123,7 @@ The existing history is unchanged. Chapter 4 should describe its growth as not a
 
 **Read-only by design.** The adapter interface (`describe`, `poll`, `events`) has no operation that writes to devices. Unit tests check this, and an import rule prevents the simulation engine from reaching the adapters at all.
 
-**Flow telemetry is an extension.** Chapter 3 names "device status and interface traffic data"; the build also collects NetFlow-style flow records. They give the twin a traffic demand matrix, which the simulation engine needs to "run traffic through the modified model" (§3.7). Figure 3.2's "telemetry feed" covers it, but §3.4, §3.6 and Figure 3.4 should mention it (see CHAPTER3_FIXES).
+**Flow telemetry is an extension.** Chapter 3 names "device status and interface traffic data"; the build also collects NetFlow-style flow records. They give the twin a traffic demand matrix, which the simulation engine needs when it "runs traffic through the modified model" (§3.7). Figure 3.2's "telemetry feed" covers it, but §3.4, §3.6 and Figure 3.4 should mention it (see CHAPTER3_FIXES).
 
 **Preprocessing rules** (process 2.0):
 - Counters become rates: Mbps = Δoctets × 8 ÷ Δt ÷ 10⁶.
@@ -132,7 +132,7 @@ The existing history is unchanged. Chapter 4 should describe its growth as not a
 - A rate above 105 % of the interface speed is a bogus reading. It is rejected, and the last good reading is kept as the baseline.
 - Utilisation between 100 % and 105 % is clipped to 100 % and counted.
 - Timestamps come from the source's own clock. A cycle polled twice is ignored, and a clock that goes backwards stops ingestion with a visible error.
-- **Capacity drift** (added after a test exposed the gap): if the devices report an interface speed different from the stored capacity, the twin adopts the new capacity and updates the Topology Store. The replica's configuration therefore follows real upgrades, which Table 3.1 G1 implies. Without this, utilisation after an upgrade was computed against the old capacity.
+- **Capacity drift** (added after a test exposed the gap): if the devices report an interface speed different from the stored capacity, the twin adopts the new capacity and updates the Topology Store. The replica's configuration therefore follows real upgrades, which G1 (§2.6) implies. Without this, utilisation after an upgrade was computed against the old capacity.
 - Every cycle produces a data-quality report: interfaces expected, received and missing, spikes rejected, counter resets, values clipped, unknown elements, capacity changes.
 
 **Source restarts.** Flow records and events are read with a cursor (the last number seen). If the source restarts and numbers its records from the start again, its latest number is behind the cursor; the adapter notices this and reads the new records instead of waiting for the old numbers to come round again. Found while restarting the emulator during a history run; covered by a test.
@@ -148,7 +148,7 @@ The existing history is unchanged. Chapter 4 should describe its growth as not a
 - Periodic: from each validated cycle.
 - Event-driven: from up/down notifications, applied immediately (FR2).
 
-**Bottleneck identification** (Table 3.5):
+**Bottleneck identification** (Table 3.4):
 - load bottlenecks: links at or above 90 %;
 - structural bottlenecks: single points of failure (bridges and articulation points) and the most-used links (edge betweenness).
 
@@ -239,7 +239,7 @@ The model must be under 100 MB.
 
 **Two models (D6).** The full model uses the same-time-yesterday features. A short-history model without them serves the first day, from one hour of history onwards. The predictor switches between them automatically.
 
-**Comparison (Table 3.5).** Gradient boosting (HistGradientBoosting, one per horizon) is trained alongside, and three baselines are reported: persistence, linear trend, same time yesterday.
+**Comparison (Table 3.4).** Gradient boosting (HistGradientBoosting, one per horizon) is trained alongside, and three baselines are reported: persistence, linear trend, same time yesterday.
 
 **Registry.** Every trained model is saved with its metadata: training window, rows, metrics, feature and permutation importance, size and library versions. A new model is promoted only if its test error is no worse; versions never collide.
 

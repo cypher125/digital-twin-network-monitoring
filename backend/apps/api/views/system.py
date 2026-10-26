@@ -17,7 +17,7 @@ from ..permissions import IsSenior
 from ..services import engine_status, invalidate_topology, is_stale, thresholds
 
 MAX_IMPORT_BYTES = 2 * 1024 * 1024
-# The six tables in Table 3.2 order. The small ones are counted exactly. The two large ones use
+# The six tables in Table 3.1 order. The small ones are counted exactly. The two large ones use
 # PostgreSQL's estimate, or are counted while it has none (-1 or 0 until the table is first analysed).
 TABLES = ("network_device", "network_link", "monitoring_record", "prediction", "simulation_scenario",
           "simulation_result")

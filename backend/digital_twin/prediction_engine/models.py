@@ -1,4 +1,4 @@
-"""Forecasting models (Figures 3.1/3.2: scikit-learn Random Forest; Table 3.5: compared with gradient boosting).
+"""Forecasting models (Figures 3.1/3.2: scikit-learn Random Forest; Table 3.4: compared with gradient boosting).
 
 * ForestForecaster: the production model, one multi-output Random Forest for all
   horizons, with fixed size limits so it fits in 4 GB RAM (plan section 7.5).

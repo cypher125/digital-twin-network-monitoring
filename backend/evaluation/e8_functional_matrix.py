@@ -77,14 +77,14 @@ SIGN_IN = "Senior Administrator signs in"
 
 MATRIX = [
     # ---------------------------------------------------------------- functional requirements
-    Row("FR1", "§3.4.1, O1", "Represent the topology as a dynamic graph with node and edge attributes and configuration", [
+    Row("FR1", "§3.3, O1", "Represent the topology as a dynamic graph with node and edge attributes and configuration", [
         T(UT + "test_network_model.py::test_graph_mirrors_topology"),
         T(IT + "test_database.py::test_topology_import_creates_devices_links_and_configuration"),
         T(IT + "test_database.py::test_topology_import_is_idempotent"),
         T(IT + "test_database.py::test_topology_import_refuses_bad_files"),
         T(IT + "test_api.py::test_topology_payload"),
         E("E1")]),
-    Row("FR2", "§3.4.1, O2", "Synchronise the model with monitoring data periodically and on events", [
+    Row("FR2", "§3.3, O2", "Synchronise the model with monitoring data periodically and on events", [
         T(UT + "test_pipeline_smoke.py::test_twin_replicates_emulator_state"),
         T(UT + "test_pipeline_smoke.py::test_events_arrive_through_the_feed"),
         T(UT + "test_preprocessing.py::test_counter_delta_handles_wrap_and_reset"),
@@ -95,7 +95,7 @@ MATRIX = [
         T(IT + "test_engine.py::test_a_late_poll_counts_and_reports_the_cycles_it_missed"),
         T(UT + "test_adapter.py::test_flow_and_event_cursors_survive_a_source_restart"),
         E("E1")]),
-    Row("FR3", "§3.4.1, O3", "Analyse trends, forecast utilisation and warn before congestion, with lead time", [
+    Row("FR3", "§3.3, O3", "Analyse trends, forecast utilisation and warn before congestion, with lead time", [
         T(UT + "test_prediction.py::test_forest_beats_naive_baselines_at_thirty_minutes"),
         T(UT + "test_prediction.py::test_rising_link_is_flagged_at_least_ten_minutes_early"),
         T(UT + "test_prediction.py::test_features_never_look_ahead"),
@@ -103,7 +103,7 @@ MATRIX = [
         T(UT + "test_prediction.py::test_alert_episode_lifecycle_with_hysteresis"),
         T(IT + "test_api.py::test_link_metrics_and_forecast"),
         E("E2"), E("E3")]),
-    Row("FR4", "§3.4.1, O4", "Test changes on a detached copy and show bottlenecks created or relieved", [
+    Row("FR4", "§3.3, O4", "Test changes on a detached copy and show bottlenecks created or relieved", [
         T(UT + "test_simulation.py::test_live_model_is_never_modified"),
         T(UT + "test_simulation.py::test_registry_covers_every_scenario_type"),
         T(UT + "test_simulation.py::test_link_failure_reroutes_over_the_other_core"),
@@ -113,7 +113,7 @@ MATRIX = [
         T(UT + "test_sim_vs_reality.py::test_prediction_matches_reality"),
         T(IT + "test_api.py::test_scenario_lifecycle"),
         E("E4")]),
-    Row("FR5", "§3.4.1, O5", "Web dashboard with a live topology view", [
+    Row("FR5", "§3.3, O5", "Web dashboard with a live topology view", [
         W("UC1 overview shows the live map and summary"),
         W("System page shows the engine, models and database"),
         T(IT + "test_api.py::test_live_reports_state_version"),
@@ -142,7 +142,7 @@ MATRIX = [
     Row("UC3-ext", "Figure 3.5", "Compare scenario result with current state", [
         W("UC3 extension: compare the result with the network now"),
         T(IT + "test_api.py::test_result_compare")]),
-    Row("UC4", "Weakness 3 (§3.7)", "Analyse long-term trends and plan capacity", [
+    Row("UC4", "Weakness 3 (§3.1.1)", "Analyse long-term trends and plan capacity", [
         W("UC4: trends, weekly pattern and capacity planning"),
         T(IT + "test_api.py::test_trends_capacity_and_export"),
         T(IT + "test_api.py::test_network_trend_covers_up_to_14_days"),
@@ -157,23 +157,23 @@ MATRIX = [
         T(IT + "test_api.py::test_junior_can_read_everything_but_change_nothing"),
         T(IT + "test_api.py::test_user_without_a_role_cannot_log_in")]),
     # ---------------------------------------------------------------- non-functional requirements
-    Row("NFR1", "§3.4.2", "Responsiveness: new data on screen within 5 s", [
+    Row("NFR1", "§3.3", "Responsiveness: new data on screen within 5 s", [
         W("NFR1: the overview shows each new cycle within 5 s of it being stored"),
         T(IT + "test_engine.py::test_the_published_network_time_is_never_behind_the_stored_cycle"),
         T(IT + "test_api.py::test_polls_do_not_count_as_activity"),
         T(IT + "test_engine.py::test_retention_runs_after_the_cycle_is_published"),
         E("E5")]),
-    Row("NFR2", "§3.4.2", "Reliability: runs unattended and recovers from faults", [
+    Row("NFR2", "§3.3", "Reliability: runs unattended and recovers from faults", [
         T(UT + "test_netemu.py::test_a_locked_clock_file_never_stops_the_network"),
         T(UT + "test_adapter.py::test_flow_and_event_cursors_survive_a_source_restart"),
         T(IT + "test_database.py::test_duplicate_readings_are_impossible"),
         T(IT + "test_database.py::test_model_starts_warm_from_the_latest_readings"),
         F("docs/evidence/P6_recovery.json"),
         E("E6"), E("E6_database")]),
-    Row("NFR3", "§3.4.2", "Usability for administrators without data-science training", [
+    Row("NFR3", "§3.3", "Usability for administrators without data-science training", [
         F("docs/evaluation/E8_USABILITY_KIT.md"),
         Evidence("experiment", "E8-SUS")]),
-    Row("NFR4", "§3.4.2, §3.8", "Security: authentication, roles, HTTPS, CSRF, throttling, audit", [
+    Row("NFR4", "§3.3, §3.8", "Security: authentication, roles, HTTPS, CSRF, throttling, audit", [
         T(IT + "test_api.py::test_login_is_csrf_protected"),
         T(IT + "test_api.py::test_password_checks_are_rate_limited"),
         T(IT + "test_api.py::test_repeated_failures_lock_the_account"),
@@ -186,22 +186,22 @@ MATRIX = [
         T(UT + "test_settings_prod.py::test_production_refuses_to_start_without_a_secret_key"),
         T(UT + "test_pipeline_smoke.py::test_lab_needs_the_token"),
         F("docs/evidence/P6_security_headers.txt")]),
-    Row("NFR5", "§3.4.2", "Modularity: layered packages, pluggable adapters and scenario types", [
+    Row("NFR5", "§3.3", "Modularity: layered packages, pluggable adapters and scenario types", [
         LINT,
         T(UT + "test_simulation.py::test_registry_covers_every_scenario_type"),
         T(UT + "test_read_only.py::test_adapter_interface_has_only_read_operations"),
         T(UT + "test_read_only.py::test_every_registered_adapter_is_read_only_and_complete"),
         F("docs/EXTENDING.md")]),
-    # ---------------------------------------------------------------- goals and other design points
-    Row("G1", "§3.2", "A live replica of the network", [E("E1")]),
-    Row("G2", "§3.2", "Forecasts bound to links, with alerts", [E("E3")]),
-    Row("G3", "§3.2, §3.8", "Changes tested on a detached copy with no write path to the network", [
+    # ---------------------------------------------------------------- gaps and other design points
+    Row("G1", "§2.6", "A live replica of the network", [E("E1")]),
+    Row("G2", "§2.6", "Forecasts bound to links, with alerts", [E("E3")]),
+    Row("G3", "§2.6, §3.8", "Changes tested on a detached copy with no write path to the network", [
         T(UT + "test_read_only.py::test_collection_and_engine_never_send_write_requests"),
         T(UT + "test_read_only.py::test_no_part_of_the_twin_uses_the_lab_interface"),
         T(UT + "test_read_only.py::test_telemetry_adapter_exposes_only_read_operations"),
         T(UT + "test_simulation.py::test_live_model_is_never_modified"),
         LINT, E("E4")]),
-    Row("G4", "§3.2", "Affordable, open source, administrator-first", [
+    Row("G4", "§2.6", "Affordable, open source, administrator-first", [
         F("docs/INSTALL.md"), F("docs/USER_GUIDE.md"), E("E7"), Evidence("experiment", "E8-SUS")]),
     Row("Optimisation", "§3.2 (title)", "Recommend tested fixes for predicted congestion", [
         T(UT + "test_simulation.py::test_recommendations_prefer_least_disruptive_fix"),
@@ -209,15 +209,15 @@ MATRIX = [
         T(UT + "test_simulation.py::test_a_fix_that_takes_nothing_off_the_link_is_never_recommended"),
         T(IT + "test_engine.py::test_fixes_for_a_new_alert_are_worked_out_off_the_cycle"),
         E("E4"), E("E4_recommendations")]),
-    Row("Tables 3.2/3.3", "§3.6", "The six tables, their principal fields and relationships", [
+    Row("Tables 3.1/3.2", "§3.5", "The six tables, their principal fields and relationships", [
         T(IT + "test_schema.py::test_the_six_tables_exist_with_every_principal_field"),
         T(IT + "test_schema.py::test_primary_keys_are_the_named_id_fields"),
-        T(IT + "test_schema.py::test_table_3_3_relationships_are_foreign_keys_in_the_database"),
+        T(IT + "test_schema.py::test_the_relationships_are_foreign_keys_in_the_database"),
         T(IT + "test_schema.py::test_history_is_protected_from_cascading_deletes"),
         T(IT + "test_database.py::test_monitoring_record_is_device_or_link_never_both"),
         T(IT + "test_database.py::test_utilisation_must_be_a_percentage"),
         T(UT + "test_simulation.py::test_result_fits_the_simulation_result_table")]),
-    Row("Figure 3.4", "§3.5", "Data flow: processes 1.0-6.0 and stores D1-D4", [
+    Row("Figure 3.4", "§3.6", "Data flow: processes 1.0-6.0 and stores D1-D4", [
         T(UT + "test_pipeline_smoke.py::test_twin_replicates_emulator_state"),
         T(IT + "test_database.py::test_write_cycle_stores_one_row_per_link_and_device"),
         F("docs/diagrams/dfd.svg")]),

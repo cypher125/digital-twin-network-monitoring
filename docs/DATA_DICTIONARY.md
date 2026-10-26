@@ -1,9 +1,9 @@
 # Data dictionary
 
-These are the six application tables of Figure 3.3 and Table 3.2, as built in PostgreSQL.
+These are the six application tables of Figure 3.3 and Table 3.1, as built in PostgreSQL.
 - Column names and types are copied from the Django models (`backend/apps/twin/models.py`) as the migrations create them.
 - The schema conformance tests (`backend/tests/integration/test_schema.py`) check them against the live database.
-- Fields marked **\*** are additions to Table 3.2's principal fields (plan D13). Each one is explained in `AS_BUILT_NOTES.md` §1.
+- Fields marked **\*** are additions to Table 3.1's principal fields (plan D13). Each one is explained in `AS_BUILT_NOTES.md` §1.
 
 **Conventions:**
 - Units: Mbps for traffic and capacity, percent from 0 to 100, and confidence from 0 to 1.
@@ -118,7 +118,7 @@ One row per run of a scenario.
 
 **Index:** `simulationresult_queue_idx`, a partial index on queued runs, oldest first. The engine takes the next run from it.
 
-## Relationships (Table 3.3, plus two implied by Chapter 3)
+## Relationships (Table 3.2, plus two implied by Chapter 3)
 
 | Parent | Child | Through | Cardinality |
 |---|---|---|---|

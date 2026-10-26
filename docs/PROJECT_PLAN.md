@@ -95,11 +95,11 @@ Each decision below is stated once in settings and used everywhere. Chapter 4 sh
 | D8 | Authentication | Django session login with HttpOnly, Secure, SameSite cookies and CSRF protection. Passwords hashed with Argon2 (19 MiB memory, 2 passes, 1 lane: OWASP's minimum, sized for a 4 GB laptop) and checked by Django's password validators. Login lockout by username and address (django-axes), covering both the dashboard login and the admin. A read-only dashboard may stay open for a working day (absolute session limit 12 h), so passive alerting works. Any change (a write) needs activity within the last 30 minutes, measured by a last-activity stamp that automatic polls never update. Polls never rewrite the session; sessions are cached in memory in front of the database. | §3.8. The dashboard is served from the same origin as the API, which makes sessions the simplest secure option. |
 | D9 | Data sources | (a) Network emulator over an HTTP telemetry feed — used for the demo and the evaluation. (b) Read-only SNMP adapter (should-have). (c) CSV/JSON import of topology and historical data. | Fig 3.2 "SNMP polling / telemetry feed"; §1.4; §3.6. |
 | D10 | Where simulations run | Inside the Digital Twin Engine, on a deep copy of the live model. The API submits a run (a SimulationResult with status `queued`); the engine executes it within about a second and stores the result. | Fig 3.2 puts the simulation engine inside the twin engine, and §3.4 says the backend "submit[s] simulation scenarios". |
-| D11 | Traffic model inside the twin | A demand matrix (source, destination, traffic class, Mbps) built from flow telemetry. Demands are routed on shortest paths using an OSPF-style cost of 10,000 ÷ `capacity_mbps`, with traffic split equally across equal-cost paths. Link utilisation = the busier direction ÷ capacity. Flow records are an as-built extension beyond Chapter 3's "device and interface metrics". They are a standard monitoring feed (NetFlow/IPFIX), but they are logged in the as-built notes and the DFD. With SNMP-only sources (Should), a counter-only estimate is used instead: each access device's measured traffic is shared across destinations in proportion to their observed load (a gravity model). | Needed to "run traffic through the modified model" (§3.7). |
+| D11 | Traffic model inside the twin | A demand matrix (source, destination, traffic class, Mbps) built from flow telemetry. Demands are routed on shortest paths using an OSPF-style cost of 10,000 ÷ `capacity_mbps`, with traffic split equally across equal-cost paths. Link utilisation = the busier direction ÷ capacity. Flow records are an as-built extension beyond Chapter 3's "device and interface metrics". They are a standard monitoring feed (NetFlow/IPFIX), but they are logged in the as-built notes and the DFD. With SNMP-only sources (Should), a counter-only estimate is used instead: each access device's measured traffic is shared across destinations in proportion to their observed load (a gravity model). | Needed to run traffic "through the modified model" (§3.7). |
 | D12 | User accounts | Django's built-in authentication tables, kept outside the six application tables. `created_by` points to the auth user. | Keeps §3.5's "six tables" true for application data. |
-| D13 | Extra fields | Allowed, because Table 3.2 lists only "principal fields". Added: `NetworkDevice.configuration` (JSON), `NetworkLink.routing_cost`, `MonitoringRecord.status` and `received_at`, `Prediction.model_version`, `SimulationResult.status` and `run_by`. Each one is logged in the as-built notes. | FR1 needs device configuration, NFR1 needs a receipt time, and the audit trail needs run status. |
-| D14 | Frontend delivery | Next.js (App Router) with TypeScript and Tailwind, pre-rendered to a static build served by Caddy. Pages use query strings (`/device?id=12`) instead of dynamic `[id]` routes, because a static export cannot generate pages for IDs created at runtime. Live data follows D28. | No Node server is needed at runtime, which is lighter on low-end hardware (G4). Table 3.5 gives "server-side rendering" as a reason for choosing Next.js; §15 note 15 covers that wording. |
-| D15 | HTTPS | Caddy reverse proxy with its own local certificate authority (`tls internal`), HTTP→HTTPS redirect and HSTS. | Table 3.5 row 7. Caddy is a single small binary on Windows. |
+| D13 | Extra fields | Allowed, because Table 3.1 lists only "principal fields". Added: `NetworkDevice.configuration` (JSON), `NetworkLink.routing_cost`, `MonitoringRecord.status` and `received_at`, `Prediction.model_version`, `SimulationResult.status` and `run_by`. Each one is logged in the as-built notes. | FR1 needs device configuration, NFR1 needs a receipt time, and the audit trail needs run status. |
+| D14 | Frontend delivery | Next.js (App Router) with TypeScript and Tailwind, pre-rendered to a static build served by Caddy. Pages use query strings (`/device?id=12`) instead of dynamic `[id]` routes, because a static export cannot generate pages for IDs created at runtime. Live data follows D28. | No Node server is needed at runtime, which is lighter on low-end hardware (G4). Table 3.4 gives "server-side rendering" as a reason for choosing Next.js; §15 note 15 covers that wording. |
+| D15 | HTTPS | Caddy reverse proxy with its own local certificate authority (`tls internal`), HTTP→HTTPS redirect and HSTS. | Table 3.4 row 7. Caddy is a single small binary on Windows. |
 | D16 | Process model | Four programs on the laptop: network emulator, Digital Twin Engine, API server (Waitress) and Caddy. The database is on Neon (D24). A small supervisor starts the four programs and restarts any that crash. | NFR2. |
 | D17 | Versions (checked 18 Oct 2026) | Python 3.13, Django 5.2 LTS (5.2.18) with DRF 3.18, NetworkX 3.7, scikit-learn 1.9, NumPy 2.5, pandas 3.0, psycopg 3.3, PostgreSQL 17 on Neon (D24), Node 22, Next.js 16.4, React 19, Tailwind 4, Cytoscape.js 3.34, Recharts 3. Everything is pinned with lock files (`uv.lock`, `package-lock.json`). | LTS where it matters: Django 5.2 receives security fixes until April 2028. |
 | D18 | Time | Stored in UTC; displayed in Africa/Lagos time (WAT). | Avoids time-zone errors. |
@@ -109,7 +109,7 @@ Each decision below is stated once in settings and used everywhere. Chapter 4 sh
 | D22 | Alert lifecycle | An episode starts when a link gets a warning. It ends only after 5 consecutive cycles in which every horizon is below 85 %, so an alert hovering near 90 % does not flap on and off. The active alert shows the newest warning for its episode. Recommendations are computed once per episode, for at most one link per cycle, inside a time limit, so the next cycle always starts on time. Acknowledging alerts is a could-have. | Without hysteresis, a link near the threshold would raise a new alert, and new recommendations, every few cycles. E3 counts false alarms per episode. |
 | D23 | Supported size | Tested at 40, 100 and 200 devices (up to 400 links). | §1.4 targets "small to medium" networks. |
 | D24 | Database hosting | PostgreSQL 17 on Neon, a managed serverless PostgreSQL service, in region AWS Europe (Frankfurt), the closest Neon region to Lagos. Compute 0.25–1 CU; TLS required; connection details kept only in `backend/.env`. Separate Neon branches for development, tests and evaluation runs. Each API endpoint makes at most three queries, and a shared topology snapshot is cached for 1–2 s, so the network round trip stays well inside NFR1. | Your decision; it also suits the programme (Networking and Cloud Computing). The free plan gives 100 compute-hours a month — about 400 hours of running time at 0.25 CU — so the engine is stopped when not in use instead of running 24/7. |
-| D25 | Backend framework | Django + Django REST Framework, as Chapter 3 specifies. | Built-in user accounts, salted password hashing, roles, sessions/CSRF, ORM with migrations, and an admin site cover §3.8 with well-tested code. FastAPI's async speed brings nothing at this load (a few administrators polling every 2 s), and switching would mean rewriting the abstract, §1.4, §1.7, §3.4, Figures 3.1–3.2 and Table 3.5. |
+| D25 | Backend framework | Django + Django REST Framework, as Chapter 3 specifies. | Built-in user accounts, salted password hashing, roles, sessions/CSRF, ORM with migrations, and an admin site cover §3.8 with well-tested code. FastAPI's async speed brings nothing at this load (a few administrators polling every 2 s), and switching would mean rewriting the abstract, §1.4, §1.7, §3.4, Figures 3.1–3.2 and Table 3.4. |
 | D26 | Network time | The emulator's network clock is the only source of `timestamp`. It saves its clock and resumes from it, never rewinding, so history stays continuous across restarts and demo speed changes. The twin checks timestamps against the feed's own clock (never in the future, never out of order). If the source's clock goes backwards it stops ingesting and says so on the System Status page, rather than freezing silently. Retention and "minutes until" are measured in network time. `received_at` (wall clock) is used for staleness and NFR1. The dashboard shows network time and the demo speed. | In demo mode, network time runs ahead of the wall clock. Mixing the two would break the validity checks, retention and the unique timestamps. |
 | D27 | Runtime status | The engine's heartbeat, cycle timings, data-quality report and active model are written each cycle to Django's database cache table (a framework table, like the session table) and read by `GET system/status`. Model metrics also live in the model registry files under `var/models/`. | Keeps runtime state out of the six application tables without inventing a seventh. A shared file is unreliable on Windows while another process holds it open. |
 | D28 | Live updates | The dashboard polls a tiny `GET live` endpoint every second. It returns a state version that the engine bumps after each cycle's final commit and after each applied up/down event. Every payload carries the version it was built from, and the dashboard refetches until its data is at least as new as `live`, so event-driven failures also appear within a poll (§4.4). The topology snapshot cache is keyed on the version, not on time. Trend views load when a page opens and are cached for 10 minutes. Automatic requests carry an `X-Poll` header, so they never count as user activity (D8). | Keeps the database round trips to Neon low (D24) and leaves headroom for NFR1. |
@@ -239,7 +239,7 @@ Digital_Twin_Revised/
 
 ## 6. Data model
 
-Model and field names match Figure 3.3 and Table 3.2 exactly. Fields marked * are extra, non-principal fields (D13).
+Model and field names match Figure 3.3 and Table 3.1 exactly. Fields marked * are extra, non-principal fields (D13).
 
 ### 6.1 Application tables
 
@@ -328,7 +328,7 @@ Rule: once a scenario has results it cannot be edited. To change it, the adminis
 
 ### 6.2 Relationships
 
-These are the five relationships in Table 3.3, plus two that Chapter 3 implies but does not draw:
+These are the five relationships in Table 3.2, plus two that Chapter 3 implies but does not draw:
 
 - auth user 1 : N SimulationScenario (`created_by`);
 - auth user 1 : N SimulationResult (`run_by`).
@@ -424,7 +424,7 @@ Only the command line (`python -m netemu lab ...`) and the evaluation harness us
   - a health colour for every element;
   - shortest paths;
   - load bottlenecks (links at 90 % or more);
-  - structural bottlenecks: single points of failure (bridges and articulation points) and most-used links (edge betweenness). This delivers Table 3.5's "bottleneck identification". They are returned by `GET topology` and marked on the map with a "single point of failure" badge.
+  - structural bottlenecks: single points of failure (bridges and articulation points) and most-used links (edge betweenness). This delivers Table 3.4's "bottleneck identification". They are returned by `GET topology` and marked on the map with a "single point of failure" badge.
 - `snapshot()` returns a deep copy for the simulation engine.
 
 ### 7.5 Prediction engine (process 4.0)
@@ -442,7 +442,7 @@ Only the command line (`python -m netemu lab ...`) and the evaluation harness us
   - CPU of the two endpoint devices.
 - **Models:**
   - RandomForestRegressor is the production model: one multi-output model covers all four horizons (Figures 3.1 and 3.2).
-  - Gradient boosting (HistGradientBoostingRegressor, one per horizon) is the compared candidate (Table 3.5).
+  - Gradient boosting (HistGradientBoostingRegressor, one per horizon) is the compared candidate (Table 3.4).
   - Three baselines: persistence, same time yesterday, and linear trend.
   - Could: MLPRegressor, a small neural network, to connect the results to the neural-network literature in §2.4.
 - **One feature function.** Training, serving and E2 all call the same NumPy feature function over a per-link, time-indexed array. A parity test checks that offline and online features match to 1e-6, including gaps and counter resets.
@@ -812,7 +812,7 @@ Should items are attempted only once every Must passes.
 | G4 — affordable, open source, administrator-first | Lean stack, setup scripts, UI rules | all | E7, E8 |
 | Weakness 3 — long-term trend analysis | Trends & capacity page | P4, P5 | Playwright; screenshots |
 | "Optimization" / recommendations (§3.2) | Recommendation engine | P2, P3 | E4 recommendation check |
-| Tables 3.2 and 3.3 | Django models, constraints | P0 | Schema conformance test |
+| Tables 3.1 and 3.2 | Django models, constraints | P0 | Schema conformance test |
 | Figure 3.4 processes 1.0–6.0, stores D1–D4 | §4.3 | P1–P5 | As-built DFD in Chapter 4 |
 
 ---
@@ -823,26 +823,26 @@ These do not block the build; the software handles each one. Chapter 3 is still 
 
 1. **Use cases vs weaknesses (§3.7).** The text says the three use cases match the three weaknesses, but long-term trend analysis (weakness 3) has no use case. UC1 answers G1 instead. We build a Trends & capacity page. Optionally, add an "Analyse historical trends" use case to Figure 3.5.
 2. **"Six tables" (§3.5).** Users and roles also need storage, and `created_by` has no parent table in Figure 3.3. Django's built-in authentication tables cover this; say so in Chapter 4.
-3. **MonitoringRecord (Tables 3.2 and 3.3).** Each row holds either a device or a link, but Table 3.3 reads as if it holds both. Implemented as "exactly one of the two".
+3. **MonitoringRecord (Tables 3.1 and 3.2).** Each row holds either a device or a link, but Table 3.2 reads as if it holds both. Implemented as "exactly one of the two".
 4. **§3.4 prose vs Figure 3.2.** The prose places the Django backend in the "user interface layer". The figure places it in the "Application and Digital Twin Layer". The code follows the figure.
 5. **Figure 3.4.** Several flows are missing, a process and a store need adding, and one flow breaks DFD rules (§4.5 of this plan).
 6. **Undefined values.** Thresholds, cycle length, horizons, confidence and minimum history are fixed in §3 of this plan. Chapter 4 must state them.
 7. **"Optimization" and "recommendations".** Promised in the title and §3.2 but not designed in Chapter 3. Delivered by §7.7.
 8. **Abstract.** It already reports evaluation results in the past tense. Once E1–E4 are done, replace words like "accurately" with the measured figures.
-9. **LSTM vs Random Forest.** §2.4 says LSTM performs best, but the system uses Random Forest. Chapter 4 should justify the choice (light enough for G4, no GPU) using E2's comparison.
-10. **Random Forest vs "Random Forest and gradient boosting".** Figures 3.1 and 3.2 name only Random Forest; Table 3.5 names both. Random Forest is the production model and gradient boosting the compared candidate.
-11. **FR3 says "performance problems".** UC2 and the Prediction table cover link congestion only. Predictive alerts stay link-level; device problems are shown as current state.
+9. **LSTM vs Random Forest.** §2.5 says LSTM performs best, but the system uses Random Forest. Chapter 4 should justify the choice (light enough for G4, no GPU) using E2's comparison.
+10. **Random Forest vs "Random Forest and gradient boosting".** Figures 3.1 and 3.2 name only Random Forest; Table 3.4 names both. Random Forest is the production model and gradient boosting the compared candidate.
+11. **FR3 says "performance problem".** UC2 and the Prediction table cover link congestion only. Predictive alerts stay link-level; device problems are shown as current state.
 12. **Spelling.** Both "utilization" and "utilisation" are used. The tables use British spelling, so use it throughout.
 13. **References — please check before submission.**
     - Almasan et al. (2022) exists in IEEE Communications Magazine 60(11), pp. 22–27, but its real title is "Network Digital Twin: Context, Enabling Technologies, and Opportunities", not "...and open research challenges". Check the author list against the paper as well.
     - I could not find Adeyemi and Salami (2010) or Shi et al. (2021) as cited.
-    - The "MAPE below five percent" figure attributed to Vinayakumar et al. (2017) should be checked against the paper before Chapter 4 uses it as a benchmark.
+    - The "below five percent" MAPE figure attributed to Vinayakumar et al. (2017) should be checked against the paper before Chapter 4 uses it as a benchmark.
 14. **Changes from this plan that Chapter 3 should mention.**
-    - PostgreSQL is hosted on Neon: affects §3.5, Table 3.5 row 6 and Figure 3.2.
+    - PostgreSQL is hosted on Neon: affects §3.5, Table 3.4 row 6 and Figure 3.2.
     - The six tables gain the extra fields in D13.
     - There is a fourth use-case area, trend analysis.
     - Flow telemetry (NetFlow-style) joins device and interface metrics as an input (D11): affects §3.4, §3.6 and Figures 3.2 and 3.4.
-15. **Table 3.5 row 5.** The reason given for choosing Next.js is "server-side rendering", but the build pre-renders pages to static files and polls the API for live data (D14), to suit modest hardware (G4). Reword the reason to "pre-rendered pages and efficient handling of frequently updating data", or explain the difference in Chapter 4.
+15. **Table 3.4 row 5.** The reason given for choosing Next.js is "server-side rendering", but the build pre-renders pages to static files and polls the API for live data (D14), to suit modest hardware (G4). Reword the reason to "pre-rendered pages and efficient handling of frequently updating data", or explain the difference in Chapter 4.
 
 ---
 
@@ -903,7 +903,7 @@ Three independent critics reviewed v1.1: fidelity to the write-up, feasibility o
 | Retraining and status had no home in the dashboard | System status through D27; "Retrain now" (Should) (§7.5) |
 | Structural bottlenecks never reached the screen | Returned by `GET topology` and badged on the map (§7.4, §7.8) |
 | As-built DFD list incomplete and partly against DFD rules | Process 7.0 and store D5 added; flows routed through stores (§4.5) |
-| Table 3.5 credits server-side rendering, which a static build does not use | §15 note 15; query-string routes (D14) |
+| Table 3.4 credits server-side rendering, which a static build does not use | §15 note 15; query-string routes (D14) |
 | Unbounded Random Forest would need gigabytes of RAM | Fixed size limits, model cap 100 MB, no automatic nightly retrain (§7.5) |
 | Demo-speed network time would break validity checks and retention | Network clock is the only timestamp source, resumes and never rewinds (D26) |
 | Alerts near the threshold would flap and flood the engine with recommendations | Hysteresis and time-limited recommendations (D22) |
@@ -968,7 +968,7 @@ Three independent critics reviewed v1.1: fidelity to the write-up, feasibility o
 
 | Finding | Change |
 |---|---|
-| The traceability matrix promised a schema conformance test for Tables 3.2 and 3.3, but there was none | `tests/integration/test_schema.py` reads the live PostgreSQL catalogue: the six tables, every principal field, the primary keys, the Table 3.3 foreign keys, PROTECT on delete. It found that Django's foreign keys are checked at commit (deferred), so the test checks them immediately |
+| The traceability matrix promised a schema conformance test for Tables 3.1 and 3.2, but there was none | `tests/integration/test_schema.py` reads the live PostgreSQL catalogue: the six tables, every principal field, the primary keys, the Table 3.2 foreign keys, PROTECT on delete. It found that Django's foreign keys are checked at commit (deferred), so the test checks them immediately |
 | Adapters were said to plug in "through registries", but `run_twin` built the HTTP adapter directly | An adapter registry with `run_twin --adapter`; a test checks that every registered adapter is read-only and complete (NFR5, G3) |
 | NFR5 asks for a documented extension walkthrough | `docs/EXTENDING.md`: a scenario type and an adapter added on a copy of the repository and tested — 7 files, 123 lines, no change to the engine, API or dashboard |
 | §6.3 promised a data dictionary | `docs/DATA_DICTIONARY.md`, taken from the models |
@@ -982,3 +982,12 @@ Three independent critics reviewed v1.1: fidelity to the write-up, feasibility o
 | E7 measured memory as the working set (psutil rss), which Windows trims and compresses when RAM is short: the engine showed 47 MB while holding 262 MB | E6 and E7 record committed (private) memory and judge the budgets on it; the working set is kept beside it. With the right measure the API (about 340 MB) is over its 150 MB budget |
 | Every Next.js prefetch was a 404 behind Caddy: the static export writes `/x/__next.<group>/x/__PAGE__.txt`, the browser asks for `/x/__next.<group>.x.__PAGE__.txt` | Two rewrites in the Caddyfile; the screenshot run checks that no page logs an error |
 | E4 found that the recommendation engine kept fixes that changed nothing (a routing cost on a link with no other path), because the forecast load alone was below the threshold; the alert's forecast was 20–44 points below the real peak | Every immediate fix is also tested with the link at full load, and must take at least 5 points off it; a test covers it |
+
+**Supervisor's corrections after the seminar (v1.6, 26 October 2026):**
+
+| Finding | Change |
+|---|---|
+| The supervisor asked for the Research Gap to be in Chapter Two, and not as a table | §2.6 Research Gap is now prose, with G1–G4 named in the text. The old §2.6 Summary is §2.7, the old §3.1.3 Conceptual Model is §3.1.2, and Chapter 3's tables are now 3.1–3.4 (database tables, relationships, use cases, technology stack). Figure 3.1's gap column is headed "(from Section 2.6)". Every reference in the repository was renumbered, then audited against the corrected document |
+| The audit found section references from an earlier numbering: the requirements cited as §3.4.1/§3.4.2 (they are in §3.3), the database tables as §3.6 (§3.5), the data flow as §3.5 (§3.6) and the gaps as §3.2 (§2.6) | Corrected in the E8 matrix and the documents |
+| Two gap statements cited studies for claims that Table 2.1 does not support: Ahmed et al. (2016), an anomaly-detection survey, for forecasting; Shi et al. (2021), whose twin does test configurations, for "no facility for testing a change" | Each citation now supports only what Table 2.1 says of that study |
+| Moving text pushed three figure captions onto the next page: the Caption style keeps with the next paragraph, which suits table captions (above their tables) but drags a figure caption away from its image | Each figure image keeps with its caption, and figure captions no longer keep with the next paragraph |

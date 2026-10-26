@@ -179,7 +179,7 @@ class NetworkModel:
         return g
 
     def structural_bottlenecks(self) -> dict:
-        """Single points of failure and most-used links (Table 3.5: bottleneck identification)."""
+        """Single points of failure and most-used links (Table 3.4: bottleneck identification)."""
         g = self.operational_graph()
         bridges = [g.edges[u, v]["link_id"] for u, v in nx.bridges(g)] if g.number_of_edges() else []
         points = sorted(nx.articulation_points(g)) if g.number_of_nodes() else []

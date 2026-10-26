@@ -1,4 +1,4 @@
-"""Shared helpers for the API (Figure 3.4 process 6.0 reads D1-D4).
+"""Shared helpers for the API (Figure 3.4 process 6.0; as built it reads D1-D4).
 
 Designed for a remote database (Neon, D24): few queries per request, and payloads
 cached in this process by the engine's state version (D28), so many dashboards

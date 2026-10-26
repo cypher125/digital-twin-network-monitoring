@@ -10,7 +10,7 @@ import { engineBadge, fmtBytes, fmtCompact, fmtDateTime, fmtNumber, ROLE_LABEL }
 import { useLive, useMe, useSettings, useSystemStatus, useUsers } from "@/lib/queries";
 import type { ImportReport, ModelInfo, User, UserRow } from "@/lib/types";
 
-// The six tables of Table 3.2, in plain words (the table name is the tooltip). The two simulation
+// The six tables of Table 3.1, in plain words (the table name is the tooltip). The two simulation
 // tables also hold the scenarios and runs the twin makes itself for alerts, which the Simulation
 // page leaves out, so their counts say so.
 const TABLE_LABELS: Record<string, string> = {

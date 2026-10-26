@@ -1,6 +1,6 @@
 # Defence demonstration script
 
-A 10–15 minute live demonstration of the Digital Twin for the project defence. It shows each use case from Chapter 3: UC1 monitor, UC2 predictive alert, UC3 simulation, UC4 trends, and the two administrator roles.
+A 10–15 minute live demonstration of the Digital Twin for the project defence. It shows each use case from Chapter 3: UC1 monitor, UC2 predictive alert, UC3 simulation, plus UC4 trends (added by the build) and the two administrator roles.
 
 ## The day before
 

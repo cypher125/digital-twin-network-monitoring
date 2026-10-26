@@ -3,7 +3,7 @@
 The API stores a SimulationResult with status "queued" (and the run options in
 result_summary["request"]). The engine claims it, runs the scenario on a detached
 snapshot of the live model, and stores the outcome in the SimulationResult fields
-of Table 3.2.
+of Table 3.1.
 """
 from __future__ import annotations
 
@@ -57,7 +57,7 @@ def execute(job: SimulationResult, model: NetworkModel, forecast: ForecastProvid
     except ScenarioError as exc:
         job.result_summary = {"request": request, "error": str(exc)}
         job.status = RunStatus.FAILED
-    except Exception as exc:  # recorded so the activity log stays complete (Table 3.2)
+    except Exception as exc:  # recorded so the activity log stays complete (Table 3.1)
         log.exception("simulation %s failed", job.pk)
         job.result_summary = {"request": request, "error": f"Internal error: {type(exc).__name__}"}
         job.status = RunStatus.FAILED

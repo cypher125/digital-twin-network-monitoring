@@ -304,7 +304,7 @@ def erd() -> None:
     table(1880, 300, 400, "User", user, added=True)
     s.text(1165, 1160, "PK = primary key     FK = foreign key     1 : N = one-to-many relationship     "
            "- - - arrow = data dependency", size=30, fill=GREY)
-    s.text(1165, 1205, "* = field added in the as-built system (Table 3.2 lists principal fields only)     "
+    s.text(1165, 1205, "* = field added in the as-built system (Table 3.1 lists principal fields only)     "
            "dashed = Django's user table and its two relationships", size=30, fill=GREY)
     s.save("erd.svg")
 

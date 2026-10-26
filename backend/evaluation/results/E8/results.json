@@ -1,0 +1,97 @@
+{
+  "experiment": "E8",
+  "title": "Functional acceptance matrix",
+  "finished": "2026-10-26T08:17:33+00:00",
+  "seconds": 7.6,
+  "code_version": "b3ddbea+uncommitted",
+  "python": "3.13.1",
+  "machine": "Windows 11, Intel64 Family 6 Model 122 Stepping 8, GenuineIntel",
+  "machine_load": {
+    "at_start": {
+      "cpu_pct": 50.9,
+      "memory_used_pct": 92.1,
+      "busy_other_programs": [
+        {
+          "name": "System Idle Process",
+          "cpu_pct_of_machine": 30.3,
+          "command": ""
+        },
+        {
+          "name": "MsMpEng.exe",
+          "cpu_pct_of_machine": 12.4,
+          "command": ""
+        },
+        {
+          "name": "Void.exe",
+          "cpu_pct_of_machine": 7.5,
+          "command": "C:\\Program Files\\Void\\Void.exe --type=renderer --user-data-dir=C:\\Users\\cirex\\AppData\\Roaming\\Void -"
+        },
+        {
+          "name": "System",
+          "cpu_pct_of_machine": 6.4,
+          "command": ""
+        },
+        {
+          "name": "Void.exe",
+          "cpu_pct_of_machine": 5.7,
+          "command": "C:\\Program Files\\Void\\Void.exe --type=utility --utility-sub-type=node.mojom.NodeService --lang=en-US"
+        }
+      ]
+    },
+    "at_finish": {
+      "cpu_pct": 47.8,
+      "memory_used_pct": 91.0,
+      "busy_other_programs": [
+        {
+          "name": "System Idle Process",
+          "cpu_pct_of_machine": 34.1,
+          "command": ""
+        },
+        {
+          "name": "MsMpEng.exe",
+          "cpu_pct_of_machine": 12.3,
+          "command": ""
+        },
+        {
+          "name": "Void.exe",
+          "cpu_pct_of_machine": 6.0,
+          "command": "C:\\Program Files\\Void\\Void.exe --type=utility --utility-sub-type=node.mojom.NodeService --lang=en-US"
+        }
+      ]
+    }
+  },
+  "config": {
+    "source": "project plan \u00a714 and \u00a79"
+  },
+  "summary": {
+    "rows": 25,
+    "rows_pass": 21,
+    "rows_pending": [
+      "NFR3",
+      "G4"
+    ],
+    "rows_fail": [
+      "FR5",
+      "NFR1"
+    ],
+    "functional_rows_pass": "12/13",
+    "automated_evidence_pass": "101/101",
+    "tests_in_suite": 180,
+    "tests_passed": 180,
+    "walkthrough": {
+      "file": "C:\\Users\\cirex\\Downloads\\Digital_Twin_Revised\\var\\walkthrough\\report.json",
+      "url": "https://localhost",
+      "when": "2026-10-25T22:22:11.479Z",
+      "passed": 14,
+      "failed": 0
+    },
+    "failures": [
+      "FR5: experiment E5 (fail) maximum within 5 s",
+      "NFR1: experiment E5 (fail) maximum within 5 s"
+    ],
+    "verdict": {
+      "passed": false,
+      "criterion": "every FR and use-case row passes its tests and walkthrough steps"
+    }
+  }
+}

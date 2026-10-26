@@ -251,6 +251,14 @@ def read_junit(path) -> dict[str, tuple[str, str]]:
             out[nodeid] = ("missing", "skipped")
         else:
             out[nodeid] = ("pass", f"{float(case.get('time', 0)):.2f} s")
+    # a parametrised test is reported once per case (name[params]): it passes when every case passes
+    groups: dict[str, list] = {}
+    for nodeid, result in out.items():
+        if "[" in nodeid:
+            groups.setdefault(nodeid.split("[", 1)[0], []).append(result)
+    for base, results in groups.items():
+        failed = [message for status, message in results if status != "pass"]
+        out[base] = ("fail", f"{len(failed)} of {len(results)} cases failed: {failed[0]}") if failed else             ("pass", f"all {len(results)} cases")
     return out
 
 

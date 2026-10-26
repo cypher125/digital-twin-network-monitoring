@@ -251,6 +251,12 @@ The model must be under 100 MB.
 
 **Scheduling.** The engine polls just after each cycle boundary of the source's clock (network time).
 
+**Publish first, then housekeeping** (fixed on 26 October 2026, found by E5).
+- The hourly retention delete and the model-reload check used to run inside the cycle, before the cycle was published.
+- So every 60th cycle reached the dashboard 4–10 s late, which breached NFR1 at both 1× and 10×.
+- They now run after the publish. After the fix, E5 at 10× measured a maximum of 3.7 s, down from 10.1 s.
+- A test covers the order.
+
 **Late polls are counted, not hidden.** If a cycle takes longer than the time to the next boundary, the network has moved on when the engine polls again. Like a real SNMP poller, the twin cannot read a boundary afterwards. Such missed cycles are counted, logged as warnings and shown on the System page. Readings bridge the gap: the next counter difference covers the whole interval, and short gaps (up to 5 cycles) are forward-filled for forecasting. This mattered at the 20× demo speed (one cycle every 3 s): on the 2-core laptop, with model training and a browser running, about a quarter of the cycles were missed at first. Two changes reduce it:
 - the dashboard is told about a cycle as soon as its data and forecasts are stored;
 - the fixes for a new alert are worked out on a separate worker thread instead of inside the cycle. The worker starts work only while the main loop is waiting for the next boundary: Python runs one thread at a time, so a busy worker during a cycle would still slow it (one cycle took 8.9 s when five alerts started together during a test).
@@ -419,7 +425,7 @@ The results are in `docs/evidence/P6_recovery.json`, written by `deploy/recovery
 - **Replacing a file fails while another program is reading it.** This hit the emulator's clock file during a history run, and the supervisor's own state file while `start.ps1` checked whether the system was ready. Both writers now retry briefly and otherwise skip one update, and the readers retry too; neither can stop the system any more.
 - **Caddy installs its local root certificate the first time it serves HTTPS.** On Windows that opens a dialog, and Caddy waits until someone answers it. The Caddyfile now says `skip_install_trust`, and `setup.ps1` runs `caddy trust` once, at a moment when the user expects the question.
 
-**Offline fallback** (Should, done). `start.ps1 -LocalDatabase` starts the local PostgreSQL (pgserver), runs everything on it, and stops it again. `deploy/localpg.py install-timezones` adds the time-zone data its Windows build lacks. pgserver picks a new random port at every start, so a database restarted while the system runs would never be found again. `localpg.py` therefore reuses its previous port (found while preparing the E6 database-outage fault).
+**Offline fallback** (Should, done). `start.ps1 -LocalDatabase` starts the local PostgreSQL (pgserver), runs everything on it, and stops it again. `deploy/localpg.py install-timezones` adds the time-zone data its Windows build lacks. pgserver picks a new random port at every start, so a database restarted while the system runs would never be found again. `localpg.py` therefore reuses its previous port (found while preparing the E6 database-outage fault). Its `stop` also did nothing: pgserver's `cleanup()` never stops a server that is meant to outlive the script. So the database had never been stopped, and the soak's scheduled database outage did not happen. `stop` now uses `pg_ctl`, and the outage was tested on its own (E6).
 
 **Not yet verified:** `setup.ps1` end to end on a fresh Windows account with a real Neon project. The script asks for the connection string and the first password, so it cannot run unattended. The students' first installation is that test.
 

@@ -1,0 +1,8 @@
+# Not uploaded to Vercel: local builds, dependencies and test output
+.next
+out
+node_modules
+test-results
+playwright-report
+*.tsbuildinfo
+.env*

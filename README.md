@@ -4,18 +4,19 @@ HND final-year project, Department of Computer Science, Yaba College of Technolo
 
 The system keeps a live virtual model, or *digital twin*, of a campus network, updated from monitoring data every minute. It forecasts the utilisation of every link and warns administrators before congestion happens. Administrators can also test changes, such as a link failure, more traffic, a reroute or an upgrade, on a detached copy of the model, without any path to the real network.
 
-The design is Chapters 1–3 of the project report (`Digital_Twin_Network_Chapter1_3_REVISED.docx`). The evaluation is done on a network emulator that stands in for the real campus network and provides ground truth for every measurement.
+The design is Chapters 1–3 of the project report. The evaluation is done on a network emulator that stands in for the real campus network and provides ground truth for every measurement. The report itself and the drafts for its chapters stay out of the public repository until the report has been submitted.
 
 ## Start here
 
 | If you want to… | Read |
 |---|---|
 | install and run it on a Windows laptop | [docs/INSTALL.md](docs/INSTALL.md) |
+| run it in the cloud (API on Modal, dashboard on Vercel) | [docs/CLOUD.md](docs/CLOUD.md) |
 | use the dashboard | [docs/USER_GUIDE.md](docs/USER_GUIDE.md) |
 | give the project defence demo | [docs/DEMO_SCRIPT.md](docs/DEMO_SCRIPT.md) |
-| see how the build maps to Chapter 3, and what changed | [docs/AS_BUILT_NOTES.md](docs/AS_BUILT_NOTES.md), [docs/CHAPTER3_FIXES.md](docs/CHAPTER3_FIXES.md) |
+| see how the build maps to Chapter 3, and what changed | [docs/AS_BUILT_NOTES.md](docs/AS_BUILT_NOTES.md) |
 | see the plan, decisions and traceability matrix | [docs/PROJECT_PLAN.md](docs/PROJECT_PLAN.md) |
-| write Chapters 4 and 5 | [docs/CHAPTER4_5_OUTLINE.md](docs/CHAPTER4_5_OUTLINE.md), [docs/evidence/](docs/evidence/) |
+| see the evaluation evidence | [docs/evidence/](docs/evidence/), `backend/evaluation/results/` |
 | look up a table or column | [docs/DATA_DICTIONARY.md](docs/DATA_DICTIONARY.md) |
 | add a scenario type or a data source | [docs/EXTENDING.md](docs/EXTENDING.md) |
 
@@ -31,12 +32,12 @@ backend/                      Python 3.13 (uv): Django REST API and the Digital 
     simulation_engine/        what-if scenarios and recommendations             (5.0)
     runtime/                  the engine loop, persistence, simulation jobs
   apps/                       Django apps: twin (the six tables), api, accounts, lab
-  config/                     Django settings (dev, test, prod)
+  config/                     Django settings (dev, test, prod, cloud)
   evaluation/                 experiments E1-E9 and their results (results/E*/)
   tests/                      unit and integration tests (pytest)
-frontend/                     Next.js 16 dashboard (static build) and Playwright scripts
+frontend/                     Next.js 16 dashboard (static build; a Next.js app on Vercel) and Playwright scripts
 data/topologies/campus.yaml   the campus network: 34 devices, 43 links
-deploy/                       setup, start and stop scripts, supervisor, Caddy configuration
+deploy/                       setup, start and stop scripts, supervisor, Caddy configuration, Modal app
 docs/                         guides, design notes, diagrams (docs/diagrams/), evidence
 figures/                      the Chapter 3 figures as designed
 ```

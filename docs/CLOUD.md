@@ -4,8 +4,8 @@ The laptop deployment (`docs/INSTALL.md`) stays the reference. The cloud copy ru
 
 | Part | Where | What runs there |
 |---|---|---|
-| API and twin | [Modal](https://modal.com), app `digital-twin` | one always-on container: PostgreSQL, the network emulator, the Digital Twin Engine and the Django API on Waitress (`deploy/modal_app.py`) |
-| Dashboard | [Vercel](https://vercel.com), project `digital-twin-network-monitoring` | the Next.js dashboard; it forwards `/api`, `/admin` and `/static` to Modal |
+| API and twin | [Modal](https://modal.com), app `digital-twin`, https://osawayecyrus--digital-twin.us-east.modal.run | one always-on container: PostgreSQL, the network emulator, the Digital Twin Engine and the Django API on Waitress (`deploy/modal_app.py`) |
+| Dashboard | [Vercel](https://vercel.com), project `digital-twin-network-monitoring` (team `osawaye-cyrus-projects`), https://digital-twin-network-monitoring.vercel.app | the Next.js dashboard; it forwards `/api`, `/admin` and `/static` to Modal |
 
 The browser only ever talks to the Vercel address. Vercel forwards the Django paths to Modal (`frontend/next.config.ts`), so the session and CSRF cookies are first-party and no CORS is needed, the same arrangement as Caddy on the laptop.
 
@@ -33,7 +33,7 @@ modal app stop digital-twin             # switch off (the data stays in the volu
 modal app logs digital-twin             # follow the logs
 ```
 
-The dashboard is deployed from `frontend/` with the Vercel CLI (`vercel deploy --prod`). The Vercel project needs one environment variable: `DT_DJANGO_URL=https://osawayecyrus--digital-twin.modal.run`. Sign in only at https://digital-twin-network-monitoring.vercel.app. The per-deployment addresses that the CLI also prints are refused at sign-in, because Django trusts that one address only (`DJANGO_CSRF_TRUSTED_ORIGINS`).
+The dashboard is deployed from `frontend/` with the Vercel CLI (`vercel deploy --prod`). The Vercel project needs one environment variable: `DT_DJANGO_URL=https://osawayecyrus--digital-twin.us-east.modal.run`, the address `modal deploy` prints. Sign in only at https://digital-twin-network-monitoring.vercel.app. The per-deployment addresses that the CLI also prints are refused at sign-in, because Django trusts that one address only. Both public addresses are set in `config/settings/cloud.py` (`DT_MODAL_HOST`, `DT_DASHBOARD_HOST`); they are not secret.
 
 ## Cost
 
@@ -41,7 +41,7 @@ Modal bills a container for the CPU and memory it reserves or uses, whichever is
 
 ## Accounts and secrets
 
-The Modal secret `digital-twin` holds `DJANGO_SECRET_KEY`, `DJANGO_ALLOWED_HOSTS`, `DJANGO_CSRF_TRUSTED_ORIGINS`, and the names and passwords of the two cloud accounts, one Senior and one Junior Administrator (`DT_SENIOR_USERNAME`, `DT_SENIOR_PASSWORD`, `DT_JUNIOR_USERNAME`, `DT_JUNIOR_PASSWORD`). The account names are kept out of this repository on purpose. Sign-in lockout counts per username (see below), so anyone who knew a name could keep that account locked. The values are in `var/cloud/secret.env`, and the accounts are listed in `var/cloud/accounts.txt`. Both files are git-ignored, so never commit or screenshot them. To change a value, edit `secret.env`, then recreate the secret and redeploy:
+The Modal secret `digital-twin` holds `DJANGO_SECRET_KEY` and the names and passwords of the two cloud accounts, one Senior and one Junior Administrator (`DT_SENIOR_USERNAME`, `DT_SENIOR_PASSWORD`, `DT_JUNIOR_USERNAME`, `DT_JUNIOR_PASSWORD`). The account names are kept out of this repository on purpose. Sign-in lockout counts per username (see below), so anyone who knew a name could keep that account locked. The values are in `var/cloud/secret.env`, and the accounts are listed in `var/cloud/accounts.txt`. Both files are git-ignored, so never commit or screenshot them. To change a value, edit `secret.env`, then recreate the secret and redeploy:
 
 ```powershell
 modal secret create digital-twin --from-dotenv var/cloud/secret.env --force

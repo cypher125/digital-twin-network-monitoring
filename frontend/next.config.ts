@@ -27,16 +27,18 @@ const shared: NextConfig = {
 
 const forwardDjango = (url: string): NextConfig => ({
   ...shared,
-  // Django's admin paths end in a slash. Next.js must neither redirect it away nor drop it when
-  // rewriting (":path*" alone does), or Django adds it back and the browser loops.
+  // A rewrite's source matches with or without a trailing slash, and ":path*" drops it. The API
+  // never ends in a slash (apps/api/urls.py) and Django's admin always does, so each is forwarded
+  // in its own form; otherwise Django adds the slash back and the browser loops (or the API 404s).
+  // Next.js must not redirect the slash away first either.
   skipTrailingSlashRedirect: true,
   async rewrites() {
-    return ["api", "admin", "static"].flatMap((prefix) => [
-      { source: `/${prefix}`, destination: `${url}/${prefix}/` },
-      { source: `/${prefix}/`, destination: `${url}/${prefix}/` },
-      { source: `/${prefix}/:path+/`, destination: `${url}/${prefix}/:path+/` },
-      { source: `/${prefix}/:path*`, destination: `${url}/${prefix}/:path*` },
-    ]);
+    return [
+      { source: "/api/:path*", destination: `${url}/api/:path*` },
+      { source: "/static/:path*", destination: `${url}/static/:path*` },
+      { source: "/admin", destination: `${url}/admin/` },
+      { source: "/admin/:path+", destination: `${url}/admin/:path+/` },
+    ];
   },
 });
 

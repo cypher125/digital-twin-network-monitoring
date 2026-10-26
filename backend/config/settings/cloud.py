@@ -2,12 +2,20 @@
 
 Modal terminates HTTPS. The dashboard on Vercel forwards /api, /admin and /static to Modal, so
 the browser only ever talks to the dashboard's own address and the session and CSRF cookies stay
-first-party. DJANGO_ALLOWED_HOSTS and DJANGO_CSRF_TRUSTED_ORIGINS come from the Modal secret.
+first-party.
 """
 import os
 from pathlib import Path
 
 from .prod import *  # noqa: F403
+
+# The two public addresses. They are not secret, so they are set here rather than in the Modal
+# secret. Requests arrive with Modal's address as their host (Waitress drops X-Forwarded-Host),
+# and the dashboard's pages send their own address as the Origin of every sign-in and change.
+MODAL_HOST = os.environ.get("DT_MODAL_HOST", "osawayecyrus--digital-twin.us-east.modal.run")
+DASHBOARD_HOST = os.environ.get("DT_DASHBOARD_HOST", "digital-twin-network-monitoring.vercel.app")
+ALLOWED_HOSTS = [MODAL_HOST, DASHBOARD_HOST]
+CSRF_TRUSTED_ORIGINS = [f"https://{DASHBOARD_HOST}"]
 
 # Behind two proxies (Vercel, then Modal) the client's address arrives in a header that anyone
 # calling Modal directly can write, so sign-in lockout counts failures per username, not per

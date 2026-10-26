@@ -68,8 +68,7 @@ volume = modal.Volume.from_name("digital-twin-var", create_if_missing=True)
 ACCOUNTS = (("senior", "DT_SENIOR_USERNAME", "DT_SENIOR_PASSWORD"),
             ("junior", "DT_JUNIOR_USERNAME", "DT_JUNIOR_PASSWORD"))
 secret = modal.Secret.from_name("digital-twin", required_keys=[
-    "DJANGO_SECRET_KEY", "DJANGO_ALLOWED_HOSTS", "DJANGO_CSRF_TRUSTED_ORIGINS",
-    *(key for _, *keys in ACCOUNTS for key in keys)])
+    "DJANGO_SECRET_KEY", *(key for _, *keys in ACCOUNTS for key in keys)])
 app = modal.App("digital-twin", image=image)
 
 

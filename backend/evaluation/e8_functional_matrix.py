@@ -147,6 +147,8 @@ MATRIX = [
         T(IT + "test_api.py::test_trends_capacity_and_export"),
         T(IT + "test_api.py::test_network_trend_covers_up_to_14_days"),
         T(IT + "test_api.py::test_capacity_planning_fits_complete_days_only"),
+        T(IT + "test_api.py::test_capacity_growth_is_not_pulled_by_where_the_weekends_fall"),
+        T(UT + "test_netemu.py::test_a_resumed_emulator_keeps_its_growth_and_calendar"),
         E("E9")]),
     Row("Auth", "Figure 3.5 «include»", "Authenticate (log in) with two roles", [
         W("Sign-in refuses a wrong password"), W(SIGN_IN), W("Senior Administrator signs out"),
@@ -159,6 +161,7 @@ MATRIX = [
         W("NFR1: the overview shows each new cycle within 5 s of it being stored"),
         T(IT + "test_engine.py::test_the_published_network_time_is_never_behind_the_stored_cycle"),
         T(IT + "test_api.py::test_polls_do_not_count_as_activity"),
+        T(IT + "test_engine.py::test_retention_runs_after_the_cycle_is_published"),
         E("E5")]),
     Row("NFR2", "§3.4.2", "Reliability: runs unattended and recovers from faults", [
         T(UT + "test_netemu.py::test_a_locked_clock_file_never_stops_the_network"),
@@ -166,7 +169,7 @@ MATRIX = [
         T(IT + "test_database.py::test_duplicate_readings_are_impossible"),
         T(IT + "test_database.py::test_model_starts_warm_from_the_latest_readings"),
         F("docs/evidence/P6_recovery.json"),
-        E("E6")]),
+        E("E6"), E("E6_database")]),
     Row("NFR3", "§3.4.2", "Usability for administrators without data-science training", [
         F("docs/evaluation/E8_USABILITY_KIT.md"),
         Evidence("experiment", "E8-SUS")]),
@@ -187,6 +190,7 @@ MATRIX = [
         LINT,
         T(UT + "test_simulation.py::test_registry_covers_every_scenario_type"),
         T(UT + "test_read_only.py::test_adapter_interface_has_only_read_operations"),
+        T(UT + "test_read_only.py::test_every_registered_adapter_is_read_only_and_complete"),
         F("docs/EXTENDING.md")]),
     # ---------------------------------------------------------------- goals and other design points
     Row("G1", "§3.2", "A live replica of the network", [E("E1")]),
@@ -202,8 +206,9 @@ MATRIX = [
     Row("Optimisation", "§3.2 (title)", "Recommend tested fixes for predicted congestion", [
         T(UT + "test_simulation.py::test_recommendations_prefer_least_disruptive_fix"),
         T(UT + "test_simulation.py::test_recommendations_for_a_link_with_no_alternative_path"),
+        T(UT + "test_simulation.py::test_a_fix_that_takes_nothing_off_the_link_is_never_recommended"),
         T(IT + "test_engine.py::test_fixes_for_a_new_alert_are_worked_out_off_the_cycle"),
-        E("E4")]),
+        E("E4"), E("E4_recommendations")]),
     Row("Tables 3.2/3.3", "§3.6", "The six tables, their principal fields and relationships", [
         T(IT + "test_schema.py::test_the_six_tables_exist_with_every_principal_field"),
         T(IT + "test_schema.py::test_primary_keys_are_the_named_id_fields"),

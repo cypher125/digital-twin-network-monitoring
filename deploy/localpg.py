@@ -77,7 +77,11 @@ def main() -> None:
     _pin_port()
     server = pgserver.get_server(DATA, cleanup_mode=None)  # keep running after this script exits
     if action == "stop":
-        server.cleanup()
+        # server.cleanup() does nothing with cleanup_mode=None (the server is meant to outlive this
+        # script), so it never stopped the database: stop it with pg_ctl (found by the E6 soak test)
+        from pgserver._commands import pg_ctl
+
+        pg_ctl(["-w", "-m", "fast", "stop"], pgdata=DATA)
         print("stopped")
         return
     uri = server.get_uri()

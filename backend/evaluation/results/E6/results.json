@@ -1,0 +1,227 @@
+{
+  "experiment": "E6",
+  "title": "Reliability soak test (NFR2)",
+  "finished": "2026-10-26T07:18:28+00:00",
+  "seconds": 28844.0,
+  "code_version": "d3318c1+uncommitted",
+  "python": "3.13.1",
+  "machine": "Windows 11, Intel64 Family 6 Model 122 Stepping 8, GenuineIntel",
+  "machine_load": {
+    "at_start": {
+      "cpu_pct": 96.8,
+      "memory_used_pct": 94.4,
+      "busy_other_programs": [
+        {
+          "name": "System",
+          "cpu_pct_of_machine": 17.4,
+          "command": ""
+        },
+        {
+          "name": "Void.exe",
+          "cpu_pct_of_machine": 7.3,
+          "command": "C:\\Program Files\\Void\\Void.exe --type=renderer --user-data-dir=C:\\Users\\cirex\\AppData\\Roaming\\Void -"
+        },
+        {
+          "name": "MemCompression",
+          "cpu_pct_of_machine": 6.3,
+          "command": ""
+        },
+        {
+          "name": "MsMpEng.exe",
+          "cpu_pct_of_machine": 5.4,
+          "command": ""
+        }
+      ]
+    },
+    "at_finish": {
+      "cpu_pct": 29.3,
+      "memory_used_pct": 95.7,
+      "busy_other_programs": [
+        {
+          "name": "System",
+          "cpu_pct_of_machine": 19.7,
+          "command": ""
+        },
+        {
+          "name": "System Idle Process",
+          "cpu_pct_of_machine": 15.2,
+          "command": ""
+        },
+        {
+          "name": "Void.exe",
+          "cpu_pct_of_machine": 9.9,
+          "command": "C:\\Program Files\\Void\\Void.exe --type=utility --utility-sub-type=node.mojom.NodeService --lang=en-US"
+        },
+        {
+          "name": "MemCompression",
+          "cpu_pct_of_machine": 6.8,
+          "command": ""
+        },
+        {
+          "name": "Void.exe",
+          "cpu_pct_of_machine": 6.2,
+          "command": "C:\\Program Files\\Void\\Void.exe --type=utility --utility-sub-type=node.mojom.NodeService --lang=en-US"
+        }
+      ]
+    }
+  },
+  "config": {
+    "hours": 8.0,
+    "url": "https://localhost",
+    "sample_seconds": 10.0,
+    "quick": false,
+    "faults_at_share_of_run": [
+      0.1,
+      0.25,
+      0.4,
+      0.55,
+      0.7,
+      0.85
+    ]
+  },
+  "summary": {
+    "started": "2026-10-26T00:17:58",
+    "started_utc": "2026-10-25T23:17:58+00:00",
+    "hours": 8.0,
+    "samples": 2879,
+    "availability_pct": 99.9,
+    "availability_outside_faults_pct": 100.0,
+    "faults": [
+      {
+        "fault": "engine killed",
+        "at_s": 2880.7,
+        "at_utc": "2026-10-26T00:05:58+00:00",
+        "skipped": false,
+        "recovered_after_s": 10.0
+      },
+      {
+        "fault": "API killed",
+        "at_s": 7201.1,
+        "at_utc": "2026-10-26T01:17:59+00:00",
+        "skipped": false,
+        "recovered_after_s": 10.0
+      },
+      {
+        "fault": "emulator killed",
+        "at_s": 11525.8,
+        "at_utc": "2026-10-26T02:30:03+00:00",
+        "skipped": false,
+        "recovered_after_s": 20.0
+      },
+      {
+        "fault": "ISP-B link failure (20 network minutes)",
+        "at_s": 15847.6,
+        "at_utc": "2026-10-26T03:42:05+00:00",
+        "skipped": false,
+        "twin_shows_down_after_s": 10.0,
+        "twin_shows_up_again_after_s": 1200.1,
+        "recovered_after_s": 1200.1
+      },
+      {
+        "fault": "database outage (90 s)",
+        "at_s": 20168.2,
+        "at_utc": "2026-10-26T04:54:06+00:00",
+        "skipped": false,
+        "outage_ended_s": 20258.2,
+        "note": "restarted at 127.0.0.1:26029/postgres",
+        "recovered_after_s": 90.0
+      },
+      {
+        "fault": "Caddy killed",
+        "at_s": 24482.7,
+        "at_utc": "2026-10-26T06:06:00+00:00",
+        "skipped": false,
+        "recovered_after_s": 10.0
+      }
+    ],
+    "all_faults_recovered_without_manual_steps": true,
+    "max_recovery_s": 1200.1,
+    "engine_cycles_missed_reported": 0,
+    "engine_cycles_stored_reported": 480,
+    "distinct_cycles_seen_by_the_dashboard": 481,
+    "memory": {
+      "api": {
+        "private_start_mb": 242.1,
+        "private_end_mb": 301.0,
+        "private_max_mb": 303.1,
+        "growth_mb_per_hour": 8.48
+      },
+      "caddy": {
+        "private_start_mb": 61.3,
+        "private_end_mb": 61.2,
+        "private_max_mb": 98.3,
+        "growth_mb_per_hour": -0.47
+      },
+      "emulator": {
+        "private_start_mb": 83.1,
+        "private_end_mb": 97.4,
+        "private_max_mb": 97.4,
+        "growth_mb_per_hour": 1.18
+      },
+      "engine": {
+        "private_start_mb": 273.7,
+        "private_end_mb": 275.3,
+        "private_max_mb": 276.9,
+        "growth_mb_per_hour": 0.24
+      }
+    },
+    "local_database": true,
+    "target": "recovers with no manual steps",
+    "target_met": true,
+    "recovery_new_data": {
+      "rule": "seconds from the fault to the first fresh sample showing a cycle newer than any seen at the fault",
+      "faults": [
+        {
+          "fault": "engine killed",
+          "at_utc": "2026-10-26T00:05:58+00:00",
+          "soak_recovered_after_s": "10.0",
+          "new_data_after_s": 50.0,
+          "newest_cycle_at_fault": "2026-10-29T00:15:00+00:00",
+          "first_new_cycle": "2026-10-29T00:16:00+00:00"
+        },
+        {
+          "fault": "API killed",
+          "at_utc": "2026-10-26T01:17:59+00:00",
+          "soak_recovered_after_s": "10.0",
+          "new_data_after_s": 10.0,
+          "newest_cycle_at_fault": "2026-10-29T01:27:00+00:00",
+          "first_new_cycle": "2026-10-29T01:28:00+00:00"
+        },
+        {
+          "fault": "emulator killed",
+          "at_utc": "2026-10-26T02:30:03+00:00",
+          "soak_recovered_after_s": "20.0",
+          "new_data_after_s": 20.0,
+          "newest_cycle_at_fault": "2026-10-29T02:39:00+00:00",
+          "first_new_cycle": "2026-10-29T02:40:00+00:00"
+        },
+        {
+          "fault": "ISP-B link failure (20 network minutes)",
+          "at_utc": "2026-10-26T03:42:05+00:00",
+          "soak_recovered_after_s": "1200.1",
+          "new_data_after_s": 30.0,
+          "newest_cycle_at_fault": "2026-10-29T03:51:00+00:00",
+          "first_new_cycle": "2026-10-29T03:52:00+00:00"
+        },
+        {
+          "fault": "database outage (90 s)",
+          "at_utc": "2026-10-26T04:54:06+00:00",
+          "soak_recovered_after_s": "90.0",
+          "new_data_after_s": 30.0,
+          "newest_cycle_at_fault": "2026-10-29T05:03:00+00:00",
+          "first_new_cycle": "2026-10-29T05:04:00+00:00"
+        },
+        {
+          "fault": "Caddy killed",
+          "at_utc": "2026-10-26T06:06:00+00:00",
+          "soak_recovered_after_s": "10.0",
+          "new_data_after_s": 30.0,
+          "newest_cycle_at_fault": "2026-10-29T06:15:00+00:00",
+          "first_new_cycle": "2026-10-29T06:16:00+00:00"
+        }
+      ],
+      "all_recovered": true,
+      "max_new_data_after_s": 50.0
+    }
+  }
+}

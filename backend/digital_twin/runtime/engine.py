@@ -174,12 +174,19 @@ class TwinEngine:
             "forecasts": len(forecasts),
             "status_changes": len(changes),
         }
+        return True
+
+    def housekeeping(self) -> None:
+        """Retention and model reloads, run after the cycle has been published, so that the hourly
+        delete never holds back the dashboard's new data. Evaluation E5 found every 60th cycle on
+        screen 4-10 s late while it ran inside the cycle."""
+        if self.last_cycle is None:
+            return
         if self.cycles % self.config.prune_every_cycles == 0:
-            persistence.prune(clean.timestamp, self.config.monitoring_retention_days,
+            persistence.prune(self.last_cycle.timestamp, self.config.monitoring_retention_days,
                               self.config.prediction_retention_days)
         if self.forecasting is not None and self.cycles % self.config.reload_models_every_cycles == 0:
             self.forecasting.reload_if_changed()
-        return True
 
     def seconds_until_next_poll(self) -> float:
         """Wall-clock wait until just after the source's next cycle boundary (network time, D26)."""
@@ -382,6 +389,8 @@ class TwinEngine:
                     self.between_cycles.set()
                 if stored:
                     self.state, self.last_error = "running", ""
+                    self.publish_status()    # the dashboard sees the new cycle now (D28) ...
+                    self.housekeeping()      # ... and the hourly retention delete comes after it
                 elif self.source.get("mode") == "stepped":
                     self.state = "paused: the data source clock is stepped by the test harness"
                 backoff = 1.0

@@ -1,0 +1,7 @@
+fault,at_s,at_utc,skipped,recovered_after_s,twin_shows_down_after_s,twin_shows_up_again_after_s,outage_ended_s,note,error
+engine killed,2880.7,2026-10-26T00:05:58+00:00,False,10.0,,,,,
+API killed,7201.1,2026-10-26T01:17:59+00:00,False,10.0,,,,,
+emulator killed,11525.8,2026-10-26T02:30:03+00:00,False,20.0,,,,,
+ISP-B link failure (20 network minutes),15847.6,2026-10-26T03:42:05+00:00,False,1200.1,10.0,1200.1,,,
+database outage (90 s),20168.2,2026-10-26T04:54:06+00:00,False,90.0,,,20258.2,restarted at 127.0.0.1:26029/postgres,
+Caddy killed,24482.7,2026-10-26T06:06:00+00:00,False,10.0,,,,,

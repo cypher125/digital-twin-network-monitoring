@@ -115,3 +115,19 @@ def test_fixes_for_a_new_alert_are_worked_out_off_the_cycle(engine):
     stored = SimulationResult.objects.filter(scenario__parameters__trigger__link_id=link.link_id).count()
     assert stored == twin.recommendations_made
     assert twin.recommend_next(timeout=0.01) is False          # nothing waiting
+
+
+def test_retention_runs_after_the_cycle_is_published(engine, monkeypatch):
+    """Found by E5: the hourly retention delete ran inside the cycle, so every 60th cycle reached
+    the dashboard 4-10 s late. Now the cycle is published first and the delete comes after it."""
+    from dataclasses import replace
+
+    runtime, twin = engine
+    twin.config = replace(twin.config, prune_every_cycles=1)
+    seen = []
+    monkeypatch.setattr(persistence, "prune", lambda *args, **kwargs: seen.append(persistence.read_status()))
+    runtime.step_cycles(1)
+    assert twin.run_cycle() is True and seen == []                 # nothing deleted inside the cycle
+    twin.publish_status()                                          # as run_forever does, then:
+    twin.housekeeping()
+    assert len(seen) == 1 and seen[0]["state_version"] == twin.state_version   # already on the dashboard

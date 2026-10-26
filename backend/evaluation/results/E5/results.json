@@ -1,0 +1,152 @@
+{
+  "experiment": "E5",
+  "title": "Responsiveness (NFR1)",
+  "finished": "2026-10-26T07:43:45+00:00",
+  "seconds": 12.1,
+  "code_version": "eec851f+uncommitted",
+  "python": "3.13.1",
+  "machine": "Windows 11, Intel64 Family 6 Model 122 Stepping 8, GenuineIntel",
+  "machine_load": {
+    "at_start": {
+      "cpu_pct": 100.0,
+      "memory_used_pct": 94.2,
+      "busy_other_programs": [
+        {
+          "name": "msedge.exe",
+          "cpu_pct_of_machine": 30.1,
+          "command": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe --no-startup-window /prefetch:5"
+        },
+        {
+          "name": "MsMpEng.exe",
+          "cpu_pct_of_machine": 10.6,
+          "command": ""
+        },
+        {
+          "name": "Void.exe",
+          "cpu_pct_of_machine": 5.3,
+          "command": "C:\\Program Files\\Void\\Void.exe --type=renderer --user-data-dir=C:\\Users\\cirex\\AppData\\Roaming\\Void -"
+        }
+      ]
+    },
+    "at_finish": {
+      "cpu_pct": 100.0,
+      "memory_used_pct": 95.1,
+      "busy_other_programs": [
+        {
+          "name": "msedge.exe",
+          "cpu_pct_of_machine": 28.8,
+          "command": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe --no-startup-window /prefetch:5"
+        },
+        {
+          "name": "System",
+          "cpu_pct_of_machine": 13.6,
+          "command": ""
+        },
+        {
+          "name": "MsMpEng.exe",
+          "cpu_pct_of_machine": 10.2,
+          "command": ""
+        },
+        {
+          "name": "Void.exe",
+          "cpu_pct_of_machine": 5.2,
+          "command": "C:\\Program Files\\Void\\Void.exe --type=renderer --user-data-dir=C:\\Users\\cirex\\AppData\\Roaming\\Void -"
+        }
+      ]
+    }
+  },
+  "config": {
+    "exclude_fault_windows_from": "evaluation/results/E6/faults.csv",
+    "fault_margin_s": 120
+  },
+  "summary": {
+    "runs": {
+      "speed1": {
+        "speed": 1,
+        "url": "https://localhost",
+        "measured": "2026-10-26T05:58:27.585Z",
+        "received_to_screen": {
+          "samples": 366,
+          "timed_out": 0,
+          "max_s": 7.727,
+          "max_shown_s": 7.727,
+          "p50_s": 1.599,
+          "p95_s": 2.777,
+          "mean_s": 1.731,
+          "share_within_5s": 0.9945
+        },
+        "received_to_api": {
+          "samples": 366,
+          "timed_out": 0,
+          "max_s": 6.803,
+          "max_shown_s": 6.803,
+          "p50_s": 0.847,
+          "p95_s": 1.75,
+          "mean_s": 0.934,
+          "share_within_5s": 0.9973
+        },
+        "api_to_screen": {
+          "samples": 366,
+          "timed_out": 0,
+          "max_s": 2.435,
+          "max_shown_s": 2.435,
+          "p50_s": 0.812,
+          "p95_s": 1.363,
+          "mean_s": 0.797,
+          "share_within_5s": 1.0
+        },
+        "left_out_in_fault_windows": {
+          "engine killed": 2,
+          "API killed": 3,
+          "emulator killed": 3,
+          "ISP-B link failure (20 network minutes)": 22,
+          "database outage (90 s)": 4
+        }
+      },
+      "speed10": {
+        "speed": 10,
+        "url": "https://localhost",
+        "measured": "2026-10-25T22:18:53.168Z",
+        "received_to_screen": {
+          "samples": 200,
+          "timed_out": 2,
+          "max_s": null,
+          "max_shown_s": 10.065,
+          "p50_s": 1.64,
+          "p95_s": 3.32,
+          "mean_s": 1.803,
+          "share_within_5s": 0.975
+        },
+        "received_to_api": {
+          "samples": 200,
+          "timed_out": 0,
+          "max_s": 9.74,
+          "max_shown_s": 9.74,
+          "p50_s": 0.883,
+          "p95_s": 2.209,
+          "mean_s": 1.052,
+          "share_within_5s": 0.99
+        },
+        "api_to_screen": {
+          "samples": 198,
+          "timed_out": 0,
+          "max_s": 3.695,
+          "max_shown_s": 3.695,
+          "p50_s": 0.723,
+          "p95_s": 1.239,
+          "mean_s": 0.77,
+          "share_within_5s": 1.0
+        },
+        "left_out_in_fault_windows": {}
+      }
+    },
+    "worst_received_to_screen_s": 10.065,
+    "any_timed_out": true,
+    "target": "maximum within 5 s",
+    "target_met": false,
+    "target_nfr1": {
+      "rule": "every new cycle on screen within 5 s of the data arriving (maximum)",
+      "met": false
+    }
+  }
+}

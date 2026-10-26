@@ -13,6 +13,15 @@ from .prod import *  # noqa: F403
 # calling Modal directly can write, so sign-in lockout counts failures per username, not per
 # username and address (D8).
 AXES_LOCKOUT_PARAMETERS = ["username"]
+# axes warns that without the address an attacker can rotate cookies or User-Agents; failures
+# here are counted per username whatever else changes, and the accounts' passwords are random
+SILENCED_SYSTEM_CHECKS = ["axes.W006"]
+
+# No file may stay open on the Modal volume (/app/var): a volume commit reloads it, and a reload
+# fails while a file on it is open. The audit trail also goes to the console, which Modal keeps.
+LOG_DIR = Path("/app/log")
+LOG_DIR.mkdir(parents=True, exist_ok=True)
+LOGGING["handlers"]["audit_file"]["filename"] = str(LOG_DIR / "audit.log")  # noqa: F405
 
 # There is no Caddy in front, so Django serves its own static files (the admin and API pages;
 # the dashboard itself is on Vercel). config/urls.py adds the route when this is on.

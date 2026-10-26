@@ -13,13 +13,15 @@ The browser only ever talks to the Vercel address. Vercel forwards the Django pa
 
 The database runs inside the twin's container, on its own disk. The alternative was Neon's free plan, which suspends a database after 5 idle minutes and allows 100 compute-hours a month. A twin that writes every minute never lets it suspend, so the allowance would run out after about 16 days. There is never more than one container (`max_containers=1`), because a second one would start a second database.
 
-The database survives restarts through the Modal volume `digital-twin-var`. Every 10 minutes, and when the container stops, it is dumped to the volume (`var/backup/twin.dump`), and a new container restores the latest dump. The trained models and the emulator's clock are on the same volume. If Modal stops the container without warning (preemption), at most the last 10 minutes of history are lost.
+The database survives restarts through the Modal volume `digital-twin-var`. Every 10 minutes, and when the container stops, it is dumped to the volume (`var/backup/twin.dump`), together with the emulator's clock at that moment. A new container restores both, so the emulator resumes where the data ends and any gap after it is generated again. The trained models are on the same volume. If Modal stops the container without warning (preemption), at most the last 10 minutes of history are lost and regenerated.
+
+A redeploy (`modal deploy`) can briefly run the old and the new container side by side. The new one restores the last dump, so the history can lose the few minutes of the overlap.
 
 ## The first start, and starting again after a pause
 
-On the first start the volume is empty. The container generates 14 days of network history, then trains the models, as `deploy/setup.ps1` does on the laptop. This takes roughly half an hour to an hour. The API answers during this time, but the dashboard shows no live data until the engine starts.
+On the first start the volume is empty. The container generates 14 days of network history (about half an hour), starts the engine, then trains the models, as `deploy/setup.ps1` does on the laptop. The API answers throughout. The dashboard shows live data once the engine starts, and forecasts once the first model is trained.
 
-After the twin has been switched off, the network clock is behind real time. On the next start the container fills the gap from the emulator in the same way (`backfill_history`), then the engine carries on. A gap under 15 minutes is treated like a short outage.
+After the twin has been switched off, the network clock is behind real time. On the next start the container fills the gap from the emulator in the same way (`backfill_history`, repeated until it has caught up), then the engine carries on. A gap under 15 minutes is skipped, like a short outage.
 
 ## Commands
 
@@ -31,7 +33,7 @@ modal app stop digital-twin             # switch off (the data stays in the volu
 modal app logs digital-twin             # follow the logs
 ```
 
-The dashboard is deployed from `frontend/` with the Vercel CLI (`vercel deploy --prod`). The Vercel project needs one environment variable: `DT_DJANGO_URL=https://osawayecyrus--digital-twin.modal.run`.
+The dashboard is deployed from `frontend/` with the Vercel CLI (`vercel deploy --prod`). The Vercel project needs one environment variable: `DT_DJANGO_URL=https://osawayecyrus--digital-twin.modal.run`. Sign in only at https://digital-twin-network-monitoring.vercel.app. The per-deployment addresses that the CLI also prints are refused at sign-in, because Django trusts that one address only (`DJANGO_CSRF_TRUSTED_ORIGINS`).
 
 ## Cost
 
@@ -39,7 +41,7 @@ Modal bills a container for the CPU and memory it reserves or uses, whichever is
 
 ## Accounts and secrets
 
-The Modal secret `digital-twin` holds `DJANGO_SECRET_KEY`, `DJANGO_ALLOWED_HOSTS`, `DJANGO_CSRF_TRUSTED_ORIGINS` and the passwords of the two cloud accounts, `senior1` (Senior Administrator) and `junior1` (Junior Administrator). The values are in `var/cloud/secret.env`, and the account list is in `var/cloud/accounts.txt`. Both files are git-ignored. To change a value, edit `secret.env`, then recreate the secret and redeploy:
+The Modal secret `digital-twin` holds `DJANGO_SECRET_KEY`, `DJANGO_ALLOWED_HOSTS`, `DJANGO_CSRF_TRUSTED_ORIGINS`, and the names and passwords of the two cloud accounts, one Senior and one Junior Administrator (`DT_SENIOR_USERNAME`, `DT_SENIOR_PASSWORD`, `DT_JUNIOR_USERNAME`, `DT_JUNIOR_PASSWORD`). The account names are kept out of this repository on purpose. Sign-in lockout counts per username (see below), so anyone who knew a name could keep that account locked. The values are in `var/cloud/secret.env`, and the accounts are listed in `var/cloud/accounts.txt`. Both files are git-ignored, so never commit or screenshot them. To change a value, edit `secret.env`, then recreate the secret and redeploy:
 
 ```powershell
 modal secret create digital-twin --from-dotenv var/cloud/secret.env --force
@@ -53,3 +55,4 @@ The accounts are created on the first start only. A changed password in the secr
 - **HTTPS:** Modal and Vercel provide it, so there is no Caddy. Vercel sends the security headers that Caddy sends on the laptop (`frontend/next.config.ts`), and Django serves its own static files for the admin and API pages (`config/settings/cloud.py`).
 - **Sign-in lockout:** after 5 failures, a username is locked for 15 minutes. On the laptop the lockout applies to a username and address together. In the cloud the client's address arrives in a header that anyone calling Modal directly could forge, so the lockout applies to the username alone.
 - **Lab interface:** the emulator's lab interface (surges, failures) listens inside the container only. Demos that use it, such as `walkthrough.mjs --surge`, run against the laptop.
+- **Audit trail:** it goes to Modal's logs (`modal app logs digital-twin`) and to a file on the container's disk, not to the volume, because a file held open on the volume would make every volume commit fail. Every entry records the address of Modal's proxy, not the client's. The client's address arrives only in headers that a direct caller could forge, so the API does not trust them.

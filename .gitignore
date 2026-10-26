@@ -33,3 +33,6 @@ next-env.d.ts
 Thumbs.db
 .DS_Store
 ~$*.docx
+
+# Vercel CLI project link (frontend/.vercel)
+.vercel/

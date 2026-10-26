@@ -30,7 +30,11 @@ import urllib.request
 from datetime import UTC, datetime, timedelta, timezone
 from pathlib import Path
 
-import modal
+# uv_sync needs Modal's 2025.06 image builder; set here so this app does not depend on (or
+# change) the workspace's default, which other apps share
+os.environ.setdefault("MODAL_IMAGE_BUILDER_VERSION", "2025.06")
+
+import modal  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
 APP_DIR = Path("/app")
@@ -48,19 +52,24 @@ WAT = timezone(timedelta(hours=1))        # D18: West Africa Time
 
 image = (
     modal.Image.debian_slim(python_version="3.13")
-    .apt_install("postgresql", "tzdata")
+    .run_commands("apt-get update && apt-get install -y --no-install-recommends postgresql tzdata "
+                  "&& rm -rf /var/lib/apt/lists/*")
     .uv_sync(str(ROOT / "backend"))       # the backend's locked dependencies (uv.lock)
     .env({"PYTHONUTF8": "1", "DJANGO_SETTINGS_MODULE": "config.settings.cloud", "DATABASE_URL": DATABASE_URL,
           "DJANGO_STATIC_ROOT": "/app/static", "EMULATOR_URL": EMULATOR})
-    .add_local_dir(ROOT / "backend", str(BACKEND),
+    .add_local_dir(ROOT / "backend", BACKEND.as_posix(),
                    ignore=[".venv", "**/__pycache__", "**/.pytest_cache", "**/.ruff_cache", ".env",
                            "tests", "evaluation/results"])
-    .add_local_dir(ROOT / "data", str(APP_DIR / "data"))
+    .add_local_dir(ROOT / "data", (APP_DIR / "data").as_posix())
 )
 volume = modal.Volume.from_name("digital-twin-var", create_if_missing=True)
+# The account names are in the secret, not in this public repository: sign-in lockout counts per
+# username in the cloud (config/settings/cloud.py), so a known name could be kept locked out.
+ACCOUNTS = (("senior", "DT_SENIOR_USERNAME", "DT_SENIOR_PASSWORD"),
+            ("junior", "DT_JUNIOR_USERNAME", "DT_JUNIOR_PASSWORD"))
 secret = modal.Secret.from_name("digital-twin", required_keys=[
     "DJANGO_SECRET_KEY", "DJANGO_ALLOWED_HOSTS", "DJANGO_CSRF_TRUSTED_ORIGINS",
-    "DT_SENIOR_PASSWORD", "DT_JUNIOR_PASSWORD"])
+    *(key for _, *keys in ACCOUNTS for key in keys)])
 app = modal.App("digital-twin", image=image)
 
 
@@ -118,14 +127,29 @@ def start_database() -> None:
         if DUMP.exists():
             log(f"restoring the database from {DUMP.name} ({DUMP.stat().st_size / 1e6:.1f} MB)")
             run(pg("pg_restore"), *client, "-d", "twin", "--no-owner", str(DUMP), cwd=Path("/"))
+            if DUMP_CLOCK.exists():
+                # the network clock as it was when this dump was taken, so the emulator resumes where the
+                # data ends and any gap after it is generated, not skipped
+                shutil.copy2(DUMP_CLOCK, CLOCK)
+
+
+CLOCK = VAR / "netemu" / "clock.json"
+DUMP_CLOCK = DUMP.with_name("clock.json")
+DUMPING = threading.Lock()      # the 10-minute backup and the shutdown hook may overlap
 
 
 def dump_database() -> None:
-    DUMP.parent.mkdir(parents=True, exist_ok=True)
-    tmp = DUMP.with_suffix(".tmp")
-    run(pg("pg_dump"), "-h", "127.0.0.1", "-U", "postgres", "-Fc", "-f", str(tmp), "twin", cwd=Path("/"))
-    os.replace(tmp, DUMP)
-    volume.commit()
+    with DUMPING:
+        DUMP.parent.mkdir(parents=True, exist_ok=True)
+        tmp = DUMP.with_suffix(".tmp")
+        run(pg("pg_dump"), "-h", "127.0.0.1", "-U", "postgres", "-Fc", "-f", str(tmp), "twin", cwd=Path("/"))
+        if CLOCK.exists():          # copied after the dump: the clock is never behind the data
+            shutil.copy2(CLOCK, DUMP_CLOCK)
+        os.replace(tmp, DUMP)       # a dump cut short never replaces the last good one
+        try:
+            volume.commit()
+        except Exception as error:  # noqa: BLE001 - background commits will carry the files anyway
+            log(f"volume commit after the dump: {error!r}")
 
 
 # ------------------------------------------------------------------------- the services
@@ -164,7 +188,7 @@ def emulator(mode: str, start: str) -> Service:
                                 "--speed", os.environ.get("DT_SPEED", "1"), "--start", start])
 
 
-@app.cls(volumes={str(VAR): volume}, secrets=[secret], cpu=(0.25, 1.0), memory=(1024, 3072),
+@app.cls(volumes={VAR.as_posix(): volume}, secrets=[secret], cpu=(0.25, 1.0), memory=(1024, 3072),
          min_containers=1, max_containers=1, startup_timeout=900)
 @modal.concurrent(max_inputs=100)
 class Twin:
@@ -176,16 +200,24 @@ class Twin:
         manage("migrate", "--noinput")
         manage("createcachetable")
         manage("setup_roles")
-        for username, role, key in (("senior1", "senior", "DT_SENIOR_PASSWORD"),
-                                    ("junior1", "junior", "DT_JUNIOR_PASSWORD")):
+        for role, name_key, password_key in ACCOUNTS:
+            username = os.environ[name_key]
             if django_says(f"from django.contrib.auth.models import User; "
-                           f"print(User.objects.filter(username='{username}').exists())") != "True":
-                manage("setup_roles", "--create-user", username, "--role", role, "--password", os.environ[key])
+                           f"print(User.objects.filter(username={username!r}).exists())") != "True":
+                try:
+                    manage("setup_roles", "--create-user", username, "--role", role,
+                           "--password", os.environ[password_key])
+                except subprocess.CalledProcessError:
+                    # the exception would print the command line, password included
+                    raise RuntimeError(f"could not create the {role} account; see the output above") from None
         if django_says("from apps.twin.models import NetworkDevice; print(NetworkDevice.objects.exists())") != "True":
             manage("import_topology", str(APP_DIR / "data" / "topologies" / "campus.yaml"))
         manage("collectstatic", "--noinput", "--verbosity", "0")
+        # Modal serves this port over HTTPS only. Waitress drops the X-Forwarded-* headers of an
+        # untrusted proxy, and trusting them would let anyone calling Modal directly forge them, so
+        # the scheme is stated instead (Django's is_secure(), secure redirects and links).
         api = Service("api", [sys.executable, "-m", "waitress", f"--listen=0.0.0.0:{PORT}", "--threads=8",
-                              "config.wsgi:application"])
+                              "--url-scheme=https", "config.wsgi:application"])
         api.start()
         self.services.append(api)
         threading.Thread(target=self.twin, name="twin", daemon=True).start()
@@ -206,40 +238,60 @@ class Twin:
                 net = emulator("stepped", (first_day - timedelta(days=HISTORY_DAYS)).isoformat())
             net.start()
             self.services.append(net)
-            info = None
-            while info is None:
-                if self.stopping.wait(2):
-                    return
-                info = get_json(f"{EMULATOR}/v1/info")
-            behind = datetime.now(UTC) - datetime.fromisoformat(info["time"])
-            if behind > GAP_TO_BACKFILL:
-                days = behind.total_seconds() / 86400
-                log(f"the network clock is {days:.2f} days behind: generating that history first")
-                manage("backfill_history", "--days", f"{days:.4f}", "--then-live",
-                       "--speed", os.environ.get("DT_SPEED", "1"))
-            if not has_history or not any((VAR / "models").glob("*")):
-                manage("train_models", "--days", str(HISTORY_DAYS))
+            # Generate the history the network clock is behind by. Each pass leaves the emulator
+            # stepped, so the next pass covers the minutes the previous one took; the last few are
+            # fast-forwarded when it goes live (as after a short outage).
+            backfilling = not has_history
+            for _ in range(5):
+                behind = self.network_clock_behind(net)
+                if behind is None or behind <= timedelta(minutes=2):
+                    break
+                if not (backfilling or behind > GAP_TO_BACKFILL):
+                    break
+                backfilling = True
+                log(f"the network clock is {behind.total_seconds() / 86400:.3f} days behind: generating that history")
+                manage("backfill_history", "--days", f"{behind.total_seconds() / 86400:.5f}")
+            run(sys.executable, "-m", "netemu", "lab", "mode", "live", "--speed", os.environ.get("DT_SPEED", "1"),
+                "--catch-up")
+            net.command = emulator("live", "resume").command   # a restart from now on resumes the saved clock
             engine = Service("engine", [sys.executable, "manage.py", "run_twin"])
-            engine.start()
+            engine.start()                     # before training: it picks up new models as they are promoted
             self.services.append(engine)
-        except Exception as error:  # noqa: BLE001 - the API stays up; the System page shows the engine missing
+            if backfilling:
+                dump_database()                # keep the generated history even if training is cut short
+            if not (VAR / "models" / "active.json").exists():   # written only once a model is complete
+                manage("train_models", "--days", str(HISTORY_DAYS))
+        except Exception as error:  # noqa: BLE001 - the API stays up; the System page shows what is missing
             log(f"could not bring the twin up: {error!r}")
         last_backup = time.time()
         while not self.stopping.is_set():
-            for service in self.services:
-                service.keep_running()
-            if time.time() - last_backup > BACKUP_SECONDS:
-                try:
+            try:
+                for service in self.services:
+                    service.keep_running()
+                if time.time() - last_backup > BACKUP_SECONDS:
+                    last_backup = time.time()
                     dump_database()
-                except (OSError, subprocess.CalledProcessError) as error:
-                    log(f"backup failed: {error!r}")
-                last_backup = time.time()
+            except Exception as error:  # noqa: BLE001 - nothing may end supervision or backups
+                log(f"supervision: {error!r}")
             self.stopping.wait(5)
+
+    def network_clock_behind(self, net: Service) -> timedelta | None:
+        """How far the emulator's network clock is behind real time, once it answers."""
+        while not self.stopping.is_set():
+            net.keep_running()
+            info = get_json(f"{EMULATOR}/v1/info")
+            if info is not None:
+                return datetime.now(UTC) - datetime.fromisoformat(info["time"])
+            self.stopping.wait(2)
+        return None
 
     @modal.exit()
     def shutdown(self) -> None:
         self.stopping.set()
         for service in reversed(self.services):
             service.stop()
-        dump_database()
-        log("stopped; database saved to the volume")
+        try:
+            dump_database()
+            log("stopped; database saved to the volume")
+        except Exception as error:  # noqa: BLE001 - the last periodic dump is still on the volume
+            log(f"final dump failed: {error!r}")

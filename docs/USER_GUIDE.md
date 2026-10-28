@@ -55,7 +55,7 @@ Times are West Africa Time (WAT). Times marked **(server clock)** come from the 
 
 ### Alerts
 
-- **An alert opens** when a link is likely to reach 90 % within the next 30 minutes. It closes after the link has been quiet for five minutes.
+- **An alert opens** when a link is likely to reach 90 % within the next 30 minutes. It closes after five quiet cycles, in which the link and all its forecasts stay below 85 %.
 - **What each alert shows:**
   - when the problem is expected and how confident the model is;
   - the forecast at each horizon;
@@ -85,7 +85,7 @@ A scenario that has been run cannot be edited: use **Copy** to change it, so eve
 
 ### Trends
 
-For planning. The **Period** and **Link** filters at the top apply to the first chart and the busiest links.
+For planning. **Period** applies to the first chart and the busiest links; **Link** applies to the first chart and the weekly pattern. The weekly pattern and capacity planning always cover the last 14 days.
 
 - **Weekly pattern:** average use by weekday and hour over the last 14 days. Cells near the 0 % end of the key are the quiet times for maintenance.
 - **Capacity planning:** each link's growth per week and, if growth continues in a straight line, when it would reach 90 %. Each day of the week may have its own level, so a quiet Sunday does not look like falling traffic. Treat it as an early hint for budgeting, not a promise.

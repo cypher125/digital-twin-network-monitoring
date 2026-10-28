@@ -100,6 +100,9 @@ Senior Administrators can sign in to the admin site at **https://localhost/admin
 
 1. Add a user.
 2. Add the user to the group **Senior Administrator** (full access) or **Junior Administrator** (view only).
+3. For a Senior Administrator, also tick **Staff status**. The dashboard does not need it, but without it they cannot sign in to this admin site to add accounts themselves.
+
+In the cloud the admin site is at **https://digital-twin-network-monitoring.vercel.app/admin**.
 
 You can also add an account from PowerShell:
 
